@@ -3,7 +3,7 @@
  */
 module.exports = {
   serverBuildTarget: "cloudflare-workers",
-  server: "./server.js",
+  server: "./server.ts",
   devServerBroadcastDelay: 1000,
   ignoredRouteFiles: [".*"],
   // appDirectory: "app",

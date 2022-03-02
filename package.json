@@ -1,8 +1,8 @@
 {
-  "name": "remix-app-template",
+  "name": "hashland",
   "private": true,
   "description": "",
-  "license": "",
+  "license": "Unlicense",
   "sideEffects": false,
   "main": "build/index.js",
   "scripts": {
