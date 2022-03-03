@@ -111,3 +111,6 @@ dist
 /dist
 /public/build
 /.mf
+
+# Tailwind CSS output
+app/main.css

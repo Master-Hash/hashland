@@ -8,11 +8,11 @@ export default function Posts() {
     posts.map(post => {
       const published = new Date(post.commits[0].date);
       // @ts-ignore
-      const updated = new Date(post.commits.at(-1)?.date);
+      // const updated = new Date(post.commits.at(-1)?.date);
       return (
         <article key={post.slug}>
-          <h2>
-            <Link to={`/post/${post.slug}`}>{post.title}</Link>
+          <h2 className="">
+            <Link to={`/post/${post.slug}`} className="text-blue-300">{post.title}</Link>
           </h2>
           <p>
             {post.description}

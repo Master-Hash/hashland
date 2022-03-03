@@ -11,6 +11,7 @@ import type {
   MetaFunction,
   LinksFunction,
 } from "remix";
+import styles from "./main.css";
 
 export const meta: MetaFunction = () => {
   return {
@@ -36,7 +37,11 @@ export const links: LinksFunction = () => {
       type: "application/atom+xml",
       href: "/atom",
       title: "Hashland",
-    }
+    },
+    {
+      rel: "stylesheet",
+      href: styles,
+    },
   ];
 };
 
