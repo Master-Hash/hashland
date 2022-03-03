@@ -4,6 +4,7 @@ import {
   Meta,
   Outlet,
   Scripts,
+  Link,
   ScrollRestoration,
 } from "remix";
 import type {
@@ -14,6 +15,12 @@ import type {
 export const meta: MetaFunction = () => {
   return {
     title: "Hashland",
+    "og:title": "Hashland",
+    "og:image": "",
+    "og:description": "()",
+    "og:site_name": "Hashland",
+    robots: "follow, index",
+    description: "()",
   };
 };
 
@@ -44,7 +51,18 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <header>
+          <Link to="/">
+            {/* <img src="/favicon.svg" alt="favicon" /> */}
+            <span>Hashland</span>
+          </Link>
+          <nav>
+          </nav>
+        </header>
+        <main><Outlet /></main>
+        <footer>
+          <small></small>
+        </footer>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

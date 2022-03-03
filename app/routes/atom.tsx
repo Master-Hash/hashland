@@ -24,8 +24,9 @@ posts.forEach((post) => {
     image: post.image,
     content: post.content,
     description: post.description,
-    // date: new Date(post.commits.at(-1).date),
-    date: new Date(post.commits[post.commits.length - 1].date),
+    // @ts-ignore
+    date: new Date(post.commits.at(-1).date),
+    // date: new Date(post.commits[post.commits.length - 1].date),
   });
 });
 
