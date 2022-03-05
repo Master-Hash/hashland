@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  a {
+    @apply text-gray-500;
+    @apply hover:text-gray-900;
+    @apply border-b;
+    @apply border-b-gray-300;
+    @apply hover:border-b-gray-600;
+    @apply transition-all;
+    @apply duration-150;
+    @apply ease-in-out;
+  }
+
+  code {
+    @apply font-mono;
+  }
+}

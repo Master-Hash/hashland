@@ -11,17 +11,20 @@ import type {
   MetaFunction,
   LinksFunction,
 } from "remix";
+import { RssIcon } from "@heroicons/react/outline";
+import { dateFormat } from "./utils/dateFormat.js";
 import styles from "./main.css";
 
 export const meta: MetaFunction = () => {
   return {
     title: "Hashland",
-    "og:title": "Hashland",
-    "og:image": "",
-    "og:description": "()",
     "og:site_name": "Hashland",
+    // 这些应该在页面路由，而不是根路由
+    // "og:title": "Hashland",
+    // "og:image": "",
+    // "og:description": "()",
+    // description: "()",
     robots: "follow, index",
-    description: "()",
   };
 };
 
@@ -56,17 +59,49 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <header>
-          <Link to="/">
-            {/* <img src="/favicon.svg" alt="favicon" /> */}
-            <span>Hashland</span>
+        <header className="flex mx-auto justify-between items-center max-w-screen-lg py-6">
+          <Link to="/" className="border-0">
+            <img alt="Hashland homepage" src="/favicon.svg" className="w-12 h-12" />
           </Link>
-          <nav>
+          <nav className="">
+            <ul className="flex">
+              {[
+                ["/posts", "动态"],
+                ["/collections", "专栏"],
+                ["/friends", "友链"]
+              ]
+                .map(([url, text]) =>
+                  <li key={url}><Link to={url} className="mr-10 text-base font-normal">{text}</Link></li>
+                )}
+              <Link to="/atom" className="border-0" target="_blank" rel="noreferrer">
+                <RssIcon transform="translate(0 2)" className="h-5 w-5" />
+              </Link>
+            </ul>
           </nav>
         </header>
         <main><Outlet /></main>
-        <footer>
-          <small></small>
+        <footer className="mx-auto text-center p-12">
+          <div>
+            <small>
+              缓存更新于{dateFormat.format(new Date())}
+            </small>
+          </div>
+          {/* 最终没有选择 deno 类似的 Github 贴纸 */}
+          <div>
+            <small>
+              <a href="https://github.com/Master-Hash/hashland" target="_blank" rel="noreferrer">前端仓库</a>
+              {/**
+               * 间隔号
+               * @see https://www.zhihu.com/question/20271115 */}
+              {"・"}
+              <a href="https://github.com/Master-Hash/post" target="_blank" rel="noreferrer">文章仓库</a>
+            </small>
+          </div>
+          <div>
+            <small>
+              <Link to="https://creativecommons.org/publicdomain/zero/1.0/deed.zh" target="_blank" rel="noreferrer">CC0</Link> © 公共领域
+            </small>
+          </div>
         </footer>
         <ScrollRestoration />
         <Scripts />
