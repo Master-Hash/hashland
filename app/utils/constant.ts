@@ -1,1 +1,4 @@
-export const SITEURL = "https://localhost:8787";
+/**
+ * @todo 改成自己的域名
+ */
+export const SITEURL = "https://land.master-hash.workers.dev";

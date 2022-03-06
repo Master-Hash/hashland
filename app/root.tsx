@@ -74,7 +74,7 @@ export default function App() {
           <nav className="">
             <ul className="flex">
               {[
-                ["/posts", "动态"],
+                ["/posts", "文章"],
                 ["/collections", "专栏"],
                 ["/friends", "友链"]
               ]
@@ -87,7 +87,7 @@ export default function App() {
             </ul>
           </nav>
         </header>
-        <main className="mx-auto my-6 max-w-3xl"><Outlet /></main>
+        <main className="mx-auto my-6 max-w-[70ch]"><Outlet /></main>
         <footer className="mx-auto text-center p-12">
           {/* <div>
             <small>

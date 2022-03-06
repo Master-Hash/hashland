@@ -5,24 +5,29 @@ import { dateFormat } from "../utils/dateFormat.js";
 
 export default function Posts() {
   return (
-    posts.map(post => {
-      const published = new Date(post.commits[0].date);
-      // @ts-ignore
-      // const updated = new Date(post.commits.at(-1)?.date);
-      return (
-        <article key={post.slug} className="p-2">
-          <h2 className="">
-            <Link to={`/post/${post.slug}`} className="">{post.title}</Link>
-          </h2>
-          <p>
-            {post.description}
-          </p>
-          <p>
-            <small>发布于{dateFormat.format(published)}</small>
-          </p>
-        </article>
-      );
-    }
-    )
+    <>
+      <h1 className="my-6 p-2">最新文章</h1>
+      {posts.map(post => {
+        const published = new Date(post.commits[0].date);
+        // @ts-ignore
+        // const updated = new Date(post.commits.at(-1)?.date);
+        return (
+          <Link to={`/post/${post.slug}`} key={post.slug} className="">
+            <article className="my-2 p-2 hover:bg-neutral-50 hover:shadow-xl">
+              <h2 className="text-xl my-1">
+                {post.title}
+              </h2>
+              <p>
+                {post.description}
+              </p>
+              <p>
+                <small>发布于{dateFormat.format(published)}</small>
+              </p>
+            </article>
+          </Link>
+        );
+      }
+      )}
+    </>
   );
 }
