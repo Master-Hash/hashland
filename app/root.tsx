@@ -60,8 +60,9 @@ export default function App() {
       </head>
       <body>
         <header className="flex mx-auto justify-between items-center max-w-screen-lg py-6">
-          <Link to="/" className="border-0">
-            <img alt="Hashland homepage" src="/favicon.svg" className="w-12 h-12" />
+          <Link to="/" className="flex items-center border-0">
+            <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
+            <a href="/" className="ml-4">Hashland</a>
           </Link>
           <nav className="">
             <ul className="flex">

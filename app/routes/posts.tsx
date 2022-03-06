@@ -1,7 +1,7 @@
 import { Link } from "remix";
 import posts from "../data.json" assert { type: "json" };
 
-const dateFormat = new Intl.DateTimeFormat("zh-CN", { dateStyle: "long", });
+import { dateFormat } from "../utils/dateFormat.js";
 
 export default function Posts() {
   return (
@@ -10,9 +10,9 @@ export default function Posts() {
       // @ts-ignore
       // const updated = new Date(post.commits.at(-1)?.date);
       return (
-        <article key={post.slug}>
+        <article key={post.slug} className="p-2">
           <h2 className="">
-            <Link to={`/post/${post.slug}`} className="text-blue-300">{post.title}</Link>
+            <Link to={`/post/${post.slug}`} className="">{post.title}</Link>
           </h2>
           <p>
             {post.description}
