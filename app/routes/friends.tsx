@@ -23,6 +23,11 @@ export default function Friends() {
   return (
     <>
       <h1 className="my-18 font-bold text-4xl text-center">友链</h1>
+      <div className="mx-auto my-8 text-xs max-w-xs translate-x-8">
+        <p>已知错误：刷新会导致头像、名称、链接错位</p>
+        <p>缓解方案：请勿主动刷新；<br />先路由至其它页面，再回到本页，可恢复正常；<br />正常状态下，点击导航栏上本页路由可随机排序。
+        </p>
+      </div>
       <ul className="my-8 flex flex-wrap justify-center space-x-12">
         {friends
           /**
