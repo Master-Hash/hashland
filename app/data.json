@@ -3,7 +3,6 @@
         "slug": "fuck",
         "content": "<h1>Fuck</h1>\n<p>Fuck!</p>",
         "title": "Fuck",
-        "image": "/",
         "description": "ddd",
         "commits": [
             {
@@ -18,7 +17,6 @@
     {
         "slug": "hello",
         "title": "Hello",
-        "image": "/sssss",
         "description": "sss",
         "content": "<h1>Hello</h1>\n<pre class=\"language-python\"><code class=\"language-python code-highlight\"><span class=\"code-line\"><span class=\"token keyword\">import</span> __hello__\n</span></code></pre>\n<h2>Fuck</h2>\n<pre class=\"language-bash\"><code class=\"language-bash code-highlight\"><span class=\"code-line\"><span class=\"token function-name function\">fuck</span><span class=\"token punctuation\">(</span><span class=\"token punctuation\">)</span> <span class=\"token punctuation\">{</span>\n</span><span class=\"code-line\">\t<span class=\"token builtin class-name\">echo</span> <span class=\"token string\">\"Fuck!\"</span>\n</span><span class=\"code-line\"><span class=\"token punctuation\">}</span>\n</span></code></pre>",
         "commits": [
