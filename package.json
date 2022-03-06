@@ -7,7 +7,7 @@
   "main": "build/index.js",
   "scripts": {
     "postinstall": "remix setup cloudflare-workers",
-    "build": "run-p build:*",
+    "build": "run-s build:css build:remix",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "cross-env NODE_ENV=production remix build",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
