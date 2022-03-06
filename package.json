@@ -11,11 +11,11 @@
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "cross-env NODE_ENV=production remix build",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
-    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch",
+    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --build-command echo --watch",
     "dev:css": "npm run generate:css -- --watch",
     "dev": "cross-env NODE_ENV=development remix build && run-p dev:*",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
-    "generate:css": "npx tailwindcss -i ./styles/main.css -o ./app/main.css",
+    "generate:css": "tailwindcss -i ./styles/main.css -o ./app/main.css",
     "deploy": "wrangler publish"
   },
   "dependencies": {

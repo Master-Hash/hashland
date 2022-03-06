@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-  a {
+  /*a {
     @apply text-gray-500;
     @apply hover:text-gray-900;
     @apply border-b;
@@ -12,9 +12,8 @@
     @apply transition-all;
     @apply duration-150;
     @apply ease-in-out;
-  }
-
-  code {
-    @apply font-mono;
+  }*/
+  *, ::before, ::after {
+    @apply transition-all duration-150 ease-in-out;
   }
 }

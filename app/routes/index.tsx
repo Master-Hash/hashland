@@ -1,32 +1,14 @@
+import { MailIcon } from "@heroicons/react/outline";
+
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <article className="mx-auto prose prose-blockquote:not-italic">
+      <h1>你好。</h1>
+      <p className="flex space-x-2 items-center">
+        <MailIcon className="h-4 w-4" />
+        <a href="mailto:A137294381b@163.com">A137294381b@163.com</a>
+      </p>
+
+    </article>
   );
 }
