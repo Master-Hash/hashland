@@ -20,11 +20,10 @@ import { CatchBoundaryComponent } from "@remix-run/react/routeModules";
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Hashland",
     "og:site_name": "Hashland",
     // 这些应该在页面路由，而不是根路由
+    // title: "Hashland",
     // "og:title": "Hashland",
-    // "og:image": "",
     // "og:description": "()",
     // description: "()",
     robots: "follow, index",
@@ -81,10 +80,13 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
   return (
     <html>
       <head>
-        <title>{caught.status} {caught.data ?? caught.statusText}</title>
+        <title>{caught.status} {caught.statusText}</title>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta property="og:title" content={`${caught.status} ${caught.statusText}`} />
+        <meta name="description" content={`${caught.status} ${caught.statusText}`} />
+        <meta property="og:description" content={`${caught.status} ${caught.statusText}`} />
         <Meta />
         <Links />
       </head>

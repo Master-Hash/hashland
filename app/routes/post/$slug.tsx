@@ -1,7 +1,16 @@
 import { useLoaderData } from "remix";
-import type { LoaderFunction } from "remix";
+import type { MetaFunction, LoaderFunction } from "remix";
 import posts from "../../data.json" assert { type: "json" };
 import type { Post } from "../../utils/type.js";
+
+export const meta: MetaFunction = ({ data }: { data: Post; }) => {
+  return {
+    title: `${data.title} « Hashland`,
+    "og:title": `${data.title} « Hashland`,
+    "og:description": `${data.description}`,
+    description: `${data.description}`,
+  };
+};
 
 export const loader: LoaderFunction = ({ params }) => {
   const _ps = groupBy(posts, ({ slug }) => slug);
@@ -28,9 +37,7 @@ const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
  * @todo 等 groupBy 方法出来更新
  */
 export default function PostSlug() {
-  const post: Post = useLoaderData();
-
-
+  const post = useLoaderData<Post>();
 
   return (
     <article

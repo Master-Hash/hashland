@@ -1,7 +1,17 @@
 import { Link } from "remix";
+import type { MetaFunction } from "remix";
 import posts from "../data.json" assert { type: "json" };
 
 import { dateFormat } from "../utils/dateFormat.js";
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "最新文章 « Hashland",
+    "og:title": "最新文章 « Hashland",
+    "og:description": "Hash 的最新文章",
+    description: "Hash 的最新文章",
+  };
+};
 
 export default function Posts() {
   return (

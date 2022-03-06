@@ -1,4 +1,15 @@
+import type { MetaFunction } from "remix";
 import { MailIcon } from "@heroicons/react/outline";
+
+export const meta: MetaFunction = () => {
+  return {
+    "og:site_name": "Hashland",
+    title: "Hashland",
+    "og:title": "Hashland",
+    "og:description": "照我思索，可理解我。",
+    description: "照我思索，可理解我。",
+  };
+};
 
 export default function Index() {
   return (
