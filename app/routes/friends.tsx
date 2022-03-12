@@ -20,8 +20,8 @@ export const meta: MetaFunction = () => {
   return {
     title: "友链 « Hashland",
     "og:title": "友链 « Hashland",
-    "og:description": "Hash 的挚友和邻居（暂无家属，悲",
-    description: "Hash 的挚友和邻居（暂无家属，悲",
+    "og:description": "Hash 的挚友和邻居（暂无家属",
+    description: "Hash 的挚友和邻居（暂无家属",
   };
 };
 

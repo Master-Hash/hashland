@@ -7,8 +7,8 @@ export const meta: MetaFunction = () => {
   return {
     title: "专栏 « Hashland",
     "og:title": "专栏 « Hashland",
-    "og:description": "Hash 博学而深思，于是开办若干专栏，分享研究成果。",
-    description: "Hash 博学而深思，于是开办若干专栏，分享研究成果。",
+    "og:description": "（）",
+    description: "（）",
   };
 };
 
