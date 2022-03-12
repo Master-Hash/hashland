@@ -1,4 +1,20 @@
-import type { MetaFunction } from "remix";
+import { useLoaderData } from "remix";
+import type { LoaderFunction, MetaFunction, } from "remix";
+
+/**
+ * @see https://javascript.info/array-methods#shuffle-an-array
+ */
+function shuffle<T>(xs: Array<T>): Array<T> {
+  const array = [...xs];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export const loader: LoaderFunction = () =>
+  shuffle(friends);
 
 export const meta: MetaFunction = () => {
   return {
@@ -8,6 +24,12 @@ export const meta: MetaFunction = () => {
     description: "Hash 的挚友和邻居（暂无家属，悲",
   };
 };
+
+type Friends = {
+  name: string;
+  url: string;
+  image: string;
+}[];
 
 const friends = [
   {
@@ -30,23 +52,18 @@ const friends = [
   },
 ];
 
-export default function Friends() {
+export default function FriendsComponent() {
+  const _friends = useLoaderData<Friends>();
   return (
     <>
       <h1 className="my-18 font-bold text-4xl text-center">友链</h1>
-      <div className="mx-auto my-8 text-xs max-w-xs translate-x-8">
-        <p>已知错误：刷新会导致头像、名称、链接错位</p>
-        <p>缓解方案：请勿主动刷新；<br />先路由至其它页面，再回到本页，可恢复正常；<br />正常状态下，点击导航栏上本页路由可随机排序。
-        </p>
-      </div>
       <ul className="my-8 flex flex-wrap justify-center space-x-12">
-        {friends
+        {_friends
           /**
            * 数组乱序错误方式
            * @see https://javascript.info/array-methods#shuffle-an-array
            * 还会导致图片错位……
            */
-          .sort(() => Math.random() - 0.5)
           .map(friend =>
             <li key={friend.url}>
               <a href={friend.url} target="_blank" rel="noreferrer">
