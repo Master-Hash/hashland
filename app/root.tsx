@@ -61,9 +61,9 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body>
+        <body className="dark:bg-zinc-800">
           <HeaderComponent />
-          <main className="mx-3 sm:mx-auto my-6 max-w-prose"><Outlet /></main>
+          <main className="mx-3 sm:mx-auto my-6 max-w-prose dark:text-white"><Outlet /></main>
           <FooterComponent />
           <ScrollRestoration />
           <Scripts />
@@ -93,7 +93,7 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
       <body>
         <HeaderComponent />
         <main className="">
-          <article className="prose mx-auto">
+          <article className="prose dark:prose-invert mx-auto">
             <h1>
               {caught.status} {caught.data ?? caught.statusText}
             </h1>
@@ -112,7 +112,7 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
 
 function HeaderComponent() {
   return (
-    <header className="flex mx-auto justify-between items-center text-gray-500 pr-[.6rem] sm:mx-2 lg:my-2 lg:mx-4">
+    <header className="flex mx-auto justify-between items-center text-gray-500 dark:text-zinc-300 pr-[.6rem] sm:mx-2 lg:my-2 lg:mx-4">
       <div>
         <Link to="/" className="flex items-center">
           <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
@@ -144,7 +144,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto text-center p-4">
+    <footer className="mx-auto text-center p-4 dark:text-white">
       {/* <div>
             <small>
               缓存更新于{dateFormat.format(new Date())}

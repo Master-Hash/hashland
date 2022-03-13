@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <>
-      <article className="mx-auto prose">
+      <article className="mx-auto prose dark:prose-invert">
         <h1>你好。</h1>
       </article>
       <address className="flex space-x-2 my-4 items-center not-italic">

@@ -23,7 +23,7 @@ export default function Posts() {
         // const updated = new Date(post.commits.at(-1)?.date);
         return (
           <Link to={`/post/${post.slug}`} key={post.slug} className="">
-            <article className="my-2 -mx-2 p-2 hover:shadow-2xl hover:bg-neutral-100 sm:hover:bg-neutral-50 sm:hover:shadow-xl">
+            <article className="my-2 -mx-2 p-2 sm:-mx-4 sm:p-4 hover:shadow-2xl hover:bg-neutral-100 sm:hover:bg-neutral-50 sm:hover:shadow-xl">
               <h2 className="text-xl my-1">
                 {post.title}
               </h2>

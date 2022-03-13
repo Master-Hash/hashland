@@ -44,11 +44,11 @@ export default function PostSlug() {
   return (
     <>
       <article
-        className="mx-auto prose"
+        className="mx-auto prose dark:prose-invert"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       <hr className="my-8" />
-      <div className="mx-auto prose">
+      <div className="mx-auto prose dark:prose-invert">
         <h3 className="">编辑记录</h3>
         <ul>
           {post.commits.map(commit =>

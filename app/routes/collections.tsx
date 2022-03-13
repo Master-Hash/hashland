@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 
 export default function Collections() {
   return (
-    <article className="prose">
+    <article className="prose dark:prose-invert">
       <h1>专栏</h1>
       <p>施工中</p>
     </article>
