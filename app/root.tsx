@@ -90,17 +90,18 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="dark:bg-zinc-800">
         <HeaderComponent />
         <main className="">
           <article className="prose dark:prose-invert mx-auto">
             <h1>
-              {caught.status} {caught.data ?? caught.statusText}
+              {caught.status} {caught.statusText}
             </h1>
             {caught.status === 404
-              ?
-              <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404" target="_blank" rel="noreferrer">404</a>属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？</p>
-              : null}
+              ? <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404" target="_blank" rel="noreferrer">404</a>属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？</p>
+              : caught.status === 400
+                ? <p>请指定搜索参数：<code>/search?q=%s</code></p>
+                : <p>{caught.data}</p>}
           </article>
         </main>
         <FooterComponent />

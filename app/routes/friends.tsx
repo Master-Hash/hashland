@@ -57,7 +57,7 @@ export default function FriendsComponent() {
   const _friends = useLoaderData<Friends>();
   return (
     <>
-      <h1 className="my-18 font-bold text-4xl text-center">友链</h1>
+      <h1 className="font-bold text-4xl text-center">友链</h1>
       <ul className="my-8 flex flex-wrap justify-center space-x-12">
         {_friends
           /**
