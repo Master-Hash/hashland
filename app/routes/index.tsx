@@ -13,13 +13,14 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <article className="mx-auto prose prose-blockquote:not-italic">
-      <h1>你好。</h1>
-      <address className="flex space-x-2 items-center">
+    <>
+      <article className="mx-auto prose">
+        <h1>你好。</h1>
+      </article>
+      <address className="flex space-x-2 my-4 items-center not-italic">
         <MailIcon className="h-4 w-4" />
         <a href="mailto:A137294381b@163.com">A137294381b@163.com</a>
       </address>
-
-    </article>
+    </>
   );
 }

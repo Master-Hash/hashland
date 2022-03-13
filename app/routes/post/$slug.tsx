@@ -1,7 +1,9 @@
+import { LoaderFunction, MetaFunction } from "remix";
 import { useLoaderData } from "remix";
-import type { MetaFunction, LoaderFunction } from "remix";
 import posts from "../../data.json" assert { type: "json" };
+import { dateFormat } from "../../utils/dateFormat.js";
 import type { Post } from "../../utils/type.js";
+import { Comment } from "../../utils/comment.js";
 
 export const meta: MetaFunction = ({ data }: { data: Post; }) => {
   return {
@@ -40,9 +42,32 @@ export default function PostSlug() {
   const post = useLoaderData<Post>();
 
   return (
-    <article
-      className="mx-auto prose prose-blockquote:not-italic"
-      dangerouslySetInnerHTML={{ __html: post.content }}
-    />
+    <>
+      <article
+        className="mx-auto prose"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
+      <hr className="my-8" />
+      <div className="mx-auto prose">
+        <h3 className="">编辑记录</h3>
+        <ul>
+          {post.commits.map(commit =>
+            <li key={commit.hash}>
+              <p>{commit.message}</p>
+              <p>
+                <small>
+                  {commit.author}・{dateFormat.format(new Date(commit.date))}・
+                  <a href={`https://github.com/Master-Hash/post/commit/${commit.fullHash}`} target="_blank" rel="noreferrer" className="underline">
+                    {commit.hash}
+                  </a>
+                </small>
+              </p>
+            </li>
+          )}
+        </ul>
+      </div>
+      <hr className="my-8" />
+      <Comment />
+    </>
   );
 }

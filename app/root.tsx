@@ -63,7 +63,7 @@ export default function App() {
         </head>
         <body>
           <HeaderComponent />
-          <main className="mx-auto my-6 max-w-[70ch]"><Outlet /></main>
+          <main className="mx-3 sm:mx-auto my-6 max-w-prose"><Outlet /></main>
           <FooterComponent />
           <ScrollRestoration />
           <Scripts />
@@ -112,28 +112,28 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
 
 function HeaderComponent() {
   return (
-    <header className="flex mx-auto justify-between items-center max-w-screen-lg py-6">
+    <header className="flex mx-auto justify-between items-center text-gray-500 pr-[.6rem] sm:mx-2 lg:my-2 lg:mx-4">
       <div>
-        <Link to="/" className="flex items-center border-0">
+        <Link to="/" className="flex items-center">
           <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
           {/**
        * 为了消除漂移，被迫重复了 a 的样式
        * @todo 与 a 样式同步
        * @todo 提取
        */}
-          <span className="ml-4 text-gray-500 hover:text-gray-900 border-b border-b-gray-300 hover:border-b-gray-600 transition-all duration-150 ease-in-out">Hashland</span>
+          <span className="ml-[.6rem] underline hover:opacity-80 font-medium">Hashland</span>
         </Link>
       </div>
       <nav className="">
-        <ul className="flex">
+        <ul className="flex space-x-4 sm:space-x-8">
           {[
             ["/posts", "文章"],
             ["/collections", "专栏"],
             ["/friends", "友链"]
           ]
-            .map(([url, text]) => <li key={url}><Link to={url} className="mr-10 text-base font-normal text-gray-500 hover:text-gray-900 border-b border-b-gray-300 hover:border-b-gray-600 transition-all duration-150 ease-in-out">{text}</Link></li>
+            .map(([url, text]) => <li key={url}><Link to={url} className="text-base font-normal underline hover:opacity-80">{text}</Link></li>
             )}
-          <a href="/atom" className="border-0 text-gray-500 hover:text-gray-900 border-b-gray-300 hover:border-b-gray-600 transition-all duration-150 ease-in-out" target="_blank" rel="noreferrer">
+          <a href="/atom" className="border-0 hover:opacity-80" target="_blank" rel="noreferrer">
             <RssIcon transform="translate(0 2)" className="h-5 w-5" />
           </a>
         </ul>
@@ -144,7 +144,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto text-center p-12">
+    <footer className="mx-auto text-center p-4">
       {/* <div>
             <small>
               缓存更新于{dateFormat.format(new Date())}

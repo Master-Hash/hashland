@@ -1,5 +1,6 @@
 import { useLoaderData } from "remix";
 import type { LoaderFunction, MetaFunction, } from "remix";
+import { Comment } from "../utils/comment.js";
 
 /**
  * @see https://javascript.info/array-methods#shuffle-an-array
@@ -76,6 +77,8 @@ export default function FriendsComponent() {
           )
         }
       </ul>
+      <hr className="my-8" />
+      <Comment />
     </>
   );
 }
