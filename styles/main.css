@@ -123,6 +123,10 @@
       white-space: normal;
     }
   }
+  /* 外部链接 */
+  /* a[href^="http"]::after {
+    content: url()
+  } */
 }
 
 @layer utilities {

@@ -13,7 +13,7 @@ import type {
   MetaFunction,
   LinksFunction,
 } from "remix";
-import { RssIcon } from "@heroicons/react/outline";
+import { RssIcon } from "@heroicons/react/solid";
 // import { dateFormat } from "./utils/dateFormat.js";
 import styles from "./main.css";
 import { CatchBoundaryComponent } from "@remix-run/react/routeModules";
