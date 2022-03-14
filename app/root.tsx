@@ -8,6 +8,7 @@ import {
   Link,
   ScrollRestoration,
   useCatch,
+  NavLink,
 } from "remix";
 import type {
   MetaFunction,
@@ -115,15 +116,14 @@ function HeaderComponent() {
   return (
     <header className="flex mx-auto justify-between items-center text-gray-500 dark:text-zinc-300 pr-[.6rem] sm:mx-2 lg:my-2 lg:mx-4">
       <div>
-        <Link to="/" className="flex items-center">
-          <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
-          {/**
-       * 为了消除漂移，被迫重复了 a 的样式
-       * @todo 与 a 样式同步
-       * @todo 提取
-       */}
-          <span className="ml-[.6rem] underline hover:opacity-80 font-medium">Hashland</span>
-        </Link>
+        <NavLink to="/" className="flex items-center" end>
+          {({ isActive }) => (
+            <>
+              <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
+              <span className={`ml-[.6rem] underline hover:opacity-80 ${isActive ? "font-semibold" : "font-medium"}`}>Hashland</span>
+            </>
+          )}
+        </NavLink>
       </div>
       <nav className="">
         <ul className="flex space-x-4 sm:space-x-8">
@@ -132,7 +132,11 @@ function HeaderComponent() {
             ["/collections", "专栏"],
             ["/friends", "友链"]
           ]
-            .map(([url, text]) => <li key={url}><Link to={url} className="text-base font-normal underline hover:opacity-80">{text}</Link></li>
+            .map(([pathname, text]) => <li key={pathname}>
+              <NavLink to={pathname} className={({ isActive }) => isActive ? "text-base font-semibold underline hover:opacity-80" : "text-base font-normal underline hover:opacity-80"}>
+                {text}
+              </NavLink>
+            </li>
             )}
           <a href="/atom" className="border-0 hover:opacity-80" target="_blank" rel="noreferrer">
             <RssIcon transform="translate(0 2)" className="h-5 w-5" />
