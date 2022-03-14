@@ -71,10 +71,12 @@ function Cube() {
   }
 }`}</style>
       </defs>
-      <Polygon points={[A, E, C, D, B, F]} />
-      <Line p1={O} p2={A} />
-      <Line p1={O} p2={B} />
-      <Line p1={O} p2={C} />
+      <g transform="translate(-1.2 -1.2)">
+        <Polygon points={[A, E, C, D, B, F]} />
+        <Line p1={O} p2={A} />
+        <Line p1={O} p2={B} />
+        <Line p1={O} p2={C} />
+      </g>
     </svg>
   );
 };
