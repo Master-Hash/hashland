@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import type { LoaderFunction } from "remix";
@@ -29,30 +30,24 @@ const D = O.mid(A);
 const E = O.mid(B);
 const F = O.mid(C);
 
-function Polygon({ points }: { points: Point[]; }) {
-  return (
-    <polygon
-      className="l"
-      points={
-        points
-          .map(p => `${p.x} ${p.y}`)
-          .join(", ")
-      }
-    />
-  );
-}
+const Polygon: FC<{ points: Point[]; }> = ({ points }) =>
+  <polygon
+    className="l"
+    points={
+      points
+        .map(p => `${p.x} ${p.y}`)
+        .join(", ")
+    }
+  />;
 
-function Line({ p1, p2 }: { p1: Point, p2: Point; }) {
-  return (
-    <line
-      className="l"
-      x1={p1.x}
-      y1={p1.y}
-      x2={p2.x}
-      y2={p2.y}
-    />
-  );
-}
+const Line: FC<{ p1: Point, p2: Point; }> = ({ p1, p2 }) =>
+  <line
+    className="l"
+    x1={p1.x}
+    y1={p1.y}
+    x2={p2.x}
+    y2={p2.y}
+  />;
 
 function Cube() {
   return (
