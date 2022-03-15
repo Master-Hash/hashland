@@ -71,7 +71,7 @@ function Cube() {
   }
 }`}</style>
       </defs>
-      <g transform="translate(-1.2 -1.2)">
+      <g transform="translate(-1 -1)">
         <Polygon points={[A, E, C, D, B, F]} />
         <Line p1={O} p2={A} />
         <Line p1={O} p2={B} />
