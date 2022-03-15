@@ -4,7 +4,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const reqUrl = new URL(request.url);
   const searchTerms = reqUrl.searchParams.get("q");
   if (searchTerms) {
-    return redirect(`https://github.com/search?q=${searchTerms}+repo%3AMaster-Hash%2Fpost+language%3AMarkdown+path%3Apost&type=Code&l=Markdown`);
+    return redirect(`https://github.com/search?q=${searchTerms}+repo%3AMaster-Hash%2Fpost+language%3AMarkdown+path%3Apost&type=Code`);
   }
   else {
     throw new Response("请指定搜索参数。", {

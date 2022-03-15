@@ -30,7 +30,7 @@ const OSD = {
         _attributes: {
           type: "text/html",
           method: "get",
-          template: "https://github.com/search?q={searchTerms}+repo%3AMaster-Hash%2Fpost+language%3AMarkdown&amp;type=Code+path%3Apost&amp;l=Markdown",
+          template: "https://github.com/search?q={searchTerms}+repo%3AMaster-Hash%2Fpost+language%3AMarkdown&amp;type=Code+path%3Apost",
         }
       },
       {
