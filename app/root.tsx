@@ -114,7 +114,7 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
 
 function HeaderComponent() {
   return (
-    <header className="flex mx-auto justify-between items-center text-gray-500 dark:text-zinc-300 pr-[.6rem] sm:mx-2 lg:my-2 lg:mx-4">
+    <header className="flex mx-[.6rem] my-2 justify-between items-center text-gray-500 dark:text-zinc-300 sm:mx-3 lg:my-3 lg:mx-4 print:hidden">
       <div>
         <NavLink to="/" className="flex items-center" end>
           {({ isActive }) => (
@@ -168,7 +168,7 @@ function FooterComponent() {
       </div>
       <div>
         <small>
-          <Link to="https://creativecommons.org/publicdomain/zero/1.0/deed.zh" target="_blank" rel="noreferrer" className="underline">CC0</Link> © 公共领域
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh" target="_blank" rel="noreferrer" className="underline">CC0</a> © 公共领域
         </small>
       </div>
     </footer>

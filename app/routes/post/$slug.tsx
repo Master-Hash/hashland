@@ -66,8 +66,10 @@ export default function PostSlug() {
           )}
         </ul>
       </div>
-      <hr className="my-8" />
-      <Comment />
+      <div className="print:hidden">
+        <hr className="my-8" />
+        <Comment />
+      </div>
     </>
   );
 }
