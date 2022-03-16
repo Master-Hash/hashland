@@ -291,4 +291,10 @@
   .prose blockquote {
     @apply not-italic;
   }
+
+  @media print {
+    a::after {
+      content: " (" attr(href) ") ";
+    }
+  }
 }

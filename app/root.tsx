@@ -156,7 +156,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto text-center p-4 dark:text-white">
+    <footer className="mx-auto text-center p-4 dark:text-white print:hidden">
       {/* <div>
             <small>
               缓存更新于{dateFormat.format(new Date())}
