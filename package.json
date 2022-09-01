@@ -12,9 +12,10 @@
     "build:remix": "cross-env NODE_ENV=production remix build",
     "dev": "run-p dev:*",
     "dev:remix": "cross-env NODE_ENV=development remix watch",
-    "dev:miniflare": "cross-env NODE_ENV=development wrangler dev ./build/index.js --local",
+    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --build-command echo --watch",
     "dev:css": "cross-env NODE_ENV=development npm run generate:css -- -w",
     "generate:css": "postcss ./styles/main.css -o ./app/main.css",
+    "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
     "deploy": "wrangler publish"
   },
   "dependencies": {
@@ -46,6 +47,7 @@
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "eslint": "^8.20.0",
+    "miniflare": "^2.7.1",
     "npm-run-all": "^4.1.5",
     "typescript": "^4.7.4",
     "wrangler": "^2.0.22"
