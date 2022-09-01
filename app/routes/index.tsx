@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { MailIcon } from "@heroicons/react/outline";
+// import { MailIcon } from "@heroicons/react/outline";
 
 export const meta: MetaFunction = () => {
   return {
@@ -18,7 +18,7 @@ export default function Index() {
         <h1>你好。</h1>
       </article>
       <address className="flex space-x-2 my-4 items-center not-italic">
-        <MailIcon className="h-4 w-4" />
+        {/* <MailIcon className="h-4 w-4" /> */}
         <a href="mailto:A137294381b@163.com">A137294381b@163.com</a>
       </address>
     </>

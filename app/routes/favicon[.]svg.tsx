@@ -22,13 +22,13 @@ class Point {
   }
 }
 
-const O = new Point(8, 8);
-const A = new Point(8 + 8 * Math.cos(15 * Math.PI / 180), 8 - 8 * Math.sin(15 * Math.PI / 180));
-const B = new Point(8 + 8 * Math.cos(135 * Math.PI / 180), 8 - 8 * Math.sin(135 * Math.PI / 180));
-const C = new Point(8 + 8 * Math.cos(255 * Math.PI / 180), 8 - 8 * Math.sin(255 * Math.PI / 180));
-const D = O.mid(A);
-const E = O.mid(B);
-const F = O.mid(C);
+const O = new Point(8, 8),
+  A = new Point(8 + 8 * Math.cos(15 * Math.PI / 180), 8 - 8 * Math.sin(15 * Math.PI / 180)),
+  B = new Point(8 + 8 * Math.cos(135 * Math.PI / 180), 8 - 8 * Math.sin(135 * Math.PI / 180)),
+  C = new Point(8 + 8 * Math.cos(255 * Math.PI / 180), 8 - 8 * Math.sin(255 * Math.PI / 180)),
+  D = O.mid(A),
+  E = O.mid(B),
+  F = O.mid(C);
 
 const Polygon: FC<{ points: Point[]; }> = ({ points }) =>
   <polygon
