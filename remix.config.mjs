@@ -1,10 +1,11 @@
+// @ts-check
 /**
  * @type {import('@remix-run/dev').AppConfig}
  */
-module.exports = {
+export default {
   serverBuildTarget: "cloudflare-workers",
   server: "./server.ts",
-  devServerBroadcastDelay: 1000,
+  devServerBroadcastDelay: 10000,
   ignoredRouteFiles: [".*"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
@@ -12,3 +13,4 @@ module.exports = {
   // publicPath: "/build/",
   // devServerPort: 8002
 };
+

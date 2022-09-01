@@ -4,6 +4,7 @@
   "description": "",
   "license": "Unlicense",
   "sideEffects": false,
+  "type": "module",
   "main": "build/index.js",
   "scripts": {
     "build": "run-s build:css build:remix",
@@ -28,7 +29,7 @@
     "feed": "^4.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "tailwindcss": "^3.0.23"
+    "tailwindcss": "^3.1.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.14.1",
