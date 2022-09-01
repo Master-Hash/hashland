@@ -12,8 +12,9 @@ import {
   ScrollRestoration,
   useCatch,
 } from "@remix-run/react";
+import { Icon } from "@iconify-icon/react";
+import rssIcon from "@iconify-icons/heroicons-solid/rss.js";
 
-import { RssIcon } from "@heroicons/react/solid";
 // import { dateFormat } from "./utils/dateFormat.js";
 import styles from "./main.css";
 import { CatchBoundaryComponent } from "@remix-run/react/dist/routeModules.js";
@@ -145,7 +146,7 @@ function HeaderComponent() {
             </li>
             )}
           <a href="/atom" className="border-0 hover:opacity-80" target="_blank" rel="noreferrer">
-            <RssIcon transform="translate(0 2)" className="h-5 w-5" />
+            <Icon icon={rssIcon} />
           </a>
         </ul>
       </nav>
