@@ -1,17 +1,14 @@
 name = "land"
-type = "javascript"
 
-# zone_id = ""
+main = "./build/index.js"
+
 account_id = "e0d60887062f5ede06dd38e2a57da70e"
 # route = "land.master-hash.workers.dev"
 workers_dev = true
 
 [site]
 bucket = "./public"
-entry-point = "."
 
 [build]
-command = "npm i && npm run build"
+command = ""
 
-[build.upload]
-format = "service-worker"
