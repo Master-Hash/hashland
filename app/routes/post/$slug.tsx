@@ -1,5 +1,5 @@
-import { LoaderFunction, MetaFunction } from "remix";
-import { useLoaderData } from "remix";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import posts from "../../data.json" assert { type: "json" };
 import { dateFormat } from "../../utils/dateFormat.js";
 import type { Post } from "../../utils/type.js";

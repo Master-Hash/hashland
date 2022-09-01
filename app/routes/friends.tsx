@@ -1,5 +1,5 @@
-import { useLoaderData } from "remix";
-import type { LoaderFunction, MetaFunction, } from "remix";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import { Comment } from "../utils/comment.js";
 
 /**

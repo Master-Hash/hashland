@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/cloudflare";
 
 interface Point {
   x: number;
@@ -74,7 +74,7 @@ function Cube() {
       </g>
     </svg>
   );
-};
+}
 
 export const loader: LoaderFunction = () => {
   return new Response(renderToStaticMarkup(<Cube />), {

@@ -1,19 +1,18 @@
 import { StrictMode } from "react";
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
+
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
-  Link,
   ScrollRestoration,
   useCatch,
-  NavLink,
-} from "remix";
-import type {
-  MetaFunction,
-  LinksFunction,
-} from "remix";
+} from "@remix-run/react";
+
 import { RssIcon } from "@heroicons/react/solid";
 // import { dateFormat } from "./utils/dateFormat.js";
 import styles from "./main.css";

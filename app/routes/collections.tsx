@@ -1,7 +1,4 @@
-// import { Link } from "remix";
-// import posts from "../data.json" assert { type: "json" };
-
-import type { MetaFunction } from "remix";
+import type { MetaFunction } from "@remix-run/cloudflare";
 
 export const meta: MetaFunction = () => {
   return {

@@ -1,4 +1,4 @@
-import type { MetaFunction } from "remix";
+import type { MetaFunction } from "@remix-run/cloudflare";
 import { MailIcon } from "@heroicons/react/outline";
 
 export const meta: MetaFunction = () => {

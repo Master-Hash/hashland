@@ -1,4 +1,4 @@
-import { LoaderFunction } from "remix";
+import { LoaderFunction } from "@remix-run/cloudflare";
 import { js2xml } from "xml-js";
 import { SITEURL } from "../utils/constant.js";
 

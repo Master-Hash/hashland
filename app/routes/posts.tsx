@@ -1,5 +1,5 @@
-import { Link } from "remix";
-import type { MetaFunction } from "remix";
+import { Link } from "@remix-run/react";
+import type { MetaFunction } from "@remix-run/cloudflare";
 import posts from "../data.json" assert { type: "json" };
 
 import { dateFormat } from "../utils/dateFormat.js";

@@ -21,7 +21,8 @@
     "useDefineForClassFields": true,
     "alwaysStrict": true,
     "module": "ESNext",
-    // Remix takes care of building everything in `remix build`.
     "noEmit": true,
-  }
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+  },
 }

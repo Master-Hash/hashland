@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect } from "remix";
+import { LoaderFunction, redirect } from "@remix-run/cloudflare";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const reqUrl = new URL(request.url);

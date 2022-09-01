@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/cloudflare";
 import { Feed } from "feed";
 import { SITEURL } from "../utils/constant.js";
 import posts from "../data.json" assert { type: "json" };
