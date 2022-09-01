@@ -5,7 +5,7 @@
 export default {
   serverBuildTarget: "cloudflare-workers",
   server: "./server.ts",
-  devServerBroadcastDelay: 10000,
+  devServerBroadcastDelay: 1000,
   ignoredRouteFiles: [".*"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",

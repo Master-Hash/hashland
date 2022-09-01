@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer components {
   *, ::before, ::after {
@@ -298,3 +298,7 @@
     }
   }
 }
+
+/* article.mx-auto > h1:nth-child(1) {
+  @apply text-blue-100
+} */
