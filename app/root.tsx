@@ -16,7 +16,7 @@ import {
 import { RssIcon } from "@heroicons/react/solid";
 // import { dateFormat } from "./utils/dateFormat.js";
 import styles from "./main.css";
-import { CatchBoundaryComponent } from "@remix-run/react/routeModules";
+import { CatchBoundaryComponent } from "@remix-run/react/dist/routeModules.js";
 import { SITEURL } from "./utils/constant.js";
 
 export const meta: MetaFunction = () => {
@@ -48,12 +48,12 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: styles,
     },
-    {
-      rel: "search",
-      type: "application/opensearchdescription+xml",
-      title: "Hashland",
-      href: `${SITEURL}/osd`,
-    }
+    // {
+    //   rel: "search",
+    //   type: "application/opensearchdescription+xml",
+    //   title: "Hashland",
+    //   href: `${SITEURL}/osd`,
+    // }
   ];
 };
 

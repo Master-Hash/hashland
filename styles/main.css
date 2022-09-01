@@ -2,7 +2,7 @@
 @import "prism-theme-vars/base";
 @import "prism-theme-vars/themes/vitesse-light" (prefers-color-scheme: light);
 @import "prism-theme-vars/themes/vitesse-dark" (prefers-color-scheme: dark);
-@import "./prose"
+@import "./prose";
 
 @layer components {
   *, ::before, ::after {
