@@ -69,9 +69,9 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body className="dark:bg-zinc-800">
+        <body className="dark:bg-zinc-800 flex flex-col min-h-screen">
           <HeaderComponent />
-          <main className="mx-3 sm:mx-auto my-6 max-w-prose dark:text-white"><Outlet /></main>
+          <main className="flex-grow mx-3 sm:mx-auto my-6 max-w-prose dark:text-white"><Outlet /></main>
           <FooterComponent />
           <ScrollRestoration />
           <Scripts />
@@ -121,34 +121,32 @@ export const CatchBoundary: CatchBoundaryComponent = () => {
 
 function HeaderComponent() {
   return (
-    <header className="flex mx-[.6rem] my-2 justify-between items-center text-gray-500 dark:text-zinc-300 sm:mx-3 lg:my-3 lg:mx-4 print:hidden">
-      <div>
-        <NavLink to="/" className="flex items-center" end>
-          {({ isActive }) => (
-            <>
-              <img alt="" src="/favicon.svg" className="w-12 h-12 inline" />
-              <span className={`ml-[.6rem] underline hover:opacity-80 ${isActive ? "font-semibold" : "font-medium"}`}>Hashland</span>
-            </>
-          )}
+    <header className="flex-grow-0 flex-shrink-0 px-8 py-4 text-gray-500 dark:text-zinc-300 print:hidden">
+      <nav className="flex space-x-6 items-center">
+        <NavLink to="/" className="mr-auto hover:opacity-80" end>
+          {({ isActive }) =>
+            <img alt="Hashland cube logo" src="/favicon.svg" className="w-12 h-12" />
+          }
         </NavLink>
-      </div>
-      <nav className="">
-        <ul className="flex space-x-4 sm:space-x-8">
-          {[
-            ["/posts", "文章"],
-            ["/collections", "专栏"],
-            ["/friends", "友链"]
-          ]
-            .map(([pathname, text]) => <li key={pathname}>
-              <NavLink to={pathname} className={({ isActive }) => isActive ? "text-base font-semibold underline hover:opacity-80" : "text-base font-normal underline hover:opacity-80"}>
-                {text}
-              </NavLink>
-            </li>
-            )}
-          <a href="/atom" className="border-0 hover:opacity-80" target="_blank" rel="noreferrer">
-            <Icon icon={rssIcon} />
-          </a>
-        </ul>
+
+        {[
+          ["/posts", "文章"],
+          ["/collections", "专栏"],
+          ["/friends", "友链"]
+        ]
+          .map(([pathname, text]) =>
+            <NavLink end key={pathname} to={pathname} className={({ isActive }) =>
+              (isActive
+                ? "font-semibold"
+                : "font-normal")
+              + " text-base hover:opacity-80"}
+            >
+              {text}
+            </NavLink>
+          )}
+        <a href="/atom" className="flex hover:opacity-80 items-center" target="_blank" rel="noreferrer">
+          <Icon icon={rssIcon} />
+        </a>
       </nav>
     </header>
   );
@@ -156,7 +154,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto text-center p-4 dark:text-white print:hidden">
+    <footer className="flex-grow-0 flex-shrink-0 mx-auto p-4 text-center dark:text-white print:hidden">
       {/* <div>
             <small>
               缓存更新于{dateFormat.format(new Date())}

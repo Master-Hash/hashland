@@ -19,7 +19,7 @@ export default function Index() {
       </article>
       <address className="flex space-x-2 my-4 items-center not-italic">
         {/* <MailIcon className="h-4 w-4" /> */}
-        <a href="mailto:A137294381b@163.com">A137294381b@163.com</a>
+        {/* <a href="mailto:A137294381b@163.com">A137294381b@163.com</a> */}
       </address>
     </>
   );
