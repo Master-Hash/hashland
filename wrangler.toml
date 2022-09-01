@@ -12,5 +12,5 @@ compatibility_date = "2022-09-01"
 bucket = "./public"
 
 [build]
-command = ""
+command = "npm i && npm run build"
 
