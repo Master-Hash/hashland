@@ -2,6 +2,7 @@
 @import "prism-theme-vars/base";
 @import "prism-theme-vars/themes/vitesse-light" (prefers-color-scheme: light);
 @import "prism-theme-vars/themes/vitesse-dark" (prefers-color-scheme: dark);
+@import "./prose"
 
 @layer components {
   *, ::before, ::after {
@@ -14,24 +15,9 @@
 }
 
 @layer utilities {
-  /* 自定义 prose */
-  .prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
-  .prose :where(blockquote p:last-of-type):not(:where([class~="not-prose"] *))::after
-  {
-    content: none;
-  }
-
-  .prose blockquote {
-    @apply not-italic;
-  }
-
   @media print {
     a::after {
       content: " (" attr(href) ") ";
     }
   }
 }
-
-/* article.mx-auto > h1:nth-child(1) {
-  @apply text-blue-100
-} */
