@@ -1,17 +1,17 @@
 import { Link } from "@remix-run/react";
-import type { MetaFunction } from "@remix-run/cloudflare";
-import posts from "../data.json" assert { type: "json" };
+// import type { MetaFunction } from "@remix-run/cloudflare";
+// import posts from "../data.json" assert { type: "json" };
 
-import { dateFormat } from "../utils/dateFormat.js";
+// import { dateFormat } from "../utils/dateFormat.js";
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "最新文章 « Hashland",
-    "og:title": "最新文章 « Hashland",
-    "og:description": "Hash 的最新文章",
-    description: "Hash 的最新文章",
-  };
-};
+// export const meta: MetaFunction = () => {
+//   return {
+//     title: "最新文章 « Hashland",
+//     "og:title": "最新文章 « Hashland",
+//     "og:description": "Hash 的最新文章",
+//     description: "Hash 的最新文章",
+//   };
+// };
 
 export default function Posts() {
   return (
