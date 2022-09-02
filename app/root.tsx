@@ -71,7 +71,7 @@ export default function App() {
         </head>
         <body className="dark:bg-zinc-800 flex flex-col min-h-screen">
           <HeaderComponent />
-          <main className="flex-grow mx-3 sm:mx-auto my-6 max-w-prose dark:text-white"><Outlet /></main>
+          <Outlet />
           <FooterComponent />
           <ScrollRestoration />
           <Scripts />
