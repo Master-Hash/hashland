@@ -16,7 +16,7 @@
     "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --build-command echo --watch",
     "dev:css": "cross-env NODE_ENV=development npm run generate:css -- -w",
     "generate:css": "postcss ./styles/main.css -o ./app/main.css",
-    "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
+    "start": "cross-env NODE_ENV=production miniflare ./build/index.js --build-command echo",
     "deploy": "wrangler publish"
   },
   "dependencies": {
