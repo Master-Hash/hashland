@@ -123,9 +123,9 @@ function HeaderComponent() {
   return (
     <header className="flex-grow-0 flex-shrink-0 px-8 py-4 text-gray-500 dark:text-zinc-300 print:hidden">
       <nav className="flex space-x-6 items-center">
-        <NavLink to="/" className="mr-auto hover:opacity-80" end>
+        <NavLink to="/" className="mr-auto" end>
           {({ isActive }) =>
-            <img alt="Hashland cube logo" src="/favicon.svg" className="w-12 h-12" />
+            <img alt="Hashland cube logo" src="/favicon.svg" className={"w-12 h-12" + (isActive ? "" : " opacity-80 hover:opacity-100")} />
           }
         </NavLink>
 
@@ -135,16 +135,16 @@ function HeaderComponent() {
           ["/friends", "友链"]
         ]
           .map(([pathname, text]) =>
-            <NavLink end key={pathname} to={pathname} className={({ isActive }) =>
+            <NavLink key={pathname} to={pathname} className={({ isActive }) =>
               (isActive
                 ? "font-semibold"
-                : "font-normal")
-              + " text-base hover:opacity-80"}
+                : "font-normal opacity-80 hover:opacity-100")
+              + " text-base"}
             >
               {text}
             </NavLink>
           )}
-        <a href="/atom" className="flex hover:opacity-80 items-center" target="_blank" rel="noreferrer">
+        <a href="/atom" className="flex opacity-80 hover:opacity-100 items-center" target="_blank" rel="noreferrer">
           <Icon icon={rssIcon} />
         </a>
       </nav>
@@ -163,17 +163,17 @@ function FooterComponent() {
       {/* 最终没有选择 deno 类似的 Github 贴纸 */}
       <div>
         <small>
-          <a href="https://github.com/Master-Hash/hashland" target="_blank" rel="noreferrer" className="underline">前端仓库</a>
+          <a href="https://github.com/Master-Hash/hashland" target="_blank" rel="noreferrer" className="underline decoration-neutral-800 hover:decoration-black dark:decoration-zinc-400 dark:hover:decoration-white">前端仓库</a>
           {/**
                * 间隔号
                * @see https://www.zhihu.com/question/20271115 */}
           {"・"}
-          <a href="https://github.com/Master-Hash/post" target="_blank" rel="noreferrer" className="underline">文章仓库</a>
+          <a href="https://github.com/Master-Hash/post" target="_blank" rel="noreferrer" className="underline decoration-neutral-800 hover:decoration-black dark:decoration-zinc-400 dark:hover:decoration-white">文章仓库</a>
         </small>
       </div>
       <div>
         <small>
-          <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh" target="_blank" rel="noreferrer" className="underline">CC0</a> © 公共领域
+          <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh" target="_blank" rel="noreferrer" className="underline decoration-neutral-800 hover:decoration-black dark:decoration-zinc-400 dark:hover:decoration-white">CC0</a> © 公共领域
         </small>
       </div>
     </footer>
