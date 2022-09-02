@@ -6,6 +6,7 @@
   "sideEffects": false,
   "type": "module",
   "main": "build/index.js",
+  "packageManager": "npm@8.19.1",
   "scripts": {
     "build": "run-s build:css build:remix",
     "build:css": "cross-env NODE_ENV=production npm run generate:css -- --no-map",
