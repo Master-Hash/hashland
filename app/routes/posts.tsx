@@ -1,8 +1,23 @@
-import { Link } from "@remix-run/react";
-// import type { MetaFunction } from "@remix-run/cloudflare";
-// import posts from "../data.json" assert { type: "json" };
+import { json } from "@remix-run/cloudflare";
+import type { SerializeFrom } from "@remix-run/cloudflare";
+import { Link, useLoaderData } from "@remix-run/react";
+import * as TinySnowScript from "./post/Tiny_Snow-script.md";
 
-// import { dateFormat } from "../utils/dateFormat.js";
+type PostModule = typeof TinySnowScript;
+type PostMeta = { slug: string; title: string; type: string; };
+
+function postFromModule(item: PostModule): PostMeta {
+  return {
+    slug: item.filename.replace(/\.mdx?$/, ""),
+    ...item.attributes.meta,
+  };
+}
+
+export const loader = () => {
+  return json([
+    postFromModule(TinySnowScript),
+  ]);
+};
 
 // export const meta: MetaFunction = () => {
 //   return {
@@ -14,30 +29,8 @@ import { Link } from "@remix-run/react";
 // };
 
 export default function Posts() {
+  const posts = useLoaderData<SerializeFrom<typeof loader>>();
   return (
-    <>
-      <h1 className="my-6">最新文章</h1>
-      {posts.map(post => {
-        const published = new Date(post.commits[0].date);
-        // @ts-ignore
-        // const updated = new Date(post.commits.at(-1)?.date);
-        return (
-          <Link to={`/post/${post.slug}`} key={post.slug} className="">
-            <article className="my-2 -mx-2 p-2 sm:-mx-4 sm:p-4 hover:shadow-2xl hover:bg-zinc-100 dark:hover:bg-zinc-700 sm:hover:bg-zinc-50 dark:sm:hover:bg-zinc-700 sm:hover:shadow-xl">
-              <h2 className="text-xl my-1">
-                {post.title}
-              </h2>
-              <p>
-                {post.description}
-              </p>
-              <p>
-                <small>发布于{dateFormat.format(published)}</small>
-              </p>
-            </article>
-          </Link>
-        );
-      }
-      )}
-    </>
+    <></>
   );
 }

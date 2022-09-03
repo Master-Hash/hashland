@@ -7,6 +7,10 @@ export default {
   server: "./server.ts",
   devServerBroadcastDelay: 1000,
   ignoredRouteFiles: [".*"],
+  mdx: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  }
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",
