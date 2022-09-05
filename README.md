@@ -33,4 +33,4 @@ deno.land
 ```
 
 ## 模板 REAMDE
-[cloudflare-workers](https://github.com/remix-run/remix/blob/main/packages/create-remix/templates/cloudflare-workers/README.md)
+[cloudflare-workers](https://github.com/remix-run/remix/blob/main/templates/cloudflare-workers/README.md)
