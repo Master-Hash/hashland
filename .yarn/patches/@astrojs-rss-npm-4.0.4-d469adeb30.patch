@@ -1,0 +1,50 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 4b9b561829884b6365a5a0f2946e7a45addc278b..8b97106ecb412f321d5bcc5a5b037eb6ab33c1d1 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,4 +1,4 @@
+-import { z } from 'astro/zod';
++import { z } from 'zod';
+ import { rssSchema } from './schema.js';
+ export { rssSchema };
+ export type RSSOptions = {
+diff --git a/dist/index.js b/dist/index.js
+index b6d4be4bd516217ec25989db759b068fad891914..af209fa2ca6cca5adedf85a8076edaa7b57516f7 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,4 +1,4 @@
+-import { z } from "astro/zod";
++import { z } from "zod";
+ import { XMLBuilder, XMLParser } from "fast-xml-parser";
+ import { yellow } from "kleur/colors";
+ import { rssSchema } from "./schema.js";
+diff --git a/dist/schema.d.ts b/dist/schema.d.ts
+index 1e82106cff9268c0669051dd8908a54fe6ffb7c0..62a1b208be914efc48798f484e6ab833dcaec5b3 100644
+--- a/dist/schema.d.ts
++++ b/dist/schema.d.ts
+@@ -1,4 +1,4 @@
+-import { z } from 'astro/zod';
++import { z } from 'zod';
+ export declare const rssSchema: z.ZodObject<{
+     title: z.ZodOptional<z.ZodString>;
+     description: z.ZodOptional<z.ZodString>;
+diff --git a/dist/schema.js b/dist/schema.js
+index f71e51e582e6fad013e0bf238a216d984df5eaba..c9cc25e2bea0792901e9d016f170745c373004f0 100644
+--- a/dist/schema.js
++++ b/dist/schema.js
+@@ -1,4 +1,4 @@
+-import { z } from "astro/zod";
++import { z } from "zod";
+ const rssSchema = z.object({
+   title: z.string().optional(),
+   description: z.string().optional(),
+diff --git a/dist/util.d.ts b/dist/util.d.ts
+index c5153d678861b6610c944b9a965e64f6a81528dd..1b4f005c03a11fd2ddc96cc3a2448dd6ac91956e 100644
+--- a/dist/util.d.ts
++++ b/dist/util.d.ts
+@@ -1,4 +1,4 @@
+-import type { z } from 'astro/zod';
++import type { z } from 'zod';
+ import type { RSSOptions } from './index.js';
+ /** Normalize URL to its canonical form */
+ export declare function createCanonicalURL(url: string, trailingSlash?: RSSOptions['trailingSlash'], base?: string): URL;

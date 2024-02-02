@@ -1,6 +1,7 @@
-import type { LoaderFunction } from "@remix-run/node";
 import type { FC } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+
+import type { LoaderFunction } from "@remix-run/node";
 
 interface Point {
   x: number;
@@ -46,21 +47,15 @@ const Line: FC<{ p1: Point; p2: Point }> = ({ p1, p2 }) => (
   <line className="l" x1={p1.x} y1={p1.y} x2={p2.x} y2={p2.y} />
 );
 
-function Cube() {
+function MonoCube() {
   return (
     <svg version="2.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
       <defs>
         <style>
           {`.l {
   fill: none;
-  stroke: black;
+  stroke: currentColor;
   stroke-width: .36;
-}
-
-@media (prefers-color-scheme: dark) {
-  .l {
-    stroke: white;
-  }
 }`}
         </style>
       </defs>
@@ -75,7 +70,7 @@ function Cube() {
 }
 
 export const loader = (() => {
-  return new Response(renderToStaticMarkup(<Cube />), {
+  return new Response(renderToStaticMarkup(<MonoCube />), {
     status: 200,
     headers: {
       "Content-Type": "image/svg+xml",

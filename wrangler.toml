@@ -1,16 +1,3 @@
-name = "land"
-
-main = "./build/index.js"
-
-account_id = "e0d60887062f5ede06dd38e2a57da70e"
-# route = "land.master-hash.workers.dev"
-workers_dev = true
-
-compatibility_date = "2022-09-01"
-
-[site]
-bucket = "./public"
-
-[build]
-command = "npm ci && npm run build"
-
+# kv_namespaces = [
+# { id = "MY_KV", binding="MY_KV" }
+# ]

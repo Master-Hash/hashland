@@ -8,5 +8,10 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
+    require("@iconify/tailwind").addDynamicIconSelectors(),
+    require("@catppuccin/tailwindcss")({
+      prefix: "cat",
+      // defaultFlavour: "mocha",
+    }),
   ],
 };
