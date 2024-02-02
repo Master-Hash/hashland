@@ -11,7 +11,7 @@ import rss from "@astrojs/rss";
 //   }).build;
 // }
 
-// /** @type {import("@remix-run/node").LoaderFunction} */
+/** @satisfies {import("@remix-run/cloudflare").LoaderFunction} */
 export const loader = async () => {
   // const data = await (
   //   await fetch("https://api.github.com/users/Master-Hash/gists")
@@ -80,7 +80,7 @@ export const loader = async () => {
 
   return await rss({
     title: "Hash's Publications",
-    site: import.meta.env.VITE_SITEURL,
+    site: import.meta.env.VITE_SITEURL + "/",
     description:
       "我发表过的所有文章。不是笔记，而是个人的想法和发现。我期待有作品在期刊发表，在 Hacker News 上讨论的一天。",
     items:

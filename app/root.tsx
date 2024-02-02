@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -12,7 +12,6 @@ import {
 import type { FC, ReactElement } from "react";
 import { StrictMode } from "react";
 
-import { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules.js";
 import "./main.css";
 
 // 这些应该在页面路由，而不是根路由
@@ -59,7 +58,7 @@ export default function App() {
   );
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = () => {
+export const ErrorBoundary = () => {
   const error = useRouteError() as {
     status: number;
     statusText: string;
@@ -96,67 +95,6 @@ export const ErrorBoundary: ErrorBoundaryComponent = () => {
   if (isRouteErrorResponse(error)) {
   }
 };
-
-// export const CatchBoundary: CatchBoundaryComponent = () => {
-//   const caught = useCatch();
-//   console.log(caught);
-//   return (
-//     <html>
-//       <head>
-//         <title>
-//           {caught.status} {caught.statusText}
-//         </title>
-//         <meta charSet="utf-8" />
-//         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-//         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-//         <meta
-//           property="og:title"
-//           content={`${caught.status} ${caught.statusText}`}
-//         />
-//         <meta
-//           name="description"
-//           content={`${caught.status} ${caught.statusText}`}
-//         />
-//         <meta
-//           property="og:description"
-//           content={`${caught.status} ${caught.statusText}`}
-//         />
-//         <Meta />
-//         <Links />
-//       </head>
-//       <body className="dark:bg-zinc-800">
-//         <HeaderComponent />
-//         <main className="">
-//           <article className="prose mx-auto dark:prose-invert">
-//             <h1>
-//               {caught.status} {caught.statusText}
-//             </h1>
-//             {caught.status === 404 ? (
-//               <p>
-//                 <a
-//                   href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404"
-//                   target="_blank"
-//                   rel="noreferrer"
-//                 >
-//                   404
-//                 </a>
-//                 属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？
-//               </p>
-//             ) : caught.status === 400 ? (
-//               <p>
-//                 请指定搜索参数：<code>/search?q=%s</code>
-//               </p>
-//             ) : (
-//               <p>{caught.data}</p>
-//             )}
-//           </article>
-//         </main>
-//         <FooterComponent />
-//         <Scripts />
-//       </body>
-//     </html>
-//   );
-// };
 
 const BodyComponent: FC<{
   children: ReactElement;

@@ -1,12 +1,12 @@
 import type {
   // LoaderFunction,
   MetaFunction,
-} from "@remix-run/node";
+} from "@remix-run/cloudflare";
 import { useEffect, useRef } from "react";
 import type { Config, Spec } from "vega";
 import { View, parse } from "vega";
 import { dark } from "vega-themes";
-// import { json } from "@remix-run/node";
+// import { json } from "@remix-run/cloudflare";
 // import { useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {

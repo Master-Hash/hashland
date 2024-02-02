@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/cloudflare";
 import type { FC } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 

@@ -169,7 +169,7 @@ const spec = {
 };
 
 /**
- * @satisfies {import("@remix-run/node").LoaderFunction}
+ * @satisfies {import("@remix-run/cloudflare").LoaderFunction}
  */
 export const loader = async () => {
   const viewServer = new View(parse(spec))
