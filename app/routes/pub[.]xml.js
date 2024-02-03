@@ -1,107 +1,27 @@
 import rss from "@astrojs/rss";
 
-// function a() {
-//   return new XMLBuilder({
-//     ignoreAttributes: false,
-//     // Avoid correcting self-closing tags to standard tags
-//     // when using `customData`
-//     // https://github.com/withastro/astro/issues/5794
-//     suppressEmptyNode: true,
-//     suppressBooleanAttributes: false,
-//   }).build;
-// }
-
 /** @satisfies {import("@remix-run/cloudflare").LoaderFunction} */
 export const loader = async () => {
-  // const data = await (
-  //   await fetch("https://api.github.com/users/Master-Hash/gists")
-  // ).json();
-  const data = [
-    {
-      url: "https://api.github.com/gists/3ddb74b5c5697ba1709d56f9292c5a1f",
-      forks_url:
-        "https://api.github.com/gists/3ddb74b5c5697ba1709d56f9292c5a1f/forks",
-      commits_url:
-        "https://api.github.com/gists/3ddb74b5c5697ba1709d56f9292c5a1f/commits",
-      id: "3ddb74b5c5697ba1709d56f9292c5a1f",
-      node_id: "G_kwDOA2C0CNoAIDNkZGI3NGI1YzU2OTdiYTE3MDlkNTZmOTI5MmM1YTFm",
-      git_pull_url:
-        "https://gist.github.com/3ddb74b5c5697ba1709d56f9292c5a1f.git",
-      git_push_url:
-        "https://gist.github.com/3ddb74b5c5697ba1709d56f9292c5a1f.git",
-      html_url:
-        "https://gist.github.com/Master-Hash/3ddb74b5c5697ba1709d56f9292c5a1f",
-      files: {
-        "测试：CommonMark 规范.md": {
-          filename: "测试：CommonMark 规范.md",
-          type: "text/markdown",
-          language: "Markdown",
-          raw_url:
-            "https://gist.githubusercontent.com/Master-Hash/3ddb74b5c5697ba1709d56f9292c5a1f/raw/771b8c4325932f766ab145c6e915c2b7b15a24a5/%E6%B5%8B%E8%AF%95%EF%BC%9ACommonMark%20%E8%A7%84%E8%8C%83.md",
-          size: 167096,
-        },
-      },
-      public: true,
-      created_at: "2024-01-25T08:46:09Z",
-      updated_at: "2024-01-25T13:25:29Z",
-      description:
-        "仅供测试。from https://github.com/commonmark/commonmark-spec/blob/master/spec.txt",
-      comments: 0,
-      user: null,
-      comments_url:
-        "https://api.github.com/gists/3ddb74b5c5697ba1709d56f9292c5a1f/comments",
-      owner: {
-        login: "Master-Hash",
-        id: 56669192,
-        node_id: "MDQ6VXNlcjU2NjY5MTky",
-        avatar_url: "https://avatars.githubusercontent.com/u/56669192?v=4",
-        gravatar_id: "",
-        url: "https://api.github.com/users/Master-Hash",
-        html_url: "https://github.com/Master-Hash",
-        followers_url: "https://api.github.com/users/Master-Hash/followers",
-        following_url:
-          "https://api.github.com/users/Master-Hash/following{/other_user}",
-        gists_url: "https://api.github.com/users/Master-Hash/gists{/gist_id}",
-        starred_url:
-          "https://api.github.com/users/Master-Hash/starred{/owner}{/repo}",
-        subscriptions_url:
-          "https://api.github.com/users/Master-Hash/subscriptions",
-        organizations_url: "https://api.github.com/users/Master-Hash/orgs",
-        repos_url: "https://api.github.com/users/Master-Hash/repos",
-        events_url: "https://api.github.com/users/Master-Hash/events{/privacy}",
-        received_events_url:
-          "https://api.github.com/users/Master-Hash/received_events",
-        type: "User",
-        site_admin: false,
-      },
-      truncated: false,
-    },
-  ];
+  const data = await (
+    await fetch("https://api.github.com/users/Master-Hash/gists")
+  ).json();
 
-  return await rss({
+  return rss({
     title: "Hash's Publications",
-    site: import.meta.env.VITE_SITEURL + "/",
+    site: import.meta.env.VITE_SITEURL,
     description:
       "我发表过的所有文章。不是笔记，而是个人的想法和发现。我期待有作品在期刊发表，在 Hacker News 上讨论的一天。",
-    items:
-      // [
-      //   {
-      //     author,
-      //     description,
-      //     content
-      //   }
-      // ],
-      data.map((item) => {
-        const titles = Object.keys(item.files);
-        const title = titles[0].split(".")[0];
+    items: data.map((item) => {
+      const titles = Object.keys(item.files);
+      const title = titles[0].split(".")[0];
 
-        return {
-          link: item.html_url,
-          pubDate: new Date(item.created_at),
-          title,
-          description: item.description,
-        };
-      }),
+      return {
+        link: item.html_url,
+        pubDate: new Date(item.created_at),
+        title,
+        description: item.description,
+      };
+    }),
 
     // [
     //   {

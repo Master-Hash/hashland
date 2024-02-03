@@ -21,11 +21,13 @@
     "@remix-run/cloudflare": "^2.6.0",
     "@remix-run/cloudflare-pages": "^2.6.0",
     "@remix-run/react": "^2.6.0",
+    "forgetti": "^0.8.0",
     "isbot": "^4.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vega": "^5.27.0",
     "vega-themes": "^2.14.0",
+    "vite-plugin-forgetti": "^0.8.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
