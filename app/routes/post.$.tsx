@@ -1,0 +1,34 @@
+import type { LoaderFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
+import { Suspense, lazy } from "react";
+
+const m = import.meta.glob([
+  "/post-test/人/*.md",
+  "/post-test/事/*.md",
+  "/post-test/物/*.md",
+  "/post-test/情思/*.md",
+]);
+
+export const loader = (async ({ params }) => {
+  const filePath = params["*"]!;
+
+  if (!(`/post-test/${filePath}` in m)) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const _t = filePath.match(/(人|事|物|情思)\/(.+)\.md/) as Array<string>;
+  const { [1]: type, [2]: slug } = _t;
+
+  return json({ filePath, type, slug });
+}) satisfies LoaderFunction;
+
+export default function Post() {
+  const { type, slug, filePath } = useLoaderData<typeof loader>();
+  const L = lazy(m[`/post-test/${filePath}`]);
+  return (
+    <Suspense fallback="">
+      <L />
+    </Suspense>
+  );
+}
