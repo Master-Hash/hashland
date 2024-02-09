@@ -136,3 +136,4 @@ dist
 /build
 
 .wrangler
+/public/assets/*

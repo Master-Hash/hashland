@@ -505,10 +505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-types@npm:^4.20240129.0":
-  version: 4.20240129.0
-  resolution: "@cloudflare/workers-types@npm:4.20240129.0"
-  checksum: 10c0/9d702f8c53c04d952ace255b438dfd098369f46efc063de8c0d937eac95e22b103941262e59dcdf6d524394ae797af5c94e972ff47cbd03bc30f408656a640cf
+"@cloudflare/workers-types@npm:^4.20240208.0":
+  version: 4.20240208.0
+  resolution: "@cloudflare/workers-types@npm:4.20240208.0"
+  checksum: 10c0/0655f9cfa008461dc126baee59530607b19813c90b325f25ff10366b9b5734c19e1e8a7aa38deb5ae337ae50a44d7a25dca07c877d5a86157464284c36316b1d
   languageName: node
   linkType: hard
 
@@ -4861,11 +4861,12 @@ __metadata:
   dependencies:
     "@astrojs/rss": "patch:@astrojs/rss@patch%3A@astrojs/rss@npm%253A4.0.4%23~/.yarn/patches/@astrojs-rss-npm-4.0.4-d469adeb30.patch%3A%3Aversion=4.0.4&hash=b308e6#~/.yarn/patches/@astrojs-rss-patch-77e0336396.patch"
     "@catppuccin/tailwindcss": "npm:^0.1.6"
-    "@cloudflare/workers-types": "npm:^4.20240129.0"
+    "@cloudflare/workers-types": "npm:^4.20240208.0"
     "@iconify-json/heroicons": "npm:^1.1.19"
     "@iconify-json/ph": "npm:^1.1.11"
     "@iconify-json/streamline": "npm:^1.1.8"
     "@iconify/tailwind": "npm:^0.1.4"
+    "@mdx-js/mdx": "npm:^3.0.0"
     "@mdx-js/rollup": "npm:^3.0.0"
     "@remix-run/cloudflare": "npm:^2.6.0"
     "@remix-run/cloudflare-pages": "npm:^2.6.0"
@@ -4890,8 +4891,8 @@ __metadata:
     postcss-import: "npm:^16.0.0"
     prettier: "npm:^3.2.5"
     prettier-plugin-tailwindcss: "npm:^0.5.11"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
+    react: "npm:18.3.0-canary-ba5e6a832-20240208"
+    react-dom: "npm:18.3.0-canary-ba5e6a832-20240208"
     remark-frontmatter: "npm:^5.0.0"
     remark-gfm: "npm:^4.0.0"
     remark-mdx-frontmatter: "npm:^4.0.0"
@@ -4901,7 +4902,7 @@ __metadata:
     vega-themes: "npm:^2.14.0"
     vite: "npm:^5.1.0"
     vite-plugin-forgetti: "npm:^0.8.0"
-    wrangler: "npm:^3.27.0"
+    wrangler: "npm:^3.28.0"
     zod: "npm:^3.22.4"
   languageName: unknown
   linkType: soft
@@ -8418,15 +8419,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
-  version: 18.2.0
-  resolution: "react-dom@npm:18.2.0"
+"react-dom@npm:18.3.0-canary-ba5e6a832-20240208":
+  version: 18.3.0-canary-ba5e6a832-20240208
+  resolution: "react-dom@npm:18.3.0-canary-ba5e6a832-20240208"
   dependencies:
     loose-envify: "npm:^1.1.0"
-    scheduler: "npm:^0.23.0"
+    scheduler: "npm:0.24.0-canary-ba5e6a832-20240208"
   peerDependencies:
-    react: ^18.2.0
-  checksum: 10c0/66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
+    react: 18.3.0-canary-ba5e6a832-20240208
+  checksum: 10c0/63a47b80c50b8326755a68e72b12e835849055e7139c79a417cf5bdc65a6e58896e7f9d9db24524e5e4809dd46f834e52751a59850cd620022fb9c771f27e11a
   languageName: node
   linkType: hard
 
@@ -8468,12 +8469,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
+"react@npm:18.3.0-canary-ba5e6a832-20240208":
+  version: 18.3.0-canary-ba5e6a832-20240208
+  resolution: "react@npm:18.3.0-canary-ba5e6a832-20240208"
   dependencies:
     loose-envify: "npm:^1.1.0"
-  checksum: 10c0/b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+  checksum: 10c0/486cddbb6ec7117c6767c5ca87bbc362e49a67b19c65acf881a1fbb9ae428fb2ea7d3634103a2dc0bfa3c251f9e2dc50698e42a8b83536ebd9869c025c619823
   languageName: node
   linkType: hard
 
@@ -8970,12 +8971,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "scheduler@npm:0.23.0"
+"scheduler@npm:0.24.0-canary-ba5e6a832-20240208":
+  version: 0.24.0-canary-ba5e6a832-20240208
+  resolution: "scheduler@npm:0.24.0-canary-ba5e6a832-20240208"
   dependencies:
     loose-envify: "npm:^1.1.0"
-  checksum: 10c0/b777f7ca0115e6d93e126ac490dbd82642d14983b3079f58f35519d992fa46260be7d6e6cede433a92db70306310c6f5f06e144f0e40c484199e09c1f7be53dd
+  checksum: 10c0/49ea1fbcadf2a479a856868793a35151290e615e6ae490d7b7f5f13993532a8e3100e8de38282651cea207da9202ee17971c67e19f13b147e2e24a8db7d030a7
   languageName: node
   linkType: hard
 
@@ -10841,9 +10842,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wrangler@npm:^3.27.0":
-  version: 3.27.0
-  resolution: "wrangler@npm:3.27.0"
+"wrangler@npm:^3.28.0":
+  version: 3.28.0
+  resolution: "wrangler@npm:3.28.0"
   dependencies:
     "@cloudflare/kv-asset-handler": "npm:^0.2.0"
     "@esbuild-plugins/node-globals-polyfill": "npm:^0.2.3"
@@ -10860,13 +10861,18 @@ __metadata:
     selfsigned: "npm:^2.0.1"
     source-map: "npm:0.6.1"
     xxhash-wasm: "npm:^1.0.1"
+  peerDependencies:
+    "@cloudflare/workers-types": ^4.20230914.0
   dependenciesMeta:
     fsevents:
+      optional: true
+  peerDependenciesMeta:
+    "@cloudflare/workers-types":
       optional: true
   bin:
     wrangler: bin/wrangler.js
     wrangler2: bin/wrangler.js
-  checksum: 10c0/2a5c311552cc17d59af79519397b9f8aeeabd6c2722dc35993b78bb1f6cd4df995a089dfce5d5bfaa0f2c5267505b568d6220e7c8b291c621199fe151ea7ff45
+  checksum: 10c0/79bbd838a1e1bcd021f6ee05d3d1d99f32d2abc3107cc4ffbb80c003f8e04ffe030f541d2e6c6cbff7aca55b9312e06b3019485a4b6de8a0be8f41828c735006
   languageName: node
   linkType: hard
 

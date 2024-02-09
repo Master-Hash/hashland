@@ -19,3 +19,9 @@ interface AppLoadContext {
   };
 }
 // }
+
+declare module "*.mdx" {
+  const MDXComponent: (props: any) => JSX.Element;
+  export const frontmatter: any;
+  export default MDXComponent;
+}

@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Suspense, lazy } from "react";
 
 const m = import.meta.glob([
@@ -14,7 +14,7 @@ export const loader = (async ({ params }) => {
   const filePath = params["*"]!;
 
   if (!(`/post-test/${filePath}` in m)) {
-    throw new Response("Not Found", { status: 404 });
+    throw new Response("Not Found", { status: 404, statusText: "Not Found" });
   }
 
   const _t = filePath.match(/(人|事|物|情思)\/(.+)\.md/) as Array<string>;
@@ -28,7 +28,36 @@ export default function Post() {
   const L = lazy(m[`/post-test/${filePath}`]);
   return (
     <Suspense fallback="">
-      <L />
+      <L
+        components={{
+          a({ href, children, ...props }) {
+            if (URL.canParse(href)) {
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  {...props}
+                >
+                  {children}
+                </a>
+              );
+            } else if (href.endsWith(".md") && !href.includes("/")) {
+              return (
+                <Link to={`${type}/${href}`} {...props}>
+                  {children}
+                </Link>
+              );
+            } else {
+              return (
+                <Link to={href} {...props}>
+                  {children}
+                </Link>
+              );
+            }
+          },
+        }}
+      />
     </Suspense>
   );
 }
