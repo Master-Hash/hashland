@@ -1,5 +1,7 @@
 @import "tailwindcss/tailwind";
-@import "./prose";
+@import "@shikijs/twoslash/style-rich.css";
+@import "./prose.css";
+@import "./shiki.css";
 
 @layer components {
   body {
