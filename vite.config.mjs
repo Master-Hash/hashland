@@ -1,3 +1,4 @@
+import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import {
   unstable_cloudflarePreset as cloudflare,
@@ -6,6 +7,7 @@ import {
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
@@ -39,7 +41,19 @@ export default {
         remarkGfm,
         remarkMath,
       ],
+      remarkRehypeOptions: {
+        allowDangerousHtml: true,
+        footnoteLabel: "脚注",
+        footnoteBackLabel(referenceIndex, rereferenceIndex) {
+          return (
+            "回到正文：" +
+            (referenceIndex + 1) +
+            (rereferenceIndex > 1 ? "-" + rereferenceIndex : "")
+          );
+        },
+      },
       rehypePlugins: [
+        [rehypeRaw, { passThrough: nodeTypes }],
         rehypeSlug,
         [rehypeKatex, { strict: true, output: "mathml" }],
         [
