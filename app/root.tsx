@@ -114,7 +114,7 @@ const BodyComponent: FC<{
           {extraMeta}
           <Links />
         </head>
-        <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-macchiato">
+        <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-macchiato print:block">
           <HeaderComponent />
           {children}
           <FooterComponent />
