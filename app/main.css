@@ -4,8 +4,14 @@
 @import "./shiki.css";
 
 @layer components {
-  body {
+  html {
     @apply scroll-smooth;
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    html {
+      @apply scroll-auto;
+    }
   }
 
   *,
@@ -15,15 +21,22 @@
   }
 
   /* 外部链接 */
-  /* a[href^="http"]::after {
-    content: url()
-  } */
+  /* a[href^="http"]::after { */
+    /* https://dafoster.net/articles/2018/11/24/why-isnt-the-external-link-symbol-in-unicode/ */
+    /* content: "↪"; */
+    /* content: "↗"; */
+    /* content: "⧉"; */
+    /* content: "⎋"; */
+    /* @apply inline-block rotate-90; */
+    /* @apply align-middle; */
+  /* } */
 }
 
 @layer utilities {
+  /* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
   @media print {
     a::after {
-      content: " (" attr(href) ") ";
+      content: "(" attr(href) ")";
     }
   }
 }
