@@ -5,6 +5,7 @@ import {
   unstable_vitePlugin as remix,
 } from "@remix-run/dev";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
+import { transformerRenderWhitespace } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -22,9 +23,11 @@ const highlighter = await getHighlighterCore({
     // import("shiki/themes/vitesse-light.mjs"),
     // import("shiki/themes/vitesse-dark.mjs"),
     import("shiki/themes/catppuccin-latte.mjs"),
-    import("shiki/themes/catppuccin-macchiato.mjs"),
+    import("shiki/themes/catppuccin-frappe.mjs"),
+    // import("shiki/themes/catppuccin-macchiato.mjs"),
   ],
   langs: [
+    import("shiki/langs/apache.mjs"),
     import("shiki/langs/shellscript.mjs"),
     import("shiki/langs/typescript.mjs"),
   ],
@@ -43,7 +46,7 @@ export default {
       ],
       remarkRehypeOptions: {
         allowDangerousHtml: true,
-        footnoteLabel: "脚注",
+        footnoteLabel: "尾注",
         footnoteBackLabel(referenceIndex, rereferenceIndex) {
           return (
             "回到正文：" +
@@ -64,16 +67,21 @@ export default {
               // light: "vitesse-light",
               // dark: "catppuccin-mocha",
               light: "catppuccin-latte",
-              dark: "catppuccin-macchiato",
+              // dark: "catppuccin-macchiato",
+              dark: "catppuccin-frappe",
             },
             defaultColor: false,
-            transformers: [transformerTwoslash()],
+            transformers: [
+              transformerTwoslash(),
+              transformerRenderWhitespace(),
+            ],
           },
         ],
       ],
     }),
     remix({
       presets: [cloudflare()],
+      future: {},
     }),
     forgetti({
       preset: "react",

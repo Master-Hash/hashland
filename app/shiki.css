@@ -8,7 +8,7 @@
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);
   /* Optional, if you also want font styles */
-  font-style: var(--shiki-light-font-style);
+  /* font-style: var(--shiki-light-font-style); */
   font-weight: var(--shiki-light-font-weight);
   text-decoration: var(--shiki-light-text-decoration);
 
@@ -21,8 +21,28 @@
     color: var(--shiki-dark);
     background-color: var(--shiki-dark-bg);
     /* Optional, if you also want font styles */
-    font-style: var(--shiki-dark-font-style);
+    /* font-style: var(--shiki-dark-font-style); */
     font-weight: var(--shiki-dark-font-weight);
     text-decoration: var(--shiki-dark-text-decoration);
   }
+}
+
+/* https://shiki-zh-docs.vercel.app/packages/transformers#transformerrenderwhitespace */
+.shiki .tab,
+.shiki .space {
+  @apply relative;
+}
+
+.shiki .tab::before,
+.shiki .space::before {
+  @apply absolute opacity-30;
+  @apply -translate-y-1;
+}
+
+.shiki .tab::before {
+  content: '⇥';
+}
+
+.shiki .space::before {
+  content: '·';
 }
