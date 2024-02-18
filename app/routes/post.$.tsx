@@ -43,12 +43,14 @@ export default function Post() {
                 </a>
               );
             } else if (href.endsWith(".md") && !href.includes("/")) {
+              // 相同类型
               return (
-                <Link to={`${type}/${href}`} {...props}>
+                <Link to={`../${type}/${href}`} {...props}>
                   {children}
                 </Link>
               );
             } else {
+              // 不同类型
               return (
                 <Link to={href} {...props}>
                   {children}

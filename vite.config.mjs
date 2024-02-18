@@ -81,7 +81,9 @@ export default {
     }),
     remix({
       presets: [cloudflare()],
-      future: {},
+      future: {
+        v3_relativeSplatPath: true,
+      },
     }),
     forgetti({
       preset: "react",
