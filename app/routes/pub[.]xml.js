@@ -2,26 +2,38 @@ import rss from "@astrojs/rss";
 
 /** @satisfies {import("@remix-run/cloudflare").LoaderFunction} */
 export const loader = async () => {
-  const data = await (
-    await fetch("https://api.github.com/users/Master-Hash/gists")
-  ).json();
+  // const data = await (
+  //   await fetch("https://api.github.com/users/Master-Hash/gists")
+  // ).json();
 
   return rss({
     title: "Hash's Publications",
     site: import.meta.env.VITE_SITEURL,
     description:
       "我发表过的所有文章。不是笔记，而是个人的想法和发现。我期待有作品在期刊发表，在 Hacker News 上讨论的一天。",
-    items: data.map((item) => {
-      const titles = Object.keys(item.files);
-      const title = titles[0].split(".")[0];
+    // items: data.map((item) => {
+    //   const titles = Object.keys(item.files);
+    //   const title = titles[0].split(".")[0];
 
-      return {
-        link: item.html_url,
-        pubDate: new Date(item.created_at),
-        title,
-        description: item.description,
-      };
-    }),
+    //   return {
+    //     link: item.html_url,
+    //     pubDate: new Date(item.created_at),
+    //     title,
+    //     description: item.description,
+    //   };
+    // }),
+    items: [
+      {
+        link: "https://blog.junyu33.me/2023/11/28/beijing",
+        title: "从北京城市建设看新中国的城市建设及时代背景",
+        pubDate: new Date("2023-11-28"),
+      },
+      {
+        link: "https://blog.junyu33.me/2021/12/19/%E3%80%8A%E8%8C%B8%E9%9B%AA%E3%80%8B%E8%AE%B2%E7%A8%BF",
+        title: "《茸雪》讲稿：反乌托邦的爱情，存在主义的自由、反抗",
+        pubDate: new Date("2021-12-18"),
+      },
+    ],
 
     // [
     //   {
