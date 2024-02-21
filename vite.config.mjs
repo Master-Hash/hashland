@@ -1,8 +1,8 @@
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import {
-  unstable_cloudflarePreset as cloudflare,
-  unstable_vitePlugin as remix,
+  vitePlugin as remix,
+  cloudflareDevProxyVitePlugin as remixCloudflareDevProxy,
 } from "@remix-run/dev";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
@@ -79,8 +79,8 @@ export default {
         ],
       ],
     }),
+    remixCloudflareDevProxy(),
     remix({
-      presets: [cloudflare()],
       future: {
         v3_relativeSplatPath: true,
       },
@@ -93,9 +93,4 @@ export default {
       },
     }),
   ],
-  ssr: {
-    resolve: {
-      externalConditions: ["workerd", "worker"],
-    },
-  },
 };
