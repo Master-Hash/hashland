@@ -51,11 +51,7 @@ export const links: LinksFunction = () => {
 };
 
 export default function App() {
-  return (
-    <BodyComponent>
-      <Outlet />
-    </BodyComponent>
-  );
+  return <Outlet />;
 }
 
 export const ErrorBoundary = () => {
@@ -68,38 +64,37 @@ export const ErrorBoundary = () => {
   };
   console.error(error);
   return (
-    <BodyComponent
-      extraMeta={<title>{`${error.status} ${error.statusText}`}</title>}
-    >
-      {
-        <article className="prose mx-8 dark:prose-invert md:mx-auto">
-          <h1>{`${error.status} ${error.statusText}`}</h1>
-          {error.status === 404 ? (
-            <p>
-              <a
-                href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404"
-                target="_blank"
-                rel="noreferrer"
-              >
-                404
-              </a>
-              属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？
-            </p>
-          ) : (
-            <p>{error.data}</p>
-          )}
-        </article>
-      }
-    </BodyComponent>
+    // https://react.dev/reference/react-dom/components/title#special-rendering-behavior
+    // react@canary 会把 <meta> <title> 等自动插入 <head>
+    // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
+    <>
+      <title>{`${error.status} ${error.statusText}`}</title>
+      <article className="prose mx-8 dark:prose-invert md:mx-auto">
+        <h1>{`${error.status} ${error.statusText}`}</h1>
+        {error.status === 404 ? (
+          <p>
+            <a
+              href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404"
+              target="_blank"
+              rel="noreferrer"
+            >
+              404
+            </a>
+            属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？
+          </p>
+        ) : (
+          <p>{error.data}</p>
+        )}
+      </article>
+    </>
   );
   if (isRouteErrorResponse(error)) {
   }
 };
 
-const BodyComponent: FC<{
+export const Layout: FC<{
   children: ReactElement;
-  extraMeta?: ReactElement;
-}> = ({ children, extraMeta }) => {
+}> = ({ children }) => {
   return (
     <StrictMode>
       <html lang="zh-cn">
@@ -111,7 +106,6 @@ const BodyComponent: FC<{
             content="width=device-width,initial-scale=1.0"
           />
           <Meta />
-          {extraMeta}
           <Links />
         </head>
         <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-frappe print:block">
