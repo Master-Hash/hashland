@@ -53,26 +53,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/rss@npm:4.0.6":
-  version: 4.0.6
-  resolution: "@astrojs/rss@npm:4.0.6"
-  dependencies:
-    fast-xml-parser: "npm:^4.3.6"
-    kleur: "npm:^4.1.5"
-  checksum: 10c0/78313d04b9757085be8740a7fb8ca61f2aa020931b1aca2d7cfdff0e49b842d1303a7c2e223463a67216abd4c1b323be1e099bd346f8a06393c3fe1280bbe4c1
-  languageName: node
-  linkType: hard
-
-"@astrojs/rss@patch:@astrojs/rss@npm%3A4.0.6#~/.yarn/patches/@astrojs-rss-npm-4.0.6-56e3871d30.patch":
-  version: 4.0.6
-  resolution: "@astrojs/rss@patch:@astrojs/rss@npm%3A4.0.6#~/.yarn/patches/@astrojs-rss-npm-4.0.6-56e3871d30.patch::version=4.0.6&hash=1faabe"
-  dependencies:
-    fast-xml-parser: "npm:^4.3.6"
-    kleur: "npm:^4.1.5"
-  checksum: 10c0/83359f2d5b064e096b55c74364737a8d3d80209c37084dc4088c094f256ffa6e939afc364ac17c7e671f39abb5b72b872a0130570e8ab31574ebfce77aa02d34
-  languageName: node
-  linkType: hard
-
 "@babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/code-frame@npm:7.24.7"
@@ -6284,17 +6264,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.3.6":
-  version: 4.4.0
-  resolution: "fast-xml-parser@npm:4.4.0"
-  dependencies:
-    strnum: "npm:^1.0.5"
-  bin:
-    fxparser: src/cli/cli.js
-  checksum: 10c0/ce32fad713471a40bea67959894168f297a5dd0aba64b89a2abc71a4fec0b1ae1d49c2dd8d8719ca8beeedf477824358c8a486b360b9f3ef12abc2e355d11318
-  languageName: node
-  linkType: hard
-
 "fastq@npm:^1.6.0":
   version: 1.17.1
   resolution: "fastq@npm:1.17.1"
@@ -6776,7 +6745,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hashland@workspace:."
   dependencies:
-    "@astrojs/rss": "patch:@astrojs/rss@npm%3A4.0.6#~/.yarn/patches/@astrojs-rss-npm-4.0.6-56e3871d30.patch"
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@catppuccin/palette": "npm:^1.2.0"
@@ -6853,7 +6821,6 @@ __metadata:
     shiki: "npm:^1.12.1"
     storybook: "npm:^8.2.8"
     tailwindcss: "npm:^3.4.9"
-    turbo-stream: "npm:^2.2.3"
     typescript: "npm:^5.5.4"
     vega: "npm:^5.30.0"
     vega-loader: "npm:^4.5.2"
@@ -7769,13 +7736,6 @@ __metadata:
   version: 3.0.3
   resolution: "kleur@npm:3.0.3"
   checksum: 10c0/cd3a0b8878e7d6d3799e54340efe3591ca787d9f95f109f28129bdd2915e37807bf8918bb295ab86afb8c82196beec5a1adcaf29042ce3f2bd932b038fe3aa4b
-  languageName: node
-  linkType: hard
-
-"kleur@npm:^4.1.5":
-  version: 4.1.5
-  resolution: "kleur@npm:4.1.5"
-  checksum: 10c0/e9de6cb49657b6fa70ba2d1448fd3d691a5c4370d8f7bbf1c2f64c24d461270f2117e1b0afe8cb3114f13bbd8e51de158c2a224953960331904e636a5e4c0f2a
   languageName: node
   linkType: hard
 
@@ -11321,13 +11281,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strnum@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "strnum@npm:1.0.5"
-  checksum: 10c0/64fb8cc2effbd585a6821faa73ad97d4b553c8927e49086a162ffd2cc818787643390b89d567460a8e74300148d11ac052e21c921ef2049f2987f4b1b89a7ff1
-  languageName: node
-  linkType: hard
-
 "style-to-object@npm:^0.4.0":
   version: 0.4.4
   resolution: "style-to-object@npm:0.4.4"
@@ -11671,7 +11624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turbo-stream@npm:^2.2.0, turbo-stream@npm:^2.2.3":
+"turbo-stream@npm:^2.2.0":
   version: 2.2.3
   resolution: "turbo-stream@npm:2.2.3"
   checksum: 10c0/f4a9afb52137b33564567d8c962a1ef74c9aeef1a8957b7d3e2908a34450d15a1318bb90620246a1f229c244ca466aff3f13377cfc66bf13377256f75120556f

@@ -17,7 +17,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@astrojs/rss": "patch:@astrojs/rss@npm%3A4.0.6#~/.yarn/patches/@astrojs-rss-npm-4.0.6-56e3871d30.patch",
     "@catppuccin/palette": "^1.2.0",
     "@iconify-json/arcticons": "^1.1.110",
     "@iconify-json/fluent": "^1.1.61",
