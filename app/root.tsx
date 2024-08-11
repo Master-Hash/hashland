@@ -1,4 +1,6 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { FC, ReactElement } from "react";
+import { StrictMode } from "react";
+import type { HeadersFunction, LinksFunction } from "react-router";
 import {
   Links,
   Meta,
@@ -6,13 +8,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  isRouteErrorResponse,
   useRouteError,
-} from "@remix-run/react";
-import type { FC, ReactElement } from "react";
-import { StrictMode } from "react";
+} from "react-router";
 
-import "./main.css";
+// import "./main.css";
+import style from "./main.css?url";
 
 // 这些应该在页面路由，而不是根路由
 // export const meta: MetaFunction = () => {
@@ -32,14 +32,24 @@ export const links: LinksFunction = () => {
   return [
     {
       rel: "icon",
-      href: "/favicon.svg",
+      href: "/favicon.ico",
       type: "image/svg+xml",
     },
+    // {
+    //   rel: "alternate",
+    //   type: "application/rss+xml",
+    //   href: "/pub.xml",
+    //   title: "Hash's Publications",
+    // },
     {
       rel: "alternate",
       type: "application/rss+xml",
-      href: "/pub.xml",
-      title: "Hash's Publications",
+      href: "https://rsshub.app/telegram/channel/hash_elbeszelese",
+      title: "Hash Elbeszélése & Kívánsága",
+    },
+    {
+      rel: "stylesheet",
+      href: style,
     },
     // {
     //   rel: "search",
@@ -49,6 +59,22 @@ export const links: LinksFunction = () => {
     // }
   ];
 };
+
+// export const loader = defineLoader(({ response }) => {
+// export const loader = ({ response }) => {
+//   response.headers.append(
+//     "content-security-policy",
+//     "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
+//       (import.meta.env.DEV ? "" : ""),
+//   );
+//   return null;
+// };
+
+export const headers: HeadersFunction = () => ({
+  "content-security-policy":
+    "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
+    (import.meta.env.DEV ? "" : ""),
+});
 
 export default function App() {
   return <Outlet />;
@@ -62,14 +88,14 @@ export const ErrorBoundary = () => {
     data: string;
     error: Error;
   };
-  console.error(error);
+  // console.error(error);
   return (
     // https://react.dev/reference/react-dom/components/title#special-rendering-behavior
     // react@canary 会把 <meta> <title> 等自动插入 <head>
     // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
     <>
       <title>{`${error.status} ${error.statusText}`}</title>
-      <article className="prose mx-8 dark:prose-invert md:mx-auto">
+      <main className="prose relative mx-6 dark:prose-invert prose-a:break-words md:mx-auto">
         <h1>{`${error.status} ${error.statusText}`}</h1>
         {error.status === 404 ? (
           <p>
@@ -85,11 +111,11 @@ export const ErrorBoundary = () => {
         ) : (
           <p>{error.data}</p>
         )}
-      </article>
+      </main>
     </>
   );
-  if (isRouteErrorResponse(error)) {
-  }
+  // if (isRouteErrorResponse(error)) {
+  // }
 };
 
 export const Layout: FC<{
@@ -97,7 +123,7 @@ export const Layout: FC<{
 }> = ({ children }) => {
   return (
     <StrictMode>
-      <html lang="zh-cn">
+      <html lang="zh-CN">
         <head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -127,8 +153,8 @@ function HeaderComponent() {
         <NavLink to="/" className="mr-auto" end>
           {({ isActive }) => (
             <img
-              alt="Hashland cube logo"
-              src="/favicon.svg"
+              alt="站点标识，为一立方体的三点透视图"
+              src="/favicon.ico"
               className={
                 "size-12" + (isActive ? "" : " opacity-80 hover:opacity-100")
               }
@@ -169,7 +195,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto p-4 text-center text-cat-subtext1 print:hidden">
+    <footer className="mx-auto p-4 pt-12 text-center text-cat-subtext1 print:hidden">
       <div>
         <small>
           <a
@@ -185,7 +211,7 @@ function FooterComponent() {
            * @see https://www.zhihu.com/question/20271115 */}
           {"・"}
           <a
-            href="https://github.com/Master-Hash/post"
+            href="https://github.com/Master-Hash/post-test"
             target="_blank"
             rel="noreferrer"
             // className="hover:text-cat-teal"

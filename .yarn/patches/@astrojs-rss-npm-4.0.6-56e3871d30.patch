@@ -1,5 +1,5 @@
 diff --git a/dist/index.d.ts b/dist/index.d.ts
-index 4b9b561829884b6365a5a0f2946e7a45addc278b..8b97106ecb412f321d5bcc5a5b037eb6ab33c1d1 100644
+index db446d06530025a016587080bf2f773e19ba7386..639b00d0ae2e2b56fe7d48396ba0a2b2e8405627 100644
 --- a/dist/index.d.ts
 +++ b/dist/index.d.ts
 @@ -1,4 +1,4 @@
@@ -9,7 +9,7 @@ index 4b9b561829884b6365a5a0f2946e7a45addc278b..8b97106ecb412f321d5bcc5a5b037eb6
  export { rssSchema };
  export type RSSOptions = {
 diff --git a/dist/index.js b/dist/index.js
-index b6d4be4bd516217ec25989db759b068fad891914..af209fa2ca6cca5adedf85a8076edaa7b57516f7 100644
+index d5d9eab7280597a43853cc62588c7d079805f858..27832522cdba442cb03f99acc9e494e015785848 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -1,4 +1,4 @@
@@ -29,7 +29,7 @@ index 1e82106cff9268c0669051dd8908a54fe6ffb7c0..62a1b208be914efc48798f484e6ab833
      title: z.ZodOptional<z.ZodString>;
      description: z.ZodOptional<z.ZodString>;
 diff --git a/dist/schema.js b/dist/schema.js
-index f71e51e582e6fad013e0bf238a216d984df5eaba..c9cc25e2bea0792901e9d016f170745c373004f0 100644
+index 026882b1bbff44049ea1e5a563d3c68c1ba5e353..61251e024b8bdc33dcd105a2739d9ea5c8a0f337 100644
 --- a/dist/schema.js
 +++ b/dist/schema.js
 @@ -1,4 +1,4 @@
@@ -39,7 +39,7 @@ index f71e51e582e6fad013e0bf238a216d984df5eaba..c9cc25e2bea0792901e9d016f170745c
    title: z.string().optional(),
    description: z.string().optional(),
 diff --git a/dist/util.d.ts b/dist/util.d.ts
-index c5153d678861b6610c944b9a965e64f6a81528dd..1b4f005c03a11fd2ddc96cc3a2448dd6ac91956e 100644
+index dbfc751edcc989120aada993821f93ec6ee073b4..33da014f95e870c937ac4f9636dcd268bd5ae401 100644
 --- a/dist/util.d.ts
 +++ b/dist/util.d.ts
 @@ -1,4 +1,4 @@
@@ -47,4 +47,4 @@ index c5153d678861b6610c944b9a965e64f6a81528dd..1b4f005c03a11fd2ddc96cc3a2448dd6
 +import type { z } from 'zod';
  import type { RSSOptions } from './index.js';
  /** Normalize URL to its canonical form */
- export declare function createCanonicalURL(url: string, trailingSlash?: RSSOptions['trailingSlash'], base?: string): URL;
+ export declare function createCanonicalURL(url: string, trailingSlash?: RSSOptions['trailingSlash'], base?: string): string;

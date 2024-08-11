@@ -2,7 +2,13 @@
  * @type {import("tailwindcss").Config}
  */
 module.exports = {
-  content: ["./app/**/*.tsx"],
+  content: [
+    "./app/**/*.tsx",
+    //
+    "./public/rss.xsl",
+    //
+    "./stories/**/*.tsx",
+  ],
   theme: {
     extend: {},
   },

@@ -1,1 +1,4 @@
-export const dateFormat = new Intl.DateTimeFormat("zh-CN", { dateStyle: "long", });
+export const dateFormat = new Intl.DateTimeFormat("zh-CN", {
+  dateStyle: "long",
+  timeStyle: "short",
+});

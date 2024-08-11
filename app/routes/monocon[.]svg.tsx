@@ -1,13 +1,10 @@
-import type { LoaderFunction } from "@remix-run/cloudflare";
 import type { FC } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-
-interface Point {
-  x: number;
-  y: number;
-}
+import { renderToReadableStream } from "react-dom/server";
+import type { LoaderFunction } from "react-router";
 
 class Point {
+  x: number;
+  y: number;
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -68,11 +65,16 @@ function MonoCube() {
   );
 }
 
-export const loader = (() => {
-  return new Response(renderToStaticMarkup(<MonoCube />), {
-    status: 200,
-    headers: {
-      "Content-Type": "image/svg+xml",
+export const loader = (async ({ request }) => {
+  return new Response(
+    await renderToReadableStream(<MonoCube />, {
+      signal: request.signal,
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "image/svg+xml",
+      },
     },
-  });
+  );
 }) satisfies LoaderFunction;

@@ -36,7 +36,7 @@
 .shiki .tab::before,
 .shiki .space::before {
   @apply absolute opacity-30;
-  @apply -translate-y-1;
+  /* @apply -translate-y-1; */
 }
 
 .shiki .tab::before {
@@ -45,4 +45,17 @@
 
 .shiki .space::before {
   content: '·';
+}
+
+/* https://github.com/shikijs/shiki/issues/3#issuecomment-830564854 */
+.shiki {
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.shiki .line::before {
+  @apply w-4 mr-6 inline-block text-right;
+  content: counter(step);
+  counter-increment: step;
+  color: var(--ctp-overlay1);
 }

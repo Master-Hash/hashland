@@ -30,7 +30,7 @@ export const loader = async () => {
       },
       {
         link: "https://blog.junyu33.me/2021/12/19/%E3%80%8A%E8%8C%B8%E9%9B%AA%E3%80%8B%E8%AE%B2%E7%A8%BF",
-        title: "《茸雪》讲稿：反乌托邦的爱情，存在主义的自由、反抗",
+        title: "《茸雪》讲稿：谈爱情与自由",
         pubDate: new Date("2021-12-18"),
       },
     ],

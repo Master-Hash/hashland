@@ -1,7 +1,7 @@
-import type { LoaderFunction } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
 import { Suspense, lazy } from "react";
+import type { LoaderFunction, MetaFunction } from "react-router";
+import { useLoaderData } from "react-router";
+import { HrefToLink } from "../utils/components.js";
 
 const m = import.meta.glob([
   "/post-test/人/*.md",
@@ -9,6 +9,20 @@ const m = import.meta.glob([
   "/post-test/物/*.md",
   "/post-test/情思/*.md",
 ]);
+
+const ls = new Map<string, string>();
+
+for (const key in m) {
+  ls.set(key, lazy(m[key]));
+}
+
+export const meta: MetaFunction = ({ data }) => {
+  return [
+    { title: `${data.slug} « Hashland` },
+    // { name: "description", content: "Welcome to Remix!" },
+    // 等人工智能来归纳
+  ];
+};
 
 export const loader = (async ({ params }) => {
   const filePath = params["*"]!;
@@ -20,44 +34,26 @@ export const loader = (async ({ params }) => {
   const _t = filePath.match(/(人|事|物|情思)\/(.+)\.md/) as Array<string>;
   const { [1]: type, [2]: slug } = _t;
 
-  return json({ filePath, type, slug });
+  // const module = await m[`/post-test/${filePath}`]();
+  // const Markdown = module.default;
+
+  return {
+    filePath,
+    type,
+    slug,
+    // Markdown: <Cop />
+  };
 }) satisfies LoaderFunction;
 
 export default function Post() {
   const { type, slug, filePath } = useLoaderData<typeof loader>();
-  const L = lazy(m[`/post-test/${filePath}`]);
+  const Markdown = ls.get(`/post-test/${filePath}`)!;
+  // const L = lazy(m[`/post-test/${filePath}`]);
   return (
     <Suspense fallback="">
-      <L
+      <Markdown
         components={{
-          a({ href, children, ...props }) {
-            if (URL.canParse(href)) {
-              return (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  {...props}
-                >
-                  {children}
-                </a>
-              );
-            } else if (href.endsWith(".md") && !href.includes("/")) {
-              // 相同类型
-              return (
-                <Link to={`../${type}/${href}`} {...props}>
-                  {children}
-                </Link>
-              );
-            } else {
-              // 不同类型
-              return (
-                <Link to={href} {...props}>
-                  {children}
-                </Link>
-              );
-            }
-          },
+          a: HrefToLink,
         }}
       />
     </Suspense>

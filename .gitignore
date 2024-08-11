@@ -136,4 +136,40 @@ dist
 /build
 
 .wrangler
+
+*storybook.log
+
+# Hash custom
 /public/assets/*
+/public/fluent-emoji-high-contrast/
+/public/game-icons/
+/public/zodiac-white.png
+
+# Storybook bootstrap
+/stories/Page.tsx
+/stories/Page.stories.ts
+/stories/page.css
+/stories/Header.tsx
+/stories/Header.stories.ts
+/stories/header.css
+/stories/Configure.mdx
+/stories/Button.tsx
+/stories/Button.stories.ts
+/stories/button.css
+/stories/assets/youtube.svg
+/stories/assets/tutorials.svg
+/stories/assets/theming.png
+/stories/assets/testing.png
+/stories/assets/styling.png
+/stories/assets/share.png
+/stories/assets/github.svg
+/stories/assets/figma-plugin.png
+/stories/assets/docs.png
+/stories/assets/discord.svg
+/stories/assets/context.png
+/stories/assets/avif-test-image.avif
+/stories/assets/assets.png
+/stories/assets/addon-library.png
+/stories/assets/accessibility.svg
+/stories/assets/accessibility.png
+localtest.sql

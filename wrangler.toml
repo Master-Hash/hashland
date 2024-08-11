@@ -1,3 +1,8 @@
-# kv_namespaces = [
-# { id = "MY_KV", binding="MY_KV" }
-# ]
+# [[kv_namespaces]]
+# binding = "EMAIL_KV"
+# id = "64283b43b1924bcea2821f902f7e938b"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "local"
+database_id = "24f36833-9890-493d-ab34-7549fc414340"

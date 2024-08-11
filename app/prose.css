@@ -1,17 +1,63 @@
 @layer utilities {
-  .prose
+  .prose {
     :where(blockquote p:first-of-type):not(
-      :where([class~="not-prose"] *)
-    )::before,
-  .prose
+        :where([class~="not-prose"] *)
+      )::before,
     :where(blockquote p:last-of-type):not(
-      :where([class~="not-prose"] *)
-    )::after {
-    content: none;
-  }
+        :where([class~="not-prose"] *)
+      )::after {
+      content: none;
+    }
+    :where(code):not(
+        :where([class~="not-prose"], [class~="not-prose"] *)
+      )::before {
+      content: none;
+    }
+    :where(code):not(
+        :where([class~="not-prose"], [class~="not-prose"] *)
+      )::after {
+      content: none;
+    }
 
-  .prose blockquote,
-  .prose cite {
-    @apply not-italic;
+    code {
+      @apply text-base;
+    }
+
+    h1 {
+      @apply text-balance;
+    }
+
+    blockquote,
+    cite {
+      @apply not-italic;
+    }
+
+    /* Apply on prose basis */
+    /* a {
+      @apply break-all;
+    } */
+
+    /* li {
+      @apply my-[0.1em];
+      text-indent: 0.375em hanging;
+    } */
+
+    & {
+      @apply max-w-[72.5ch];
+    }
   }
+}
+
+/* https://css-tricks.com/examples/hrs/ */
+hr {
+  @apply overflow-visible text-center;
+  /* @apply invisible; */
+  @apply contents;
+  /* content: "* * *"; */
+}
+hr::after {
+  @apply visible block text-2xl;
+  /* @apply relative -top-3 print:top-0; */
+  @apply my-8;
+  content: "* * *";
 }
