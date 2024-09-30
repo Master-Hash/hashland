@@ -30,40 +30,42 @@ const deleted = [47, 48, 49];
 export default function Narrative() {
   const { data } = useLoaderData() as { data: Promise<Feed> };
   return (
-    <main className="prose relative mx-6 dark:prose-invert prose-a:break-words md:mx-auto">
+    <main className="prose relative mx-auto prose-a:break-words">
       <h1>日记</h1>
-      <p className="text-cat-subtext1">这里按理有一段介绍，我想好了再补充。</p>
-      <hr />
       <Suspense fallback="">
         <Await resolve={data}>
-          {({ items }: Feed) =>
-            items.toReversed().map((item, index) => {
-              const id = item.id.split("/").at(-1);
-              const date = dateFormat.format(new Date(item.date_published!));
-              return (
-                !deleted.includes(Number(id)) && (
-                  <section id={id}>
-                    <p
-                      key={id}
-                      // When RSC is ready, I'll abandon dangerouslySetInnerHTML!
-                      // And I'll rewrite insite links!
-                      dangerouslySetInnerHTML={{ __html: item.content_html! }}
-                    />
-                    <p className="text-right text-cat-subtext1">
-                      <small>
-                        {date}・
-                        <a href={item.url} target="_blank" rel="noreferrer">
-                          #{id}
-                        </a>
-                      </small>
-                    </p>
-                    {/* <hr /> */}
-                    {index < items.length - 1 && <hr />}
-                  </section>
-                )
-              );
-            })
-          }
+          {({ items, description }: Feed) => (
+            <>
+              <p>{description?.split("-").at(0)}</p>
+              <hr />
+              {items.toReversed().map((item, index) => {
+                const id = item.id.split("/").at(-1);
+                const date = dateFormat.format(new Date(item.date_published!));
+                return (
+                  !deleted.includes(Number(id)) && (
+                    <section id={id}>
+                      <p
+                        key={id}
+                        // When RSC is ready, I'll abandon dangerouslySetInnerHTML!
+                        // And I'll rewrite insite links!
+                        dangerouslySetInnerHTML={{ __html: item.content_html! }}
+                      />
+                      <p className="text-right text-cat-subtext1">
+                        <small>
+                          {date}・
+                          <a href={item.url} target="_blank" rel="noreferrer">
+                            #{id}
+                          </a>
+                        </small>
+                      </p>
+                      {/* <hr /> */}
+                      {index < items.length - 1 && <hr />}
+                    </section>
+                  )
+                );
+              })}
+            </>
+          )}
         </Await>
       </Suspense>
       <hr />
@@ -110,7 +112,7 @@ export const ErrorBoundary = () => {
   return (
     <>
       <title>500 Internal Server Error</title>
-      <main className="prose relative mx-6 dark:prose-invert prose-a:break-words md:mx-auto">
+      <main className="prose relative mx-auto prose-a:break-words">
         <h1>500 Internal Server Error</h1>
         <p>
           因为上游或我们的服务器故障，暂时无法显示内容。请稍后重试或给我写信报修。

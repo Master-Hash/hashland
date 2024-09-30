@@ -1,67 +1,14 @@
-@import "tailwindcss/tailwind";
-@import "@shikijs/twoslash/style-rich.css";
-@import "./prose.css";
-@import "./shiki.css";
-@import "./slide-enter.css";
-@import "./colore.css";
-/* @import "./noto-emoji.css"; */
-/* @import "./vega.css"; */
 /* @import "heti/umd/heti.min.css"; */
+@import "tailwindcss/base" layer(tw.base);
 
-@layer components {
-  html {
-    @apply scroll-smooth;
+@import "tailwindcss/components" layer(tw.components);
+@import "@shikijs/twoslash/style-rich.css" layer(tw.components);
+@import "./prose.css" layer(tw.components);
+@import "./shiki.css" layer(tw.components);
+@import "./slide-enter.css" layer(tw.components);
+@import "./colore.css" layer(tw.components);
 
-    /* It's prevented by Firefox for preventing fingerprinting */
-    /* font-family: "霞鹜文楷 GB", ui-sans-serif, system-ui, sans-serif,
-      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-      "Noto Color Emoji"; */
-  }
+@import "tailwindcss/utilities" layer(tw.utilities);
 
-  @media screen and (prefers-reduced-motion: reduce) {
-    html {
-      @apply scroll-auto;
-    }
-  }
-  .main,
-  nav {
-    & *,
-    & ::before,
-    & ::after {
-      @apply transition-all duration-300 ease-in-out;
-    }
-  }
-
-  ::selection {
-    @apply bg-cat-surface2;
-    --tw-bg-opacity: 0.6;
-
-    /* @apply bg-cat-surface2 opacity-60; */
-  }
-
-  img[src*="cdn-telegram.org/"],
-  video[src*="cdn-telegram.org/"],
-  a[href*="?q=%23"] {
-    @apply hidden;
-  }
-
-  /* 外部链接 */
-  /* a[href^="http"]::after { */
-  /* https://dafoster.net/articles/2018/11/24/why-isnt-the-external-link-symbol-in-unicode/ */
-  /* content: "↪"; */
-  /* content: "↗"; */
-  /* content: "⧉"; */
-  /* content: "⎋"; */
-  /* @apply inline-block rotate-90; */
-  /* @apply align-middle; */
-  /* } */
-}
-
-@layer utilities {
-  /* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
-  @media print {
-    a::after {
-      content: "(" attr(href) ")";
-    }
-  }
-}
+/* https://css-tricks.com/using-css-cascade-layers-to-manage-custom-styles-in-a-tailwind-project/ */
+@layer tw.base, tw.components, tw.utilities;

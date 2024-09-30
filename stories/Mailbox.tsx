@@ -10,7 +10,7 @@ type Message = {
 // 方便调试
 export function Mailbox({ messages }: { messages: Message[] }) {
   return (
-    <table className="cat-latte prose bg-cat-base text-cat-text dark:cat-frappe dark:prose-invert prose-headings:text-cat-text">
+    <table className="cat-latte prose bg-cat-base text-cat-text dark:cat-frappe prose-headings:text-cat-text">
       <thead>
         <tr>
           <th className="text-center">时间戳</th>

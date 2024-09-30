@@ -16,9 +16,9 @@ for (const key in m) {
   ls.set(key, lazy(m[key]));
 }
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: { data: { slug: string } }) => {
   return [
-    { title: `${data.slug} « Hashland` },
+    { title: `${data.slug.split("_").at(-1)} « Hashland` },
     // { name: "description", content: "Welcome to Remix!" },
     // 等人工智能来归纳
   ];

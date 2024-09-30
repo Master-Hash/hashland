@@ -1,4 +1,48 @@
-@layer utilities {
+@layer components {
+  html {
+    @apply scroll-smooth;
+
+    /* It's prevented by Firefox for preventing fingerprinting */
+    /* font-family: "霞鹜文楷 GB", ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji"; */
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    html {
+      @apply scroll-auto;
+    }
+  }
+
+  .main,
+  nav {
+    & *,
+    & ::before,
+    & ::after {
+      @apply transition-all duration-300 ease-in-out;
+    }
+  }
+
+  ::selection {
+    @apply bg-cat-surface2;
+    --tw-bg-opacity: 0.6;
+
+    /* @apply bg-cat-surface2 opacity-60; */
+  }
+
+  /* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
+  @media print {
+    a::after {
+      content: "(" attr(href) ")";
+    }
+  }
+
+  img[src*="cdn-telegram.org/"],
+  video[src*="cdn-telegram.org/"],
+  a[href*="?q=%23"] {
+    @apply hidden;
+  }
+
   .prose {
     :where(blockquote p:first-of-type):not(
         :where([class~="not-prose"] *)
@@ -8,11 +52,13 @@
       )::after {
       content: none;
     }
+
     :where(code):not(
         :where([class~="not-prose"], [class~="not-prose"] *)
       )::before {
       content: none;
     }
+
     :where(code):not(
         :where([class~="not-prose"], [class~="not-prose"] *)
       )::after {
@@ -43,21 +89,37 @@
     } */
 
     & {
+      @apply w-[calc(100%-3rem)];
       @apply max-w-[72.5ch];
+      @apply dark:prose-invert;
+      @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
     }
   }
-}
 
-/* https://css-tricks.com/examples/hrs/ */
-hr {
-  @apply overflow-visible text-center;
-  /* @apply invisible; */
-  @apply contents;
-  /* content: "* * *"; */
-}
-hr::after {
-  @apply visible block text-2xl;
-  /* @apply relative -top-3 print:top-0; */
-  @apply my-8;
-  content: "* * *";
+  /* https://css-tricks.com/examples/hrs/ */
+  hr {
+    @apply overflow-visible text-center;
+    /* @apply invisible; */
+    @apply contents;
+    /* content: "* * *"; */
+  }
+
+  hr::after {
+    @apply visible block text-2xl;
+    /* @apply relative -top-3 print:top-0; */
+    @apply my-8;
+    content: "* * *";
+  }
+
+  summary {
+    @apply font-semibold;
+  }
+
+  details > *:nth-child(2)::before,
+  details > *:last-child::after {
+    @apply overflow-visible text-center;
+    @apply visible block text-2xl;
+    @apply my-8;
+    content: "* * *";
+  }
 }

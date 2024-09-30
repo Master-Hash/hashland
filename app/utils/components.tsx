@@ -1,5 +1,8 @@
 import type { FC } from "react";
+import { createContext } from "react";
 import { Link } from "react-router";
+
+export const NonceContext = createContext<string | undefined>(undefined);
 
 // https://github.com/zloirock/core-js/blob/master/packages/core-js/modules/web.url.parse.js
 // Below is temporary polyfill
@@ -16,7 +19,7 @@ export const HrefToLink: FC<{
   children: string;
   props: Record<string, unknown>;
 }> = ({ href, children, ...props }) => {
-  const u = "parse" in URL ? (URL.parse(href) as URL) : parse(href);
+  const u = "parse" in URL ? URL.parse(href) : parse(href);
   if (u)
     return u.hostname === new URL(import.meta.env.VITE_SITEURL).hostname ? (
       <Link

@@ -2,10 +2,8 @@ import { flavors } from "@catppuccin/palette";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import shikiColorizedBrackets from "@michael-makes/shiki-colorized-brackets";
-import {
-  vitePlugin as reactRouter,
-  cloudflareDevProxyVitePlugin as reactRouterCloudflareDevProxy,
-} from "@react-router/dev";
+import { reactRouter } from "@react-router/dev/vite";
+import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
@@ -17,11 +15,18 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import { getSingletonHighlighterCore } from "shiki/core";
+import {
+  enableDeprecationWarnings,
+  getSingletonHighlighterCore,
+} from "shiki/core";
+import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
+// import wasm from "vite-plugin-wasm";
 // import { envOnlyMacros } from "vite-env-only";
 import babel from "vite-plugin-babel";
 // import forgetti from "vite-plugin-forgetti";
+
+enableDeprecationWarnings(true);
 
 const highlighter = await getSingletonHighlighterCore({
   themes: [
@@ -40,7 +45,7 @@ const highlighter = await getSingletonHighlighterCore({
     import("shiki/langs/json.mjs"),
     import("shiki/langs/tsx.mjs"),
   ],
-  loadWasm: getWasm,
+  engine: createOnigurumaEngine(getWasm),
 });
 
 const ReactCompilerConfig = {
@@ -125,55 +130,6 @@ export default {
     !isStorybook && reactRouterCloudflareDevProxy(),
     !isStorybook &&
       reactRouter({
-        // prerender: [
-        // "/",
-        // "/post/事/2010-09-01_循环.md",
-        // "/post/事/2020-02-16_网课时期.md",
-        // "/post/事/2021-12-18_演讲《茸雪》.md",
-        // "/post/事/2022-04-01_擦肩上纽.md",
-        // "/post/事/2022-07-12_环川之行.md",
-        // "/post/事/2023-3-21_风沙与柳絮.md",
-        // "/post/人/Donz.md",
-        // "/post/人/Spheniscidae.md",
-        // "/post/人/Xecades.md",
-        // "/post/人/f.md",
-        // "/post/人/hz.md",
-        // "/post/人/junyu33.md",
-        // "/post/人/l老师.md",
-        // "/post/人/大学室友.md",
-        // "/post/人/家母.md",
-        // "/post/人/無極.md",
-        // "/post/情思/MTF.md",
-        // "/post/情思/人生的大书.md",
-        // "/post/情思/信条.md",
-        // "/post/情思/家属.md",
-        // "/post/情思/愿望.md",
-        // "/post/情思/朋友.md",
-        // "/post/情思/渔夫.md",
-        // "/post/情思/玩泥巴.md",
-        // "/post/情思/现代性.md",
-        // "/post/情思/理想主义.md",
-        // "/post/情思/自然是个整体.md",
-        // "/post/情思/记叙时间.md",
-        // "/post/情思/记忆与 WeakMap.md",
-        // "/post/情思/语义网.md",
-        // "/post/情思/蹊径.md",
-        // "/post/情思/骗子的故事.md",
-        // "/post/物/Florence.md",
-        // "/post/物/Word Power Made Easy.md",
-        // "/post/物/仙海.md",
-        // "/post/物/公共服务.md",
-        // "/post/物/大学寝室.md",
-        // "/post/物/头发.md",
-        // "/post/物/家乡.md",
-        // "/post/物/时间.md",
-        // "/post/物/服务器.md",
-        // "/post/物/梳子.md",
-        // "/post/物/电子词典.md",
-        // "/post/物/行.md",
-        // "/post/物/衣.md",
-        // "/post/物/铁罐喷雾.md",
-        // ],
         future: {
           // unstable_singleFetch: true,
           // unstable_serverComponents: true,
@@ -190,6 +146,7 @@ export default {
           plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
         },
       }),
+    // !isStorybook && wasm(),
     // envOnlyMacros(),
     // forgetti({
     //   preset: "react",

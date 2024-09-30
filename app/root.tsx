@@ -1,5 +1,5 @@
 import type { FC, ReactElement } from "react";
-import { StrictMode } from "react";
+import { Fragment, useContext } from "react";
 import type { HeadersFunction, LinksFunction } from "react-router";
 import {
   Links,
@@ -13,6 +13,7 @@ import {
 
 // import "./main.css";
 import style from "./main.css?url";
+import { NonceContext } from "./utils/components.js";
 
 // 这些应该在页面路由，而不是根路由
 // export const meta: MetaFunction = () => {
@@ -30,6 +31,11 @@ import style from "./main.css?url";
 
 export const links: LinksFunction = () => {
   return [
+    {
+      href: style,
+      rel: "preload",
+      as: "style",
+    },
     {
       rel: "icon",
       href: "/favicon.ico",
@@ -61,20 +67,16 @@ export const links: LinksFunction = () => {
 };
 
 // export const loader = defineLoader(({ response }) => {
-// export const loader = ({ response }) => {
-//   response.headers.append(
-//     "content-security-policy",
-//     "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
-//       (import.meta.env.DEV ? "" : ""),
-//   );
-//   return null;
+// export const loader = () => {
+// response.headers.append(
+//   "content-security-policy",
+//   "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
+//     (import.meta.env.DEV ? "" : ""),
+// );
+// return {nonce};
 // };
 
-export const headers: HeadersFunction = () => ({
-  "content-security-policy":
-    "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
-    (import.meta.env.DEV ? "" : ""),
-});
+export const headers: HeadersFunction = () => ({});
 
 export default function App() {
   return <Outlet />;
@@ -95,7 +97,7 @@ export const ErrorBoundary = () => {
     // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
     <>
       <title>{`${error.status} ${error.statusText}`}</title>
-      <main className="prose relative mx-6 dark:prose-invert prose-a:break-words md:mx-auto">
+      <main className="prose relative mx-auto prose-a:break-words">
         <h1>{`${error.status} ${error.statusText}`}</h1>
         {error.status === 404 ? (
           <p>
@@ -121,35 +123,31 @@ export const ErrorBoundary = () => {
 export const Layout: FC<{
   children: ReactElement;
 }> = ({ children }) => {
+  const nonce = useContext(NonceContext); // 这一行没有编译到客户端，这是为什么？
   return (
-    <StrictMode>
-      <html lang="zh-CN">
-        <head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta
-            name="viewport"
-            content="width=device-width,initial-scale=1.0"
-          />
-          <Meta />
-          <Links />
-        </head>
-        <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-frappe print:block">
-          <HeaderComponent />
-          {children}
-          <FooterComponent />
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </html>
-    </StrictMode>
+    <html lang="zh-CN">
+      <head>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <Meta />
+        <Links />
+      </head>
+      <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-frappe print:block">
+        <HeaderComponent />
+        {children}
+        <FooterComponent />
+        <ScrollRestoration nonce={nonce} />
+        <Scripts nonce={nonce} />
+      </body>
+    </html>
   );
 };
 
 function HeaderComponent() {
   return (
     <header className="px-8 py-4 print:hidden">
-      <nav className="flex items-center space-x-2">
+      <nav className="flex items-center">
         <NavLink to="/" className="mr-auto" end>
           {({ isActive }) => (
             <img
@@ -163,30 +161,35 @@ function HeaderComponent() {
         </NavLink>
 
         {[
-          ["/posts", "文章"],
-          ["/collections", "专栏"],
-          ["/friends", "友链"],
-        ].map(([pathname, text]) => (
-          <NavLink
-            key={pathname}
-            to={pathname}
-            className={({ isActive }) =>
-              (isActive
-                ? "font-semibold"
-                : "font-normal opacity-80 hover:opacity-100") +
-              " rounded p-2 text-base"
-            }
-          >
-            {text}
-          </NavLink>
+          ["/connections", "故人"],
+          ["/experiences", "故事"],
+          ["/kami", "故纸堆"],
+        ].map(([pathname, text], index) => (
+          <Fragment key={pathname}>
+            <NavLink
+              to={pathname}
+              className={({ isActive }) =>
+                (isActive
+                  ? "font-semibold text-cat-text"
+                  : "font-normal text-cat-text opacity-80 hover:opacity-100") +
+                " rounded px-1 py-2 text-base"
+              }
+            >
+              {text}
+            </NavLink>
+            ・{/* {index !== 2 ? "・" : ""} */}
+          </Fragment>
         ))}
         <a
-          href="/atom"
-          className="flex items-center p-2 opacity-80 hover:opacity-100"
+          href="https://rsshub.app/telegram/channel/hash_elbeszelese"
+          // content-center
+          // but now is not needed?
+          className="p-2 text-[0px] opacity-80 hover:opacity-100"
           target="_blank"
           rel="noreferrer"
         >
-          <span className="icon-[streamline--rss-symbol-solid]" />
+          <span className="icon-[streamline--rss-symbol-solid] text-[1rem]" />
+          RSS feed
         </a>
       </nav>
     </header>

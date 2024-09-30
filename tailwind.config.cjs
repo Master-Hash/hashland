@@ -20,4 +20,7 @@ module.exports = {
       // defaultFlavour: "mocha",
     }),
   ],
+  experimental: {
+    optimizeUniversalDefaults: true,
+  },
 };
