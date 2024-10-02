@@ -18,6 +18,7 @@ module.exports = {
           "Menlo",
           "Monaco",
           "Consolas",
+          "Droid Sans Mono",
           "Liberation Mono",
           "Courier New",
           "ui-sans-serif",
