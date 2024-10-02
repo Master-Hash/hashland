@@ -1,4 +1,2 @@
-/**
- * @todo 改成自己的域名
- */
-export const SITEURL = "https://land.master-hash.workers.dev";
+export const EMOJI_REGEX = /\p{RGI_Emoji}/v;
+export const HAN_REGEX = /\p{Script=Han}/u;

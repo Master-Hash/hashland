@@ -1,16 +1,28 @@
 {
   "include": [
-    "**/*.js",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/.server/**/*.ts",
-    "**/.server/**/*.tsx",
-    "**/.client/**/*.ts",
-    "**/.client/**/*.tsx",
+    "env.d.ts",
+    "vite.config.mjs",
+    "load-context.ts",
+    "functions.[[path]].ts",
+    "app/**/*.js",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/.server/**/*.ts",
+    "app/**/.server/**/*.tsx",
+    "app/**/.client/**/*.ts",
+    "app/**/.client/**/*.tsx",
+    ".react-router/types/**/*.d.ts"
   ],
+  "exclude": ["build/**/*.js"],
   "compilerOptions": {
+    // "plugins": [{ "name": "@react-router/dev" }],
+    "rootDirs": [".", "./.react-router/types"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["@react-router/cloudflare", "vite/client", "@cloudflare/workers-types"],
+    "types": [
+      "@react-router/cloudflare",
+      "vite/client",
+      "@cloudflare/workers-types"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -25,6 +37,6 @@
     "forceConsistentCasingInFileNames": true,
 
     // Vite takes care of building everything, not tsc.
-    "noEmit": true,
-  },
+    "noEmit": true
+  }
 }

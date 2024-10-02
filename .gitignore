@@ -136,8 +136,11 @@ dist
 /build
 
 .wrangler
+.dev.vars
 
 *storybook.log
+
+.react-router
 
 # Hash custom
 /public/assets/*
@@ -173,3 +176,10 @@ dist
 /stories/assets/accessibility.svg
 /stories/assets/accessibility.png
 localtest.sql
+/app/routes/connections-rs/*.js
+/app/routes/connections-rs/*.wasm
+/app/routes/connections-rs/*.d.ts
+
+# Emacs
+*~
+\#*\#

@@ -1,10 +1,14 @@
 // import { useLoaderData } from "react-router";
+import { useEffect } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { useLoaderData } from "react-router";
+import type { Message } from "../../../stories/Mailbox.js";
 import { Mailbox } from "../../../stories/Mailbox.js";
 import { HrefToLink } from "../../utils/components.js";
+import { useTime } from "../../utils/hooks.js";
+import type { ComponentProps } from "./+types.route.js";
 import P1 from "./p1.md";
 import P2 from "./p2.md";
+import P3 from "./p3.md";
 
 interface Env {
   DB: D1Database;
@@ -27,7 +31,14 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   const statementSent = DB.prepare(
     "SELECT Epoch, json_extract(Recipients, '$[0].address'), json_array_length(Recipients), MessageIDHash FROM GlobalMessages WHERE Folder = 'Sent' AND Epoch IN (SELECT MAX(Epoch) FROM GlobalMessages WHERE Folder = 'Sent' GROUP BY json_extract(Recipients, '$[0].address'), json_extract(Recipients, '$[1].address'), json_extract(Recipients, '$[2].address')) ORDER BY Epoch DESC LIMIT 5",
   );
-  const rows = await DB.batch([statementInbox, statementSent]);
+  const statementThreads = DB.prepare(
+    "SELECT Epoch, json(Author), MessageID, SubjectLine FROM GlobalMessages WHERE Folder = 'Discuss' AND InReplyTo IS NULL ORDER BY Epoch DESC LIMIT 5",
+  );
+  const rows = await DB.batch([
+    statementInbox,
+    statementSent,
+    statementThreads,
+  ]);
   const { results } = rows[0] as {
     results: Array<{
       Epoch: number;
@@ -43,12 +54,21 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
       MessageIDHash: string;
     }>;
   };
+  const { results: resultsThreads } = rows[2] as {
+    results: Array<{
+      Epoch: number;
+      "json(Author)": string;
+      MessageID: string;
+      SubjectLine: string;
+    }>;
+  };
   console.log(results);
   console.log(resultsSent);
+  console.log(resultsThreads);
   const processed = results.map((result) => {
-    const ISOString = new Date(result["Epoch"] * 1000).toISOString();
+    const ISOString = new Date(result.Epoch * 1000).toISOString();
     const fullTimeString =
-      ISOString.slice(2, 10) + " " + ISOString.slice(11, 16);
+      ISOString.slice(0, 10) + " " + ISOString.slice(11, 16);
     const [first] = result["json_extract(Author, '$.address')"].split("@");
     let _address;
     if (
@@ -61,16 +81,18 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
     }
     return {
       datetime:
-        fullTimeString.slice(0, 6) + "~~" + fullTimeString.slice(8, 12) + "~~",
+        fullTimeString.slice(0, 6 + 2) +
+        "~~" +
+        fullTimeString.slice(8 + 2, 12 + 2) +
+        "~~",
       address: _address,
       hash: result["MessageIDHash"],
-      isMultipleRecipient: false,
     };
   });
   const processedSent = resultsSent.map((result) => {
-    const ISOString = new Date(result["Epoch"] * 1000).toISOString();
+    const ISOString = new Date(result.Epoch * 1000).toISOString();
     const fullTimeString =
-      ISOString.slice(2, 10) + " " + ISOString.slice(11, 16);
+      ISOString.slice(0, 10) + " " + ISOString.slice(11, 16);
     const [first, _second] =
       result["json_extract(Recipients, '$[0].address')"].split("@");
     const [second] = _second.split(".");
@@ -81,17 +103,65 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
       second.at(-1) +
       ".~";
     return {
-      datetime: fullTimeString.slice(0, 12) + "~~",
+      datetime: fullTimeString.slice(0, 12 + 2) + "~~",
       address,
-      isMultipleRecipient: result["json_array_length(Recipients)"] > 1,
+      recipientLength: result["json_array_length(Recipients)"],
       hash: result["MessageIDHash"],
     };
   });
-  return { inbox: processed, sent: processedSent };
+
+  // 查询每个讨论有几个人参与
+  // 大概的思路：
+  // 查找 In-Reply-To 是目标的；
+  // 以及 In-Reply-To 的 In-Reply-To 是目标的；
+  /**
+   * @todo 等真的有递归线程了再来，不迟。
+   */
+  const TODO = 1;
+
+  const threads = resultsThreads.map((result) => {
+    const ISOString = new Date(result.Epoch * 1000).toISOString();
+    const fullTimeString =
+      ISOString.slice(0, 10) + " " + ISOString.slice(11, 16);
+    const author = JSON.parse(result["json(Author)"]);
+    return {
+      datetime: fullTimeString,
+      timestamp: result.Epoch,
+      address: author.name + ` <${author.address}>`,
+      hash: result.MessageID,
+      subject: result.SubjectLine,
+      // 这里实际上是参与讨论的人数
+      recipientLength: TODO,
+    };
+  }) satisfies Array<Message>;
+
+  // 筛掉最近37分钟的邮件，然后取出
+  const now = new Date().valueOf() / 1000;
+  const earistThreadTime = threads[0].timestamp;
+  const waitedThread = threads.filter(
+    (thread) => now - thread.timestamp > 37 * 60,
+  );
+
+  return {
+    inbox: processed,
+    sent: processedSent,
+    threads: waitedThread,
+    earistThreadTime,
+  };
 };
 
-export default function Email() {
-  const { inbox, sent } = useLoaderData();
+export default function Email({ loaderData }: ComponentProps) {
+  const { inbox, sent, threads, earistThreadTime } = loaderData;
+  const time = Math.floor(useTime().valueOf() / 1000);
+  const delta = earistThreadTime - time + 37 * 60;
+  useEffect(() => {
+    // console.log(delta);
+    if (earistThreadTime && delta < 0 && delta > -36000) {
+      location.reload();
+    }
+  });
+  const s = delta % 60;
+  const m = (delta - s) / 60;
   return (
     <main className="prose relative mx-auto">
       {/* <aside className="absolute bottom-0 right-0 text-6xl text-cat-text md:-right-12 md:top-0 lg:-right-24">
@@ -107,6 +177,25 @@ export default function Email() {
       <h2>寄件</h2>
       <Mailbox messages={sent} />
       <P2
+        components={{
+          a: HrefToLink,
+        }}
+      />
+      <Mailbox messages={threads} />
+      {/* 这句话，真有信在排队再放上去罢 */}
+      {delta > 0 ? (
+        <p>
+          邮件会在送达的37分钟后公开展示。如果最近一封是你所发，再过
+          <span>
+            {m != 0 ? `${m}分` : null}
+            {s}秒
+          </span>
+          ，大家就能看到它啦。
+        </p>
+      ) : (
+        <p>邮件会在送达的37分钟后公开展示。暂时还没有新来信~</p>
+      )}
+      <P3
         components={{
           a: HrefToLink,
         }}

@@ -65,9 +65,9 @@
       content: none;
     }
 
-    code {
+    /* code {
       @apply text-base;
-    }
+    } */
 
     h1 {
       @apply text-balance;
@@ -94,6 +94,15 @@
       @apply dark:prose-invert;
       @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
     }
+
+    table {
+      /* revert & */
+      @apply w-full;
+    }
+
+    pre {
+      @apply bg-inherit;
+    }
   }
 
   /* https://css-tricks.com/examples/hrs/ */
@@ -113,13 +122,16 @@
 
   summary {
     @apply font-semibold;
+    /* @apply text-center; */
   }
 
-  details > *:nth-child(2)::before,
-  details > *:last-child::after {
+  /* 我认为更恰当的做法是，内容用 <blockquote>，来表达边界 */
+  /* details > *:nth-child(1)::after, */
+  /* details:not(:has(pre))::before,
+  details[open]:not(:has(pre))::after {
     @apply overflow-visible text-center;
     @apply visible block text-2xl;
     @apply my-8;
     content: "* * *";
-  }
+  } */
 }

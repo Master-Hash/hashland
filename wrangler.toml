@@ -1,8 +1,15 @@
-# [[kv_namespaces]]
-# binding = "EMAIL_KV"
-# id = "64283b43b1924bcea2821f902f7e938b"
+name = "land"
+compatibility_date = "2024-09-25"
+pages_build_output_dir = "./build/client"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "local"
 database_id = "24f36833-9890-493d-ab34-7549fc414340"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "assets"
+
+# [env.production]
+# compatibility_date = "2024-09-02"

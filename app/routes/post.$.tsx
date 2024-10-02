@@ -1,7 +1,7 @@
 import { Suspense, lazy } from "react";
 import type { LoaderFunction, MetaFunction } from "react-router";
-import { useLoaderData } from "react-router";
 import { HrefToLink } from "../utils/components.js";
+import type { ComponentProps, LoaderArgs } from "./+types.post.$.d.ts";
 
 const m = import.meta.glob([
   "/post-test/人/*.md",
@@ -24,7 +24,7 @@ export const meta: MetaFunction = ({ data }: { data: { slug: string } }) => {
   ];
 };
 
-export const loader = (async ({ params }) => {
+export const loader = (async ({ params }: LoaderArgs) => {
   const filePath = params["*"]!;
 
   if (!(`/post-test/${filePath}` in m)) {
@@ -45,8 +45,9 @@ export const loader = (async ({ params }) => {
   };
 }) satisfies LoaderFunction;
 
-export default function Post() {
-  const { type, slug, filePath } = useLoaderData<typeof loader>();
+export default function Post({ loaderData }: ComponentProps) {
+  // const { type, slug, filePath } = useLoaderData<typeof loader>();
+  const { type, slug, filePath } = loaderData;
   const Markdown = ls.get(`/post-test/${filePath}`)!;
   // const L = lazy(m[`/post-test/${filePath}`]);
   return (

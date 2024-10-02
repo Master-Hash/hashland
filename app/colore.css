@@ -58,6 +58,7 @@
       @apply icon-[ph--lock];
     }
 
+    /* a[href^="https://github.com/Master-Hash/"]::after, */
     a[href^="https://gist.github.com/Master-Hash/"]::after
     {
       @apply icon-[ri--quill-pen-line];

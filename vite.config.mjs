@@ -56,78 +56,84 @@ const ReactCompilerConfig = {
 };
 
 const isStorybook = process.argv[1]?.includes("storybook");
+const isTypegen = process.argv[2]?.includes("typegen");
+const isBuild =
+  process.argv[1]?.includes("@react-router") &&
+  process.argv[2]?.includes("build");
+// console.log(process.argv);
 
 /** @type {import('vite').UserConfig} */
 export default {
   plugins: [
-    !isStorybook && {
-      ...mdx({
-        format: "md",
-        remarkPlugins: [
-          remarkFrontmatter,
-          remarkMdxFrontmatter,
-          remarkGfm,
-          remarkMath,
-        ],
-        remarkRehypeOptions: {
-          allowDangerousHtml: true,
-          footnoteLabel: "尾注",
-          footnoteBackLabel(referenceIndex, rereferenceIndex) {
-            return (
-              "回到正文：" +
-              (referenceIndex + 1) +
-              (rereferenceIndex > 1 ? "-" + rereferenceIndex : "")
-            );
-          },
-        },
-        rehypePlugins: [
-          [rehypeRaw, { passThrough: nodeTypes }],
-          rehypeSlug,
-          [rehypeKatex, { strict: true, output: "mathml" }],
-          [
-            rehypeShikiFromHighlighter,
-            highlighter,
-            {
-              themes: {
-                // light: "vitesse-light",
-                // dark: "catppuccin-mocha",
-                light: "catppuccin-latte",
-                // dark: "catppuccin-macchiato",
-                dark: "catppuccin-frappe",
-              },
-              defaultColor: false,
-              transformers: [
-                transformerTwoslash(),
-                shikiColorizedBrackets({
-                  defaultColor: false,
-                  colors: {
-                    light: [
-                      flavors.latte.colors.red.hex,
-                      flavors.latte.colors.peach.hex,
-                      flavors.latte.colors.yellow.hex,
-                      flavors.latte.colors.green.hex,
-                      flavors.latte.colors.sapphire.hex,
-                      flavors.latte.colors.lavender.hex,
-                    ],
-                    dark: [
-                      flavors.frappe.colors.red.hex,
-                      flavors.frappe.colors.peach.hex,
-                      flavors.frappe.colors.yellow.hex,
-                      flavors.frappe.colors.green.hex,
-                      flavors.frappe.colors.sapphire.hex,
-                      flavors.frappe.colors.lavender.hex,
-                    ],
-                  },
-                }),
-                transformerRenderWhitespace(),
-              ],
-            },
+    !isStorybook &&
+      !isTypegen && {
+        ...mdx({
+          format: "md",
+          remarkPlugins: [
+            remarkFrontmatter,
+            remarkMdxFrontmatter,
+            remarkGfm,
+            remarkMath,
           ],
-        ],
-      }),
-      // enforce: "pre",
-    },
-    !isStorybook && reactRouterCloudflareDevProxy(),
+          remarkRehypeOptions: {
+            allowDangerousHtml: true,
+            footnoteLabel: "尾注",
+            footnoteBackLabel(referenceIndex, rereferenceIndex) {
+              return (
+                "回到正文：" +
+                (referenceIndex + 1) +
+                (rereferenceIndex > 1 ? "-" + rereferenceIndex : "")
+              );
+            },
+          },
+          rehypePlugins: [
+            [rehypeRaw, { passThrough: nodeTypes }],
+            rehypeSlug,
+            [rehypeKatex, { strict: true, output: "mathml" }],
+            [
+              rehypeShikiFromHighlighter,
+              highlighter,
+              {
+                themes: {
+                  // light: "vitesse-light",
+                  // dark: "catppuccin-mocha",
+                  light: "catppuccin-latte",
+                  // dark: "catppuccin-macchiato",
+                  dark: "catppuccin-frappe",
+                },
+                defaultColor: false,
+                transformers: [
+                  transformerTwoslash(),
+                  shikiColorizedBrackets({
+                    defaultColor: false,
+                    colors: {
+                      light: [
+                        flavors.latte.colors.red.hex,
+                        flavors.latte.colors.peach.hex,
+                        flavors.latte.colors.yellow.hex,
+                        flavors.latte.colors.green.hex,
+                        flavors.latte.colors.sapphire.hex,
+                        flavors.latte.colors.lavender.hex,
+                      ],
+                      dark: [
+                        flavors.frappe.colors.red.hex,
+                        flavors.frappe.colors.peach.hex,
+                        flavors.frappe.colors.yellow.hex,
+                        flavors.frappe.colors.green.hex,
+                        flavors.frappe.colors.sapphire.hex,
+                        flavors.frappe.colors.lavender.hex,
+                      ],
+                    },
+                  }),
+                  transformerRenderWhitespace(),
+                ],
+              },
+            ],
+          ],
+        }),
+        // enforce: "pre",
+      },
+    !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
     !isStorybook &&
       reactRouter({
         future: {

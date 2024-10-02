@@ -1,8 +1,9 @@
-/// <reference types="@remix-run/cloudflare" />
+/// <reference types="@react-router/cloudflare" />
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
   readonly VITE_SITEURL: string;
+  readonly VITE_ASSETSURL: string;
   // 更多环境变量...
 }
 
