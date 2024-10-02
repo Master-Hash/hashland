@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import type { MetaFunction } from "react-router";
 import { Await, Link, useLoaderData } from "react-router";
 import { dateFormat } from "../../utils/dateFormat.js";
+import { fetchRejectedOnNotOk } from "../../utils/functions.js";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,16 +14,29 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ response }) => {
+export const loader = async () => {
   // Sorry DIYgod, I'll use my own deployment as soon as RSSHub supports Cloudlfare Workers.
-  const data = await fetch(
-    "https://rsshub.app/telegram/channel/hash_elbeszelese?format=json",
-  );
+  // But you're too slow, so I'll be even more immoral qaq
+  try {
+    const d = await Promise.any([
+      fetchRejectedOnNotOk(
+        "https://rsshub.app/telegram/channel/hash_elbeszelese?format=json",
+      ),
+      fetchRejectedOnNotOk(
+        "https://rsshub.rssforever.com/telegram/channel/hash_elbeszelese?format=json",
+      ),
+    ]);
+    return { data: d.json() };
+  } catch {
+    throw new Response("Internal Server Error", {
+      status: 500,
+      statusText: "Internal Server Error",
+    });
+  }
+
   // Remix has no server-side caching???
   // Client side is not strict...
   // response.headers.set("Cache-Control", "public, max-age=86400");
-
-  return { data: data.json() };
 };
 
 const deleted = [47, 48, 49];
@@ -34,38 +48,44 @@ export default function Narrative() {
       <h1>日记</h1>
       <Suspense fallback="">
         <Await resolve={data}>
-          {({ items, description }: Feed) => (
-            <>
-              <p>{description?.split("-").at(0)}</p>
-              <hr />
-              {items.toReversed().map((item, index) => {
-                const id = item.id.split("/").at(-1);
-                const date = dateFormat.format(new Date(item.date_published!));
-                return (
-                  !deleted.includes(Number(id)) && (
-                    <section id={id}>
-                      <p
-                        key={id}
-                        // When RSC is ready, I'll abandon dangerouslySetInnerHTML!
-                        // And I'll rewrite insite links!
-                        dangerouslySetInnerHTML={{ __html: item.content_html! }}
-                      />
-                      <p className="text-right text-cat-subtext1">
-                        <small>
-                          {date}・
-                          <a href={item.url} target="_blank" rel="noreferrer">
-                            #{id}
-                          </a>
-                        </small>
-                      </p>
-                      {/* <hr /> */}
-                      {index < items.length - 1 && <hr />}
-                    </section>
-                  )
-                );
-              })}
-            </>
-          )}
+          {({ items, description }: Feed) => {
+            return (
+              <>
+                <p>{description?.split("-").at(0)}</p>
+                <hr />
+                {items.toReversed().map((item, index) => {
+                  const id = item.id.split("/").at(-1);
+                  const date = dateFormat.format(
+                    new Date(item.date_published!),
+                  );
+                  return (
+                    !deleted.includes(Number(id)) && (
+                      <section id={id}>
+                        <p
+                          key={id}
+                          // When RSC is ready, I'll abandon dangerouslySetInnerHTML!
+                          // And I'll rewrite insite links!
+                          dangerouslySetInnerHTML={{
+                            __html: item.content_html!,
+                          }}
+                        />
+                        <p className="text-right text-cat-subtext1">
+                          <small>
+                            {date}・
+                            <a href={item.url} target="_blank" rel="noreferrer">
+                              #{id}
+                            </a>
+                          </small>
+                        </p>
+                        {/* <hr /> */}
+                        {index < items.length - 1 && <hr />}
+                      </section>
+                    )
+                  );
+                })}
+              </>
+            );
+          }}
         </Await>
       </Suspense>
       <hr />
