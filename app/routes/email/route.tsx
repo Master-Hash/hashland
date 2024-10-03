@@ -37,6 +37,7 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
     statementInbox,
     statementSent,
     statementThreads,
+    statementEarliestInQueue,
   ]);
   const { results } = rows[0] as {
     results: Array<{
@@ -61,9 +62,15 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
       SubjectLine: string;
     }>;
   };
+  const { results: resultsEarliestInQueue } = rows[3] as {
+    results: Array<{
+      Epoch: number;
+    }>;
+  };
   console.log(results);
   console.log(resultsSent);
   console.log(resultsThreads);
+  console.log(resultsEarliestInQueue);
   const processed = results.map((result) => {
     const ISOString = new Date(result.Epoch * 1000).toISOString();
     const fullTimeString =
@@ -135,9 +142,8 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   }) satisfies Array<Message>;
 
   // 筛掉最近37分钟的邮件，然后取出
-  const earistThreadTime = await statementEarliestInQueue.first<number | null>(
-    "Epoch",
-  );
+  const earistThreadTime =
+    resultsEarliestInQueue.length > 0 ? resultsEarliestInQueue[0].Epoch : null;
 
   return {
     inbox: processed,
