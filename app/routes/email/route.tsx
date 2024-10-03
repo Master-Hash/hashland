@@ -10,7 +10,7 @@ import P1 from "./p1.md";
 import P2 from "./p2.md";
 import P3 from "./p3.md";
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = () => {
   return [
     { title: `电子邮件 « 故人故事故纸堆` },
     // { name: "description", content: "Welcome to Remix!" },
@@ -28,7 +28,10 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
     "SELECT Epoch, json_extract(Recipients, '$[0].address'), json_array_length(Recipients), MessageIDHash FROM GlobalMessages WHERE Folder = 'Sent' AND Epoch IN (SELECT MAX(Epoch) FROM GlobalMessages WHERE Folder = 'Sent' GROUP BY json_extract(Recipients, '$[0].address'), json_extract(Recipients, '$[1].address'), json_extract(Recipients, '$[2].address')) ORDER BY Epoch DESC LIMIT 5",
   );
   const statementThreads = DB.prepare(
-    "SELECT Epoch, json(Author), MessageID, SubjectLine FROM GlobalMessages WHERE Folder = 'Discuss' AND InReplyTo IS NULL ORDER BY Epoch DESC LIMIT 5",
+    "SELECT Epoch, json(Author), MessageID, SubjectLine FROM GlobalMessages WHERE Folder = 'Discuss' AND unixepoch() - EPOCH > 37 * 60 AND InReplyTo IS NULL ORDER BY Epoch DESC LIMIT 5",
+  );
+  const statementEarliestInQueue = DB.prepare(
+    "SELECT Epoch FROM GlobalMessages WHERE Folder = 'Discuss' AND unixepoch() - EPOCH < 37 * 60 ORDER BY Epoch ASC LIMIT 1",
   );
   const rows = await DB.batch([
     statementInbox,
@@ -132,16 +135,14 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   }) satisfies Array<Message>;
 
   // 筛掉最近37分钟的邮件，然后取出
-  const now = new Date().valueOf() / 1000;
-  const earistThreadTime = threads[0].timestamp;
-  const waitedThread = threads.filter(
-    (thread) => now - thread.timestamp > 37 * 60,
+  const earistThreadTime = await statementEarliestInQueue.first<number | null>(
+    "Epoch",
   );
 
   return {
     inbox: processed,
     sent: processedSent,
-    threads: waitedThread,
+    threads,
     earistThreadTime,
   };
 };
@@ -149,15 +150,17 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
 export default function Email({ loaderData }: ComponentProps) {
   const { inbox, sent, threads, earistThreadTime } = loaderData;
   const time = Math.floor(useTime().valueOf() / 1000);
-  const delta = earistThreadTime - time + 37 * 60;
+  // 类型推断一团糟
+  const delta = earistThreadTime ? earistThreadTime - time + 37 * 60 : null;
   useEffect(() => {
     // console.log(delta);
-    if (earistThreadTime && delta < 0 && delta > -36000) {
+    if (earistThreadTime && delta && delta < 0 && delta > -36000) {
       location.reload();
     }
   });
-  const s = delta % 60;
-  const m = (delta - s) / 60;
+  const s = delta ? delta % 60 : null,
+    m = delta && s ? (delta - s) / 60 : null;
+
   return (
     <main className="prose relative mx-auto">
       {/* <aside className="absolute bottom-0 right-0 text-6xl text-cat-text md:-right-12 md:top-0 lg:-right-24">
@@ -179,10 +182,11 @@ export default function Email({ loaderData }: ComponentProps) {
       />
       <Mailbox messages={threads} />
       {/* 这句话，真有信在排队再放上去罢 */}
-      {delta > 0 ? (
+      {earistThreadTime ? (
         <p>
           邮件会在送达的37分钟后公开展示。如果最近一封是你所发，再过
           <span>
+            {/** @todo 用 Intl.??? 尝试重写 */}
             {m != 0 ? `${m}分` : null}
             {s}秒
           </span>
