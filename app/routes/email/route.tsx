@@ -10,10 +10,6 @@ import P1 from "./p1.md";
 import P2 from "./p2.md";
 import P3 from "./p3.md";
 
-interface Env {
-  DB: D1Database;
-}
-
 export const meta: MetaFunction = ({ data }) => {
   return [
     { title: `电子邮件 « 故人故事故纸堆` },

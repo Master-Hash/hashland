@@ -11,7 +11,8 @@
     "app/**/.server/**/*.tsx",
     "app/**/.client/**/*.ts",
     "app/**/.client/**/*.tsx",
-    ".react-router/types/**/*.d.ts"
+    ".react-router/types/**/*.d.ts",
+    "worker-configuration.d.ts"
   ],
   "exclude": ["build/**/*.js"],
   "compilerOptions": {

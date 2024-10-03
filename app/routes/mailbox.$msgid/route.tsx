@@ -4,11 +4,6 @@ import { HAN_REGEX } from "../../utils/constant.js";
 import { dateFormat } from "../../utils/dateFormat.js";
 import type { ComponentProps } from "./+types.route.js";
 
-interface Env {
-  DB: D1Database;
-  R2: R2Bucket;
-}
-
 export const meta: MetaFunction = ({ data }) => {
   return [{ title: `${data.email.subject} « 故人故事故纸堆` }];
 };
