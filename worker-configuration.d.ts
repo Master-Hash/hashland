@@ -3,4 +3,5 @@
 interface Env {
 	R2: R2Bucket;
 	DB: D1Database;
+	ASSETS: Fetcher;
 }

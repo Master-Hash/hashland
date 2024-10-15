@@ -1,6 +1,11 @@
+#:schema https://unpkg.com/wrangler@3.80.4/config-schema.json
 name = "land"
-compatibility_date = "2024-09-25"
-pages_build_output_dir = "./build/client"
+compatibility_date = "2024-10-14"
+main = "./build/worker/index.js"
+assets = { directory = "./build/client", binding = "ASSETS" }
+workers_dev = false
+route = { pattern = "land.hash.memorial", custom_domain = true }
+# pages_build_output_dir = "./build/client"
 
 [[d1_databases]]
 binding = "DB"
@@ -10,6 +15,9 @@ database_id = "24f36833-9890-493d-ab34-7549fc414340"
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "assets"
+
+[observability]
+enabled = true
 
 # [env.production]
 # compatibility_date = "2024-09-02"
