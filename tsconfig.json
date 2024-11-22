@@ -24,6 +24,8 @@
       "vite/client",
       "@cloudflare/workers-types"
     ],
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

@@ -5,6 +5,7 @@ main = "./build/worker/index.js"
 assets = { directory = "./build/client", binding = "ASSETS" }
 workers_dev = false
 route = { pattern = "land.hash.memorial", custom_domain = true }
+# compatibility_flags = ["enable_d1_with_sessions_api"]
 # pages_build_output_dir = "./build/client"
 
 [[d1_databases]]

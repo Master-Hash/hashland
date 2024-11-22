@@ -1,9 +1,13 @@
-import { flavors } from "@catppuccin/palette";
+/**
+ * @import { UserConfig } from "vite";
+ */
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
-import shikiColorizedBrackets from "@michael-makes/shiki-colorized-brackets";
+// import { flavors } from "@catppuccin/palette";
+// import tailwindcss from "@tailwindcss/vite";
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
+// import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
@@ -27,6 +31,10 @@ import babel from "vite-plugin-babel";
 // import forgetti from "vite-plugin-forgetti";
 
 enableDeprecationWarnings(true);
+
+// const toClass = transformerStyleToClass({
+//   classPrefix: "__shiki_",
+// });
 
 const highlighter = await getSingletonHighlighterCore({
   themes: [
@@ -62,7 +70,7 @@ const isBuild =
   process.argv[2]?.includes("build");
 // console.log(process.argv);
 
-/** @type {import('vite').UserConfig} */
+/** @type {UserConfig} */
 export default {
   plugins: [
     !isStorybook &&
@@ -104,28 +112,30 @@ export default {
                 defaultColor: false,
                 transformers: [
                   transformerTwoslash(),
-                  shikiColorizedBrackets({
-                    defaultColor: false,
-                    colors: {
-                      light: [
-                        flavors.latte.colors.red.hex,
-                        flavors.latte.colors.peach.hex,
-                        flavors.latte.colors.yellow.hex,
-                        flavors.latte.colors.green.hex,
-                        flavors.latte.colors.sapphire.hex,
-                        flavors.latte.colors.lavender.hex,
-                      ],
-                      dark: [
-                        flavors.frappe.colors.red.hex,
-                        flavors.frappe.colors.peach.hex,
-                        flavors.frappe.colors.yellow.hex,
-                        flavors.frappe.colors.green.hex,
-                        flavors.frappe.colors.sapphire.hex,
-                        flavors.frappe.colors.lavender.hex,
-                      ],
-                    },
-                  }),
+                  // transformerColorizedBrackets(),
+                  // shikiColorizedBrackets({
+                  //   defaultColor: false,
+                  //   colors: {
+                  //     light: [
+                  //       flavors.latte.colors.red.hex,
+                  //       flavors.latte.colors.peach.hex,
+                  //       flavors.latte.colors.yellow.hex,
+                  //       flavors.latte.colors.green.hex,
+                  //       flavors.latte.colors.sapphire.hex,
+                  //       flavors.latte.colors.lavender.hex,
+                  //     ],
+                  //     dark: [
+                  //       flavors.frappe.colors.red.hex,
+                  //       flavors.frappe.colors.peach.hex,
+                  //       flavors.frappe.colors.yellow.hex,
+                  //       flavors.frappe.colors.green.hex,
+                  //       flavors.frappe.colors.sapphire.hex,
+                  //       flavors.frappe.colors.lavender.hex,
+                  //     ],
+                  //   },
+                  // }),
                   transformerRenderWhitespace(),
+                  // toClass,
                 ],
               },
             ],
@@ -141,6 +151,7 @@ export default {
           // unstable_serverComponents: true,
         },
       }),
+    // !isTypegen && tailwindcss(),
     !isStorybook &&
       babel({
         filter: /\.(?:[jt]sx?)$/,
@@ -154,13 +165,6 @@ export default {
       }),
     // !isStorybook && wasm(),
     // envOnlyMacros(),
-    // forgetti({
-    //   preset: "react",
-    //   filter: {
-    //     include: "app/**/*.{ts,js,tsx,jsx}",
-    //     exclude: "node_modules/**/*.{ts,js,tsx,jsx}",
-    //   },
-    // }),
   ],
   optimizeDeps: {
     holdUntilCrawlEnd: false,
@@ -171,3 +175,5 @@ export default {
     reportCompressedSize: false,
   },
 };
+
+// const css = toClass.getCSS();

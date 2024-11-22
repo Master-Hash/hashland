@@ -8,6 +8,8 @@ module.exports = {
     "./public/rss.xsl",
     //
     "./stories/**/*.tsx",
+    //
+    "./post-test/**/*.md",
   ],
   theme: {
     extend: {
