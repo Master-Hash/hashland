@@ -1,137 +1,147 @@
-@layer components {
-  html {
-    @apply scroll-smooth;
+:root {
+  @apply scroll-smooth;
+  color-scheme: light dark;
 
-    /* It's prevented by Firefox for preventing fingerprinting */
-    /* font-family: "霞鹜文楷 GB", ui-sans-serif, system-ui, sans-serif,
+  /* @apply scheme-light dark:scheme-dark; */
+
+  /* It's prevented by Firefox for preventing fingerprinting */
+  /* font-family: "霞鹜文楷 GB", ui-sans-serif, system-ui, sans-serif,
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji"; */
+}
+
+@theme {
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    Droid Sans Mono, Liberation Mono, Courier New, ui-sans-serif, system-ui,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+    Noto Color Emoji;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  :root {
+    @apply scroll-auto;
+  }
+}
+
+.main,
+nav {
+  & *,
+  & ::before,
+  & ::after {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
+
+::selection {
+  @apply bg-cat-surface2;
+  --tw-bg-opacity: 0.6;
+
+  /* @apply bg-cat-surface2 opacity-60; */
+}
+
+/* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
+@media print {
+  a::after {
+    content: "(" attr(href) ")";
+  }
+}
+
+img[src*="cdn-telegram.org/"],
+video[src*="cdn-telegram.org/"],
+a[href*="?q=%23"] {
+  @apply hidden;
+}
+
+.prose {
+  :where(blockquote p:first-of-type):not(
+      :where([class~="not-prose"] *)
+    )::before,
+  :where(blockquote p:last-of-type):not(:where([class~="not-prose"] *))::after {
+    content: none;
   }
 
-  @media screen and (prefers-reduced-motion: reduce) {
-    html {
-      @apply scroll-auto;
-    }
+  :where(code):not(
+      :where([class~="not-prose"], [class~="not-prose"] *)
+    )::before {
+    content: none;
   }
 
-  .main,
-  nav {
-    & *,
-    & ::before,
-    & ::after {
-      @apply transition-all duration-300 ease-in-out;
-    }
+  :where(code):not(
+      :where([class~="not-prose"], [class~="not-prose"] *)
+    )::after {
+    content: none;
   }
 
-  ::selection {
-    @apply bg-cat-surface2;
-    --tw-bg-opacity: 0.6;
-
-    /* @apply bg-cat-surface2 opacity-60; */
-  }
-
-  /* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
-  @media print {
-    a::after {
-      content: "(" attr(href) ")";
-    }
-  }
-
-  img[src*="cdn-telegram.org/"],
-  video[src*="cdn-telegram.org/"],
-  a[href*="?q=%23"] {
-    @apply hidden;
-  }
-
-  .prose {
-    :where(blockquote p:first-of-type):not(
-        :where([class~="not-prose"] *)
-      )::before,
-    :where(blockquote p:last-of-type):not(
-        :where([class~="not-prose"] *)
-      )::after {
-      content: none;
-    }
-
-    :where(code):not(
-        :where([class~="not-prose"], [class~="not-prose"] *)
-      )::before {
-      content: none;
-    }
-
-    :where(code):not(
-        :where([class~="not-prose"], [class~="not-prose"] *)
-      )::after {
-      content: none;
-    }
-
-    /* code {
+  /* code {
       @apply text-base;
     } */
 
-    h1 {
-      @apply text-balance;
-    }
+  h1 {
+    @apply text-balance;
+  }
 
-    blockquote,
-    cite {
-      @apply not-italic;
-    }
+  blockquote,
+  cite {
+    @apply not-italic;
+  }
 
-    /* Apply on prose basis */
-    /* a {
+  /* Apply on prose basis */
+  /* a {
       @apply break-all;
     } */
 
-    /* li {
+  /* li {
       @apply my-[0.1em];
       text-indent: 0.375em hanging;
     } */
 
-    & {
-      @apply w-[calc(100%-3rem)];
-      @apply max-w-[72.5ch];
-      @apply dark:prose-invert;
-      @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
-    }
-
-    table {
-      /* revert & */
-      @apply w-full;
-    }
-
-    pre {
-      @apply bg-inherit;
-    }
+  & {
+    @apply w-[calc(100%-3rem)];
+    @apply max-w-[72.5ch];
+    @apply dark:prose-invert;
+    @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
   }
 
-  /* https://css-tricks.com/examples/hrs/ */
-  hr {
-    @apply overflow-visible text-center;
-    /* @apply invisible; */
-    @apply contents;
-    /* content: "* * *"; */
+  table {
+    /* revert & */
+    @apply w-full;
   }
 
-  hr::after {
-    @apply visible block text-2xl;
-    /* @apply relative -top-3 print:top-0; */
-    @apply my-8;
-    content: "* * *";
+  pre {
+    @apply bg-inherit;
   }
 
-  summary {
-    @apply font-semibold;
-    /* @apply text-center; */
-  }
+  /* figure {
+      @apply mx-auto;
+    } */
+}
 
-  /* 我认为更恰当的做法是，内容用 <blockquote>，来表达边界 */
-  /* details > *:nth-child(1)::after, */
-  /* details:not(:has(pre))::before,
+/* https://css-tricks.com/examples/hrs/ */
+hr {
+  @apply overflow-visible text-center;
+  /* @apply invisible; */
+  @apply contents;
+  /* content: "* * *"; */
+}
+
+hr::after {
+  @apply visible block text-2xl;
+  /* @apply relative -top-3 print:top-0; */
+  @apply my-8;
+  content: "* * *";
+}
+
+summary {
+  @apply font-semibold;
+  /* @apply text-center; */
+}
+
+/* 我认为更恰当的做法是，内容用 <blockquote>，来表达边界 */
+/* details > *:nth-child(1)::after, */
+/* details:not(:has(pre))::before,
   details[open]:not(:has(pre))::after {
     @apply overflow-visible text-center;
     @apply visible block text-2xl;
     @apply my-8;
     content: "* * *";
   } */
-}

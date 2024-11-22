@@ -1,81 +1,84 @@
-@layer components {
-  @media not print {
-    a[href*="人/"],
-    a[href*="%E4%BA%BA/"] {
-      @apply text-cat-yellow;
-    }
-
-    /* Not using blue and red */
-    /* Because they resemble lavender */
-    a[href*="事/"],
-    a[href*="%E4%BA%8B/"],
-    a[href^="/narrative"],
-    a[href^="/now"] {
-      @apply text-cat-sapphire;
-    }
-
-    a[href*="物/"],
-    a[href*="%E7%89%A9/"],
-    a[href^="/email"],
-    a[href^="/lists"] {
-      @apply text-cat-pink;
-    }
-
-    a[href*="情思/"],
-    a[href*="%E6%83%85%E6%80%9D/"],
-    a[href^="/connections"],
-    a[href^="/experiences"],
-    a[href^="/kami"] {
+@media not print {
+  :not(nav) {
+    & > a[href^="/connections"],
+    & > a[href^="/experiences"],
+    & > a[href^="/kami"] {
       @apply text-cat-green;
     }
+  }
+  [href*="人/"],
+  [href*="%E4%BA%BA/"] {
+    @apply text-cat-yellow;
+  }
 
-    a[href*="user-content-fn"] {
-      @apply text-cat-subtext1;
-      /* @apply opacity-80; */
-    }
+  /* Not using blue and red */
+  /* Because they resemble lavender */
+  a[href*="事/"],
+  a[href*="%E4%BA%8B/"],
+  a[href^="/narrative"],
+  a[href^="/now"] {
+    @apply text-cat-sapphire;
+  }
 
-    a[href^="https"],
+  a[href*="物/"],
+  a[href*="%E7%89%A9/"],
+  a[href^="/email"],
+  a[href^="/lists"] {
+    @apply text-cat-pink;
+  }
+
+  a[href*="情思/"],
+  a[href*="%E6%83%85%E6%80%9D/"]
+ {
+    @apply text-cat-green;
+  }
+
+  a[href*="user-content-fn"] {
+    @apply text-cat-subtext1;
+    /* @apply opacity-80; */
+  }
+
+  a[href^="https"],
     a[href^="tg://"]
-    {
-      @apply text-cat-lavender;
-    }
+  {
+    @apply text-cat-lavender;
+  }
 
-    a[href^="https"]::after,
+  a[href^="https"]::after,
     a[href^="tg://"]::after
-    {
-      @apply icon-[ph--planet];
-      content: "";
-    }
+  {
+    @apply icon-[ph--planet];
+    content: "";
+  }
 
-    /* a[href^="https://assets.hash.memorial/"]::after
+  /* a[href^="https://assets.hash.memorial/"]::after
     {
       @apply icon-[ph--database];
       content: "";
     } */
 
-    a[href="https://github.com/Master-Hash/post-test"]::after
-    {
-      @apply icon-[ph--lock];
-    }
+  a[href="https://github.com/Master-Hash/post-test"]::after
+  {
+    @apply icon-[ph--lock];
+  }
 
-    /* a[href^="https://github.com/Master-Hash/"]::after, */
-    a[href^="https://gist.github.com/Master-Hash/"]::after
-    {
-      @apply icon-[ri--quill-pen-line];
-    }
+  /* a[href^="https://github.com/Master-Hash/"]::after, */
+  a[href^="https://gist.github.com/Master-Hash/"]::after
+  {
+    @apply icon-[ri--quill-pen-line];
+  }
 
-    /* 维基百科可以单独给图标……知乎就算了？ */
-    /* 维基也算了，W图标过于简陋了 */
-    /* a[href^="https://www.zhihu.com/"]::after {
+  /* 维基百科可以单独给图标……知乎就算了？ */
+  /* 维基也算了，W图标过于简陋了 */
+  /* a[href^="https://www.zhihu.com/"]::after {
       @apply icon-[ri--zhihu-line];
     } */
-  }
+}
 
-  a[id^="user-content-fnref-"]::before {
-    content: "[";
-  }
+a[id^="user-content-fnref-"]::before {
+  content: "[";
+}
 
-  a[id^="user-content-fnref-"]::after {
-    content: "]";
-  }
+a[id^="user-content-fnref-"]::after {
+  content: "]";
 }

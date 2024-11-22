@@ -1,14 +1,34 @@
 /* @import "heti/umd/heti.min.css"; */
-@import "tailwindcss/base" layer(tw.base);
+/* @import "tailwindcss/base" layer(tw.base); */
 
-@import "tailwindcss/components" layer(tw.components);
-@import "@shikijs/twoslash/style-rich.css" layer(tw.components);
-@import "./prose.css" layer(tw.components);
-@import "./shiki.css" layer(tw.components);
-@import "./slide-enter.css" layer(tw.components);
-@import "./colore.css" layer(tw.components);
+/* @import "tailwindcss/components" layer(tw.components); */
+/* @import "@shikijs/twoslash/style-rich.css" layer(tw.components); */
+/* @import "./prose.css" layer(tw.components); */
+/* @import "./shiki.css" layer(tw.components); */
+/* @import "./slide-enter.css" layer(tw.components); */
+/* @import "./colore.css" layer(tw.components); */
 
-@import "tailwindcss/utilities" layer(tw.utilities);
+/* @import "tailwindcss/utilities" layer(tw.utilities); */
 
 /* https://css-tricks.com/using-css-cascade-layers-to-manage-custom-styles-in-a-tailwind-project/ */
-@layer tw.base, tw.components, tw.utilities;
+/* @layer tw.base, tw.components, tw.utilities; */
+
+@import "tailwindcss";
+@import "./catppuccin.css";
+@import "@shikijs/twoslash/style-rich.css";
+@import "./prose.css";
+@import "./shiki.css";
+@import "./slide-enter.css";
+@import "./colore.css";
+
+@source "../post-test/";
+
+@plugin "@tailwindcss/typography";
+@plugin "./iconify-compat.mjs";
+/* @plugin "@iconify/tailwind"; */
+/* @config "../tailwind.config.cjs"; */
+/* @plugin "@catppuccin/tailwindcss"; */
+
+/* .prose p {
+  @apply text-cat-teal;
+} */

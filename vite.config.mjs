@@ -4,9 +4,9 @@
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 // import { flavors } from "@catppuccin/palette";
-// import tailwindcss from "@tailwindcss/vite";
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
+import tailwindcss from "@tailwindcss/vite";
 // import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
@@ -144,14 +144,8 @@ export default {
         // enforce: "pre",
       },
     !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
-    !isStorybook &&
-      reactRouter({
-        future: {
-          // unstable_singleFetch: true,
-          // unstable_serverComponents: true,
-        },
-      }),
-    // !isTypegen && tailwindcss(),
+    !isStorybook && reactRouter(),
+    !isTypegen && tailwindcss(),
     !isStorybook &&
       babel({
         filter: /\.(?:[jt]sx?)$/,
@@ -173,6 +167,9 @@ export default {
   build: {
     assetsInlineLimit: 0,
     reportCompressedSize: false,
+  },
+  css: {
+    postcss: {},
   },
 };
 

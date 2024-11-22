@@ -12,7 +12,7 @@
   font-weight: var(--shiki-light-font-weight);
   text-decoration: var(--shiki-light-text-decoration);
 
-  --twoslash-popup-bg: var(--ctp-base);
+  --twoslash-popup-bg: var(--color-cat-base);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,5 +57,5 @@
   @apply w-4 mr-6 inline-block text-right;
   content: counter(step);
   counter-increment: step;
-  color: var(--ctp-overlay1);
+  color: var(--color-cat-overlay1);
 }

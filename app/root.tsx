@@ -95,9 +95,9 @@ export const ErrorBoundary = () => {
     // https://react.dev/reference/react-dom/components/title#special-rendering-behavior
     // react@canary 会把 <meta> <title> 等自动插入 <head>
     // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
-    <>
+    <Fragment key="I'm unique">
       <title>{`${error.status} ${error.statusText}`}</title>
-      <main className="prose relative mx-auto prose-a:break-words">
+      <main className="prose prose-a:break-words relative mx-auto">
         <h1>{`${error.status} ${error.statusText}`}</h1>
         {error.status === 404 ? (
           <p>
@@ -114,7 +114,7 @@ export const ErrorBoundary = () => {
           <p>{error.data}</p>
         )}
       </main>
-    </>
+    </Fragment>
   );
   // if (isRouteErrorResponse(error)) {
   // }
@@ -133,7 +133,7 @@ export const Layout: FC<{
         <Meta />
         <Links />
       </head>
-      <body className="cat-latte grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text dark:cat-frappe print:block">
+      <body className="bg-cat-base text-cat-text grid min-h-screen grid-rows-[auto_1fr_auto] print:block">
         <HeaderComponent />
         {children}
         <FooterComponent />
@@ -170,8 +170,8 @@ function HeaderComponent() {
               to={pathname}
               className={({ isActive }) =>
                 (isActive
-                  ? "font-semibold text-cat-text"
-                  : "font-normal text-cat-text opacity-80 hover:opacity-100") +
+                  ? "text-cat-text font-semibold"
+                  : "text-cat-text font-normal opacity-80 hover:opacity-100") +
                 " rounded px-1 py-2 text-base"
               }
             >
@@ -198,7 +198,7 @@ function HeaderComponent() {
 
 function FooterComponent() {
   return (
-    <footer className="mx-auto p-4 pt-12 text-center text-cat-subtext1 print:hidden">
+    <footer className="text-cat-subtext1 mx-auto p-4 pt-12 text-center print:hidden">
       <div>
         <small>
           <a
