@@ -6,6 +6,8 @@ import type { useNavigate } from "react-router";
 const mockData = {
   Ayu: "https://ayu.land/",
   Spheniscidae: "https://blog.sphenhe.me/",
+  哲涵: "https://note.adamanteye.cc/",
+  续本达: "https://hep.tsinghua.edu.cn/~orv/index.html",
 } as Record<string, string>;
 
 export const floatBubbles = new Map() as Map<
@@ -29,18 +31,18 @@ export function addBubble(
   if (!floatBubbles.has(name)) {
     const a = Math.random() * Math.PI * 2;
     const container = new Container();
-    const bubble = new Graphics().circle(0, 0, 7).fill(0xffffff);
+    const bubble = new Graphics().circle(0, 0, 8).fill(0xffffff);
     const text = new Text({
       text: name, //🪐
       style: {
         fill: isDark.current ? 0xe5c890 : 0xdf8e1d,
-        fontSize: 9,
+        fontSize: 13,
         fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         align: "center",
       },
     });
     text.anchor.set(0.5, 0);
-    text.y = 6;
+    text.y = 8;
     text.visible = false;
     container.eventMode = "static";
     container.on("mouseenter", () => {
@@ -78,13 +80,13 @@ export function addBubble(
         text: "⋆⭒友链⋆⭒",
         style: {
           fill: isDark.current ? 0xbabbf1 : 0x7287fd,
-          fontSize: 9,
+          fontSize: 13,
           fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
           align: "center",
         },
       });
       siteText.anchor.set(0.5, 0);
-      siteText.y = 16;
+      siteText.y = 21;
       siteText.visible = false;
       siteText.eventMode = "static";
       siteText.cursor = "pointer";

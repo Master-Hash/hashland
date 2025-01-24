@@ -8,10 +8,11 @@ export async function loadTexture() {
     alias: "zodiac",
   });
   chronicles.forEach((chronicle) => {
-    if (chronicle.emoji.match(/\p{RGI_Emoji}/v)) {
+    if (chronicle.emoji.match(/[\p{RGI_Emoji}\u26f0]/v)) {
       const codePoint = [...chronicle.emoji]
         .map((char) => char.codePointAt(0)?.toString(16))
         .join("-");
+      console.log(codePoint);
       const emojiName = chars[codePoint];
       Assets.add({
         src:

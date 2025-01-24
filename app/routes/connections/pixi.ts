@@ -17,12 +17,17 @@ export async function pixiApp(
   navigate: ReturnType<typeof useNavigate>,
 ) {
   await app.init({
-    antialias: true,
     backgroundAlpha: 0,
-    resolution: 1.5,
-    // resizeTo: ref.current!,
-    width: ref.current!.getBoundingClientRect().width / 1.5,
-    height: ref.current!.getBoundingClientRect().height / 1.5,
+    antialias: true,
+    roundPixels: true,
+    autoDensity: true,
+    resolution: window.devicePixelRatio,
+    // resolution: 1.5,
+    resizeTo: ref.current!,
+    // width: ref.current!.getBoundingClientRect().width / 1.5,
+    // width: ref.current!.getBoundingClientRect().width,
+    // height: ref.current!.getBoundingClientRect().height / 1.5,
+    // height: ref.current!.getBoundingClientRect().height,
   });
   ref.current!.appendChild(app.canvas);
   const texture = await loadTexture();
@@ -34,10 +39,12 @@ export async function pixiApp(
   app.stage.addChild(container);
   container.addChild(zodiac);
   zodiac.anchor.set(0.5);
-  zodiac.scale.set(0.37);
+  // MAGIC NUMBER zodiac scale here
+  zodiac.scale.set(0.54);
   zodiac.tint = isDark.current ? 0xa5adce : 0x6c6f85;
   container.x = app.screen.width / 2;
-  container.y = app.screen.height / 2 + 250;
+  // MAGIC NUMBER y here
+  container.y = app.screen.height / 2 + 365;
   container.rotation =
     ((new Date().valueOf() - new Date("2024-05-01").valueOf()) /
       31556926 /
@@ -99,7 +106,7 @@ export async function pixiApp(
   chronicles.forEach((c) => {
     const date = new Date(c.date);
     const r =
-      container.y * 0.68 +
+      container.y * 0.66 +
       (date.valueOf() - new Date("2024-01-01").valueOf()) / 1000000000;
     const secondInTropicYear = 31556926;
     const radian =
@@ -108,12 +115,12 @@ export async function pixiApp(
       2 *
       Math.PI;
     const color = isDark.current
-      ? new Color(`oklch(69% 0.1 ${(180 + (radian / Math.PI) * 180) % 360})`)
-      : new Color(`oklch(42% 0.1 ${(180 + (radian / Math.PI) * 180) % 360})`);
+      ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
+      : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
     const eventContainer = new Container();
     const event = Sprite.from(texture[c.emoji]);
     event.anchor.set(0.5);
-    event.scale.set(0.08);
+    event.scale.set(0.1);
     eventContainer.x = r * Math.cos(-radian);
     eventContainer.y = r * Math.sin(-radian);
     eventContainer.rotation = -radian + Math.PI / 2 + Math.random() - 0.5;
@@ -128,7 +135,7 @@ export async function pixiApp(
       text: c.title,
       style: {
         align: "center",
-        fontSize: 9,
+        fontSize: 13,
         fill: isDark.current ? 0x85c1dc : 0x209fb5,
       },
     });
