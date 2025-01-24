@@ -6,11 +6,11 @@ import mdx from "@mdx-js/rollup";
 // import { flavors } from "@catppuccin/palette";
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
-import tailwindcss from "@tailwindcss/vite";
-// import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
+import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
+import tailwindcss from "@tailwindcss/vite";
 import process from "node:process";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -25,12 +25,16 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
+import { envOnlyMacros } from "vite-env-only";
 // import wasm from "vite-plugin-wasm";
 // import { envOnlyMacros } from "vite-env-only";
-import babel from "vite-plugin-babel";
+// import tailwindPostcss from "@tailwindcss/postcss";
+// import babel from "vite-plugin-babel";
 // import forgetti from "vite-plugin-forgetti";
+// import BabelPresetTypescript from "@babel/preset-typescript";
+// import BabelPluginReactCompiler from "babel-plugin-react-compiler";
 
-enableDeprecationWarnings(true);
+enableDeprecationWarnings(true, true);
 
 // const toClass = transformerStyleToClass({
 //   classPrefix: "__shiki_",
@@ -112,7 +116,7 @@ export default {
                 defaultColor: false,
                 transformers: [
                   transformerTwoslash(),
-                  // transformerColorizedBrackets(),
+                  transformerColorizedBrackets(),
                   // shikiColorizedBrackets({
                   //   defaultColor: false,
                   //   colors: {
@@ -147,18 +151,19 @@ export default {
     !isStorybook && reactRouter(),
     !isTypegen && tailwindcss(),
     !isStorybook &&
+      false &&
       babel({
         filter: /\.(?:[jt]sx?)$/,
         // I don't know why MDXContent isn't compiled
         // Anyway, I'll wait for RSC so there'll be no need for client bundle
         // filter: /\.(?:[jt]sx?|mdx?)$/,
         babelConfig: {
-          presets: ["@babel/preset-typescript"], // if you use TypeScript
-          plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
+          presets: [BabelPresetTypescript], // if you use TypeScript
+          plugins: [[BabelPluginReactCompiler, ReactCompilerConfig]],
         },
       }),
     // !isStorybook && wasm(),
-    // envOnlyMacros(),
+    envOnlyMacros(),
   ],
   optimizeDeps: {
     holdUntilCrawlEnd: false,
@@ -168,8 +173,14 @@ export default {
     assetsInlineLimit: 0,
     reportCompressedSize: false,
   },
+  experimental: {
+    // skipSsrTransform: true,
+    // enableNativePlugin: true,
+  },
   css: {
-    postcss: {},
+    postcss: {
+      // plugins: [tailwindPostcss],
+    },
   },
 };
 

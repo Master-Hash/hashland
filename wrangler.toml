@@ -1,6 +1,6 @@
 #:schema https://unpkg.com/wrangler@3.80.4/config-schema.json
 name = "land"
-compatibility_date = "2024-10-14"
+compatibility_date = "2024-12-21"
 main = "./build/worker/index.js"
 assets = { directory = "./build/client", binding = "ASSETS" }
 workers_dev = false

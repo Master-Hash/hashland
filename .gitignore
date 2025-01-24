@@ -146,6 +146,8 @@ dist
 /public/assets/*
 /public/fluent-emoji-high-contrast/
 /public/game-icons/
+/public/fluent/
+/public/tabler/
 /public/zodiac-white.png
 
 # Storybook bootstrap
@@ -179,7 +181,11 @@ localtest.sql
 /app/routes/connections-rs/*.js
 /app/routes/connections-rs/*.wasm
 /app/routes/connections-rs/*.d.ts
+/app/routes/bevy-logical-resolution/*.js
+/app/routes/bevy-logical-resolution/*.wasm
+/app/routes/bevy-logical-resolution/*.d.ts
 
 # Emacs
 *~
 \#*\#
+
