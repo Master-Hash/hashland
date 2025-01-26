@@ -1,136 +1,135 @@
-import { fixupConfigRules, fixupPluginRules } from "@eslint/compat";
-import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import _import from "eslint-plugin-import";
-import jsxA11Y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
+import storybook from "eslint-plugin-storybook";
 import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
+/** @type {import("@typescript-eslint/utils").TSESLint.FlatConfig.ConfigFile} */
 export default [
-  ...compat.extends("eslint:recommended", "plugin:storybook/recommended"),
-  // reactHooks.configs["recommended-latest"],
-  reactCompiler.configs.recommended,
   {
-    plugins: {
-      "react-hooks": reactHooks,
+    files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
-    rules: reactHooks.configs.recommended.rules,
-  },
-  {
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.commonjs,
+        ...globals.es2024,
       },
-
+      // parser: tsParser,
       ecmaVersion: "latest",
       sourceType: "module",
 
       parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
         },
       },
     },
   },
-  ...fixupConfigRules(
-    compat.extends(
-      "plugin:react/recommended",
-      "plugin:react/jsx-runtime",
-      // "plugin:react-hooks/recommended",
-      "plugin:jsx-a11y/recommended",
-    ),
-  ).map((config) => ({
-    ...config,
-    files: ["**/*.{js,jsx,ts,tsx}"],
-  })),
+  js.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  ...storybook.configs["flat/recommended"],
+  react.configs.flat.recommended,
+  react.configs.flat["jsx-runtime"],
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-
     plugins: {
-      react: fixupPluginRules(react),
-      "jsx-a11y": fixupPluginRules(jsxA11Y),
+      "react-hooks": reactHooks,
     },
-
-    settings: {
-      react: {
-        version: "detect",
-      },
-
-      formComponents: ["Form"],
-
-      linkComponents: [
-        {
-          name: "Link",
-          linkAttribute: "to",
-        },
-        {
-          name: "NavLink",
-          linkAttribute: "to",
-        },
-      ],
-
-      "import/resolver": {
-        typescript: {},
-      },
-    },
-
-    rules: {
-      "@typescript-eslint/consistent-type-imports": "error",
-    },
+    rules: reactHooks.configs.recommended.rules,
   },
-  ...fixupConfigRules(
-    compat.extends(
-      "plugin:@typescript-eslint/recommended",
-      "plugin:import/recommended",
-      "plugin:import/typescript",
-    ),
-  ).map((config) => ({
-    ...config,
-    files: ["**/*.{ts,tsx}"],
-  })),
-  {
-    files: ["**/*.{ts,tsx}"],
+  // reactHooks.configs["recommended-latest"],
+  reactCompiler.configs.recommended,
+  // ...fixupConfigRules(
+  //   compat.extends(
+  //     "plugin:react/recommended",
+  //     "plugin:react/jsx-runtime",
+  //     // "plugin:react-hooks/recommended",
+  //     "plugin:jsx-a11y/recommended",
+  //   ),
+  // ).map((config) => ({
+  //   ...config,
+  //   files: ["**/*.{js,jsx,ts,tsx}"],
+  // })),
+  // {
+  //   files: ["**/*.{js,jsx,ts,tsx}"],
 
-    plugins: {
-      "@typescript-eslint": fixupPluginRules(typescriptEslint),
-      import: fixupPluginRules(_import),
-    },
+  //   plugins: {
+  //     react: fixupPluginRules(react),
+  //     "jsx-a11y": fixupPluginRules(jsxA11Y),
+  //   },
 
-    languageOptions: {
-      parser: tsParser,
-    },
+  //   settings: {
+  //     react: {
+  //       version: "detect",
+  //     },
 
-    settings: {
-      "import/internal-regex": "^~/",
+  //     formComponents: ["Form"],
 
-      "import/resolver": {
-        node: {
-          extensions: [".ts", ".tsx"],
-        },
+  //     linkComponents: [
+  //       {
+  //         name: "Link",
+  //         linkAttribute: "to",
+  //       },
+  //       {
+  //         name: "NavLink",
+  //         linkAttribute: "to",
+  //       },
+  //     ],
 
-        typescript: {
-          alwaysTryTypes: true,
-        },
-      },
-    },
+  //     "import/resolver": {
+  //       typescript: {},
+  //     },
+  //   },
 
-    rules: {
-      "@typescript-eslint/consistent-type-imports": "error",
-    },
-  },
+  //   rules: {
+  //     "@typescript-eslint/consistent-type-imports": "error",
+  //   },
+  // },
+  // ...fixupConfigRules(
+  //   compat.extends(
+  //     "plugin:@typescript-eslint/recommended",
+  //     "plugin:import/recommended",
+  //     "plugin:import/typescript",
+  //   ),
+  // ).map((config) => ({
+  //   ...config,
+  //   files: ["**/*.{ts,tsx}"],
+  // })),
+  // {
+  //   files: ["**/*.{ts,tsx}"],
+
+  //   plugins: {
+  //     "@typescript-eslint": fixupPluginRules(typescriptEslint),
+  //     import: fixupPluginRules(_import),
+  //   },
+
+  //   languageOptions: {
+  //     parser: tsParser,
+  //   },
+
+  //   settings: {
+  //     "import/internal-regex": "^~/",
+
+  //     "import/resolver": {
+  //       node: {
+  //         extensions: [".ts", ".tsx"],
+  //       },
+
+  //       typescript: {
+  //         alwaysTryTypes: true,
+  //       },
+  //     },
+  //   },
+
+  //   rules: {
+  //     "@typescript-eslint/consistent-type-imports": "error",
+  //   },
+  // },
 ];
