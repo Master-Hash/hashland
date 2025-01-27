@@ -87,6 +87,7 @@ export async function pixiApp(
 
   //#region Evnets
   const chronicleSprites = [] as Sprite[];
+  floatBubbles.clear();
   chronicles.forEach((c) => {
     const date = new Date(c.date);
     const r =
@@ -193,6 +194,7 @@ export async function pixiApp(
         dragFloatPreviousPoint.set(x, y);
       });
       data.on("pointermove", function (e) {
+        // console.log(app);
         const { x, y } = e.global;
         if (dataObj.dragged) {
           dataObj.xVelocity = x - dragFloatPreviousPoint.x;
