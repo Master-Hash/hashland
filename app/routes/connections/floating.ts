@@ -1,6 +1,5 @@
 import type { Sprite } from "pixi.js";
 import { Container, Graphics, Text } from "pixi.js";
-import type { RefObject } from "react";
 import type { useNavigate } from "react-router";
 
 const mockData = {
@@ -25,7 +24,7 @@ export const floatBubbles = new Map() as Map<
 export function addBubble(
   name: string,
   event: Sprite,
-  isDark: RefObject<boolean>,
+  isDark: boolean,
   navigate: ReturnType<typeof useNavigate>,
 ) {
   if (!floatBubbles.has(name)) {
@@ -35,7 +34,7 @@ export function addBubble(
     const text = new Text({
       text: name, //🪐
       style: {
-        fill: isDark.current ? 0xe5c890 : 0xdf8e1d,
+        fill: isDark ? 0xe5c890 : 0xdf8e1d,
         fontSize: 13,
         fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         align: "center",
@@ -73,13 +72,13 @@ export function addBubble(
     text.eventMode = "static";
     text.cursor = "pointer";
     text.on("pointerdown", () => {
-      navigate(`/post/人/${name}.md`);
+      void navigate(`/post/人/${name}.md`);
     });
     if (mockData[name] !== undefined) {
       const siteText = new Text({
         text: "⋆⭒友链⋆⭒",
         style: {
-          fill: isDark.current ? 0xbabbf1 : 0x7287fd,
+          fill: isDark ? 0xbabbf1 : 0x7287fd,
           fontSize: 13,
           fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
           align: "center",

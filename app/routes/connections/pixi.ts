@@ -1,7 +1,6 @@
 import Color from "colorjs.io";
-import type { Application, FederatedPointerEvent } from "pixi.js";
+import type { Application, FederatedPointerEvent, Ticker } from "pixi.js";
 import { Container, Point, Sprite, Text } from "pixi.js";
-import type { RefObject } from "react";
 import type { useNavigate } from "react-router";
 import { chronicles } from "./chronicle.js";
 import { colors } from "./colors.js";
@@ -12,24 +11,9 @@ const PADDING = 15;
 
 export async function pixiApp(
   app: Application,
-  ref: RefObject<HTMLDivElement>,
-  isDark: RefObject<boolean>,
+  isDark: boolean,
   navigate: ReturnType<typeof useNavigate>,
-) {
-  await app.init({
-    backgroundAlpha: 0,
-    antialias: true,
-    roundPixels: true,
-    autoDensity: true,
-    resolution: window.devicePixelRatio,
-    // resolution: 1.5,
-    resizeTo: ref.current!,
-    // width: ref.current!.getBoundingClientRect().width / 1.5,
-    // width: ref.current!.getBoundingClientRect().width,
-    // height: ref.current!.getBoundingClientRect().height / 1.5,
-    // height: ref.current!.getBoundingClientRect().height,
-  });
-  ref.current!.appendChild(app.canvas);
+): Promise<void> {
   const texture = await loadTexture();
 
   //#region Zodiac
@@ -41,7 +25,7 @@ export async function pixiApp(
   zodiac.anchor.set(0.5);
   // MAGIC NUMBER zodiac scale here
   zodiac.scale.set(0.54);
-  zodiac.tint = isDark.current ? 0xa5adce : 0x6c6f85;
+  zodiac.tint = isDark ? 0xa5adce : 0x6c6f85;
   container.x = app.screen.width / 2;
   // MAGIC NUMBER y here
   container.y = app.screen.height / 2 + 365;
@@ -114,7 +98,7 @@ export async function pixiApp(
         secondInTropicYear) *
       2 *
       Math.PI;
-    const color = isDark.current
+    const color = isDark
       ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
       : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
     const eventContainer = new Container();
@@ -124,7 +108,7 @@ export async function pixiApp(
     eventContainer.x = r * Math.cos(-radian);
     eventContainer.y = r * Math.sin(-radian);
     eventContainer.rotation = -radian + Math.PI / 2 + Math.random() - 0.5;
-    // event.tint = isDark.current ? 0x85c1dc : 0x209fb5; // Sapphire
+    // event.tint = isDark ? 0x85c1dc : 0x209fb5; // Sapphire
     event.tint = parseInt(
       color.to("srgb").toString({ format: "hex" }).slice(1),
       16,
@@ -136,7 +120,7 @@ export async function pixiApp(
       style: {
         align: "center",
         fontSize: 13,
-        fill: isDark.current ? 0x85c1dc : 0x209fb5,
+        fill: isDark ? 0x85c1dc : 0x209fb5,
       },
     });
     lable.visible = false;
@@ -170,7 +154,7 @@ export async function pixiApp(
     lable.eventMode = "static";
     lable.cursor = "pointer";
     lable.on("pointerdown", () => {
-      navigate(`/post/事/${c.date}_${c.title}.md`);
+      void navigate(`/post/事/${c.date}_${c.title}.md`);
     });
 
     eventContainer.addChild(event);
@@ -249,7 +233,7 @@ export async function pixiApp(
       data.on("pointerup", function (e) {
         dataObj.dragged = false;
       });
-      data.tint = isDark.current
+      data.tint = isDark
         ? colors.frappe[i % colors.frappe.length]
         : colors.latte[i % colors.latte.length];
       app.stage.addChild(bubbleContainer);

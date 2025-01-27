@@ -45,13 +45,60 @@ export default function Pixi() {
 
   clientOnly$(
     useEffect(() => {
-      // const fuck = new Application(); // It's not my fault!
-      // fuck.destroy();
+      const controller = new AbortController();
+      const sectionContainer = ref.current;
       const app = new Application();
-      globalThis.__PIXI_APP__ = app;
-      pixiApp(app, ref, isDark, navigate);
+      const { promise, resolve, reject } = Promise.withResolvers<Application>();
+      void app
+        .init({
+          backgroundAlpha: 0,
+          antialias: true,
+          roundPixels: true,
+          autoDensity: true,
+          resolution: window.devicePixelRatio,
+          resizeTo: sectionContainer!,
+          preference: "webgpu",
+        })
+        .then(() => resolve(app));
+      controller.signal.addEventListener("abort", () => {
+        // console.log("abort");
+        reject(controller.signal.reason);
+      });
+      promise
+        .then((app) => {
+          if (import.meta.env.DEV) {
+            // @ts-expect-error for debug
+            globalThis.__PIXI_APP__ = app;
+          }
+          sectionContainer!.appendChild(app.canvas);
+          return pixiApp(app, isDark.current, navigate);
+        })
+        .catch((error) => {
+          console.log("Abort reason:", error);
+        });
+
+      // void pixiApp(app, ref, isDark, navigate);
       return () => {
-        app.destroy();
+        controller.abort("The component is unmounted");
+        console.log("Point clean", app, app.renderer);
+
+        // app.ticker.remove(f); // ???
+
+        // should unload bundle here
+
+        // 事实上，严格模式下装卸速度极快，不一定会给充足时间 init 也没人 await 你
+        // 经典异步 race condition
+        // 我们就默认，要是没挂载上渲染器，就等于没初始化
+        if (
+          Object.prototype.hasOwnProperty.call(app, "renderer") &&
+          app.renderer !== undefined
+        ) {
+          // console.log(app.screen);
+          // console.log(sectionContainer);
+          sectionContainer?.removeChild(app.renderer.canvas);
+          // console.log("Point 3");
+          app.destroy();
+        }
       };
     }, [navigate]),
   );
@@ -70,9 +117,6 @@ export default function Pixi() {
 }
 
 export const ErrorBoundary = () => {
-  useEffect(() => {
-    location.reload();
-  }, []);
   // const error = useRouteError() as {
   //   status: number;
   //   statusText: string;
@@ -89,7 +133,7 @@ export const ErrorBoundary = () => {
       <title>Client Error</title>
       <main className="prose prose-a:break-words relative mx-auto">
         <h1>Client Error</h1>
-        <p>Oops! An error occurred! We&lsquoll auto refresh to fix it.</p>
+        <p>Oops! An error occurred! We&apos;ll auto refresh to fix it.</p>
       </main>
     </>
   );
