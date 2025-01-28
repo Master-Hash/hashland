@@ -1,6 +1,6 @@
 import { chars } from "@iconify-json/fluent-emoji-high-contrast";
 import { Assets } from "pixi.js";
-import { chronicles } from "./chronicle.js";
+import chronicles from "./chronicle.js";
 
 export async function loadTexture() {
   Assets.add({
@@ -12,7 +12,7 @@ export async function loadTexture() {
       const codePoint = [...chronicle.emoji]
         .map((char) => char.codePointAt(0)?.toString(16))
         .join("-");
-      console.log(codePoint);
+      // console.log(codePoint);
       const emojiName = chars[codePoint];
       Assets.add({
         src:

@@ -1,10 +1,12 @@
-import { Application } from "pixi.js";
+import { Application, Assets } from "pixi.js";
 import { useEffect, useRef } from "react";
 import type { MetaFunction } from "react-router";
 import { useNavigate } from "react-router";
 import { clientOnly$ } from "vite-env-only/macros";
 import { HrefToLink } from "../../utils/components.js";
+import chronicles from "./chronicle.js";
 import P from "./connections.md";
+import { loadTexture } from "./loadtexture.js";
 import { pixiApp } from "./pixi.js";
 
 export const meta: MetaFunction = () => {
@@ -64,14 +66,14 @@ export default function Pixi() {
         // console.log("abort");
         reject(controller.signal.reason);
       });
-      promise
-        .then((app) => {
-          if (import.meta.env.DEV) {
-            // @ts-expect-error for debug
-            globalThis.__PIXI_APP__ = app;
-          }
+      Promise.all([promise, loadTexture()])
+        .then(([app, texture]) => {
+          // if (import.meta.env.DEV) {
+          // @ts-expect-error for debug
+          globalThis.__PIXI_APP__ = app;
+          // }
           sectionContainer!.appendChild(app.canvas);
-          return pixiApp(app, isDark.current, navigate);
+          return pixiApp(app, isDark.current, navigate, texture);
         })
         .catch((error) => {
           console.log("Abort reason:", error);
@@ -81,8 +83,6 @@ export default function Pixi() {
       return () => {
         controller.abort("The component is unmounted");
         console.log("Point clean", app, app.renderer);
-
-        // app.ticker.remove(f); // ???
 
         // should unload bundle here
 
@@ -96,6 +96,13 @@ export default function Pixi() {
           // console.log(app.screen);
           // console.log(sectionContainer);
           sectionContainer?.removeChild(app.renderer.canvas);
+          // 覆盖 alias 的警告就不管了
+          // 反正资源是顺利释放了
+          // 你可以注意到，重新加载页面时是重新下载了图片的（从浏览器缓存，而不是压根没记录）
+          void Assets.unload([
+            "zodiac",
+            ...chronicles.map((chronicle) => chronicle.emoji),
+          ]);
           // console.log("Point 3");
           app.destroy();
         }
