@@ -34,3 +34,10 @@ export async function loadTexture() {
     ...chronicles.map((chronicle) => chronicle.emoji),
   ]);
 }
+
+export async function unloadTexture() {
+  await Assets.unload([
+    "zodiac",
+    ...chronicles.map((chronicle) => chronicle.emoji),
+  ]);
+}

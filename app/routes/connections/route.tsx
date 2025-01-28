@@ -1,12 +1,11 @@
-import { Application, Assets } from "pixi.js";
+import { Application } from "pixi.js";
 import { useEffect, useRef } from "react";
 import type { MetaFunction } from "react-router";
 import { useNavigate } from "react-router";
 import { clientOnly$ } from "vite-env-only/macros";
 import { HrefToLink } from "../../utils/components.js";
-import chronicles from "./chronicle.js";
 import P from "./connections.md";
-import { loadTexture } from "./loadtexture.js";
+import { loadTexture, unloadTexture } from "./loadtexture.js";
 import { pixiApp } from "./pixi.js";
 
 export const meta: MetaFunction = () => {
@@ -99,10 +98,7 @@ export default function Pixi() {
           // 覆盖 alias 的警告就不管了
           // 反正资源是顺利释放了
           // 你可以注意到，重新加载页面时是重新下载了图片的（从浏览器缓存，而不是压根没记录）
-          void Assets.unload([
-            "zodiac",
-            ...chronicles.map((chronicle) => chronicle.emoji),
-          ]);
+          void unloadTexture();
           // console.log("Point 3");
           app.destroy();
         }
