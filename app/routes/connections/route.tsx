@@ -7,6 +7,7 @@ import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
 import { loadTexture, unloadTexture } from "./loadtexture.js";
 import { pixiApp } from "./pixi.js";
+import { setup } from "./systemes.js";
 
 export const meta: MetaFunction = () => {
   return [{ title: "朋友们 « 故人故事故纸堆" }];
@@ -46,6 +47,40 @@ export default function Pixi() {
 
   clientOnly$(
     useEffect(() => {
+      // void import("@dimforge/rapier2d").then((RAPIER) => {
+      //   // Use the RAPIER module here.
+      //   const gravity = { x: 0.0, y: -9.81 };
+      //   const world = new RAPIER.World(gravity);
+
+      //   // Create the ground
+      //   const groundColliderDesc = RAPIER.ColliderDesc.cuboid(10.0, 0.1);
+      //   world.createCollider(groundColliderDesc);
+
+      //   // Create a dynamic rigid-body.
+      //   const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(
+      //     0.0,
+      //     1.0,
+      //   );
+      //   const rigidBody = world.createRigidBody(rigidBodyDesc);
+
+      //   // Create a cuboid collider attached to the dynamic rigidBody.
+      //   const colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5);
+      //   const collider = world.createCollider(colliderDesc, rigidBody);
+
+      //   // Game loop. Replace by your own game loop system.
+      //   const gameLoop = () => {
+      //     // Step the simulation forward.
+      //     world.step();
+
+      //     // Get and print the rigid-body's position.
+      //     const position = rigidBody.translation();
+      //     console.log("Rigid-body position: ", position.x, position.y);
+
+      //     setTimeout(gameLoop, 16);
+      //   };
+
+      //   gameLoop();
+      // });
       const controller = new AbortController();
       const sectionContainer = ref.current;
       const app = new Application();
@@ -65,25 +100,45 @@ export default function Pixi() {
         // console.log("abort");
         reject(controller.signal.reason);
       });
-      Promise.all([promise, loadTexture()])
-        .then(([app, texture]) => {
-          // if (import.meta.env.DEV) {
-          // @ts-expect-error for debug
-          globalThis.__PIXI_APP__ = app;
-          // }
-          sectionContainer!.appendChild(app.canvas);
-          return pixiApp(app, isDark.current, navigate, texture);
-        })
-        .catch((error) => {
-          console.log("Abort reason:", error);
-        });
-
+      // if (import.meta.env.DEV) {
+      if (import.meta.env.DEV) {
+        Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
+          .then(([app, texture, RAPIER]) => {
+            // if (import.meta.env.DEV) {
+            // @ts-expect-error for debug
+            globalThis.__PIXI_APP__ = app;
+            // }
+            sectionContainer!.appendChild(app.canvas);
+            console.log(RAPIER);
+            return setup({
+              app,
+              RAPIER,
+              texture,
+              isDark: isDark.current,
+              navigate,
+            });
+          })
+          .catch((error) => {
+            console.log("Abort reason:", error);
+          });
+      } else {
+        Promise.all([promise, loadTexture()])
+          .then(([app, texture]) => {
+            // if (import.meta.env.DEV) {
+            // @ts-expect-error for debug
+            globalThis.__PIXI_APP__ = app;
+            // }
+            sectionContainer!.appendChild(app.canvas);
+            return pixiApp(app, isDark.current, navigate, texture);
+          })
+          .catch((error) => {
+            console.log("Abort reason:", error);
+          });
+      }
       // void pixiApp(app, ref, isDark, navigate);
       return () => {
         controller.abort("The component is unmounted");
         console.log("Point clean", app, app.renderer);
-
-        // should unload bundle here
 
         // 事实上，严格模式下装卸速度极快，不一定会给充足时间 init 也没人 await 你
         // 经典异步 race condition
@@ -95,10 +150,15 @@ export default function Pixi() {
           // console.log(app.screen);
           // console.log(sectionContainer);
           sectionContainer?.removeChild(app.renderer.canvas);
-          // 覆盖 alias 的警告就不管了
-          // 反正资源是顺利释放了
+
+          // 资源顺利释放了
           // 你可以注意到，重新加载页面时是重新下载了图片的（从浏览器缓存，而不是压根没记录）
-          void unloadTexture();
+          // 实际上这里依然存在竞态，快速切换时可能第一次卸载还没完成，第二次加载就开始了
+          // 但谁点这么快……
+          // 如果真有人反馈问题，我就不卸载了！
+          if (import.meta.env.PROD) {
+            void unloadTexture();
+          }
           // console.log("Point 3");
           app.destroy();
         }
