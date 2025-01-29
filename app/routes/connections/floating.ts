@@ -71,8 +71,14 @@ export function addBubble(
     });
     text.eventMode = "static";
     text.cursor = "pointer";
-    text.on("pointerdown", () => {
-      void navigate(`/post/人/${name}.md`);
+    text.on("pointerdown", (e) => {
+      if (e.ctrlKey) {
+        window
+          .open(`/post/人/${name}.md`, "_blank", "noopener,noreferrer")
+          ?.focus();
+      } else {
+        void navigate(`/post/人/${name}.md`);
+      }
     });
     if (mockData[name] !== undefined) {
       const siteText = new Text({

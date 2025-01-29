@@ -193,8 +193,18 @@ export function setup(ctx: {
 
     lable.eventMode = "static";
     lable.cursor = "pointer";
-    lable.on("pointerdown", () => {
+    lable.on("pointerdown", (e) => {
+      if (e.ctrlKey) {
+        window
+          .open(
+            `/post/事/${c.date}_${c.title}.md`,
+            "_blank",
+            "noopener,noreferrer",
+          )
+          ?.focus();
+      } else {
       void navigate(`/post/事/${c.date}_${c.title}.md`);
+      }
     });
 
     eventContainer.addChild(emojiSprite);
@@ -238,8 +248,14 @@ export function setup(ctx: {
     nameText.visible = false;
     nameText.eventMode = "static";
     nameText.cursor = "pointer";
-    nameText.on("pointerdown", () => {
+    nameText.on("pointerdown", (e) => {
+      if (e.ctrlKey) {
+        window
+          .open(`/post/人/${b.name}.md`, "_blank", "noopener,noreferrer")
+          ?.focus();
+      } else {
       void navigate(`/post/人/${b.name}.md`);
+      }
     });
 
     bubbleContainer.addChild(nameText);

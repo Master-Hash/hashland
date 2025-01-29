@@ -155,8 +155,18 @@ export function pixiApp(
     });
     lable.eventMode = "static";
     lable.cursor = "pointer";
-    lable.on("pointerdown", () => {
-      void navigate(`/post/事/${c.date}_${c.title}.md`);
+    lable.on("pointerdown", (e) => {
+      if (e.ctrlKey) {
+        window
+          .open(
+            `/post/事/${c.date}_${c.title}.md`,
+            "_blank",
+            "noopener,noreferrer",
+          )
+          ?.focus();
+      } else {
+        void navigate(`/post/事/${c.date}_${c.title}.md`);
+      }
     });
 
     eventContainer.addChild(event);
@@ -209,11 +219,11 @@ export function pixiApp(
               Math.hypot(
                 x + dataObj.xVelocity - xEvent,
                 y + dataObj.yVelocity - yEvent,
-              ) < 16
+              ) < 18
             ) {
               const rad = Math.atan2(y - yEvent, x - xEvent);
-              bubbleContainer.x = xEvent + 16 * Math.cos(rad);
-              bubbleContainer.y = yEvent + 16 * Math.sin(rad);
+              bubbleContainer.x = xEvent + 18 * Math.cos(rad);
+              bubbleContainer.y = yEvent + 18 * Math.sin(rad);
               return;
             }
           }
