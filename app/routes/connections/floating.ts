@@ -76,7 +76,7 @@ export function addBubble(
     });
     if (mockData[name] !== undefined) {
       const siteText = new Text({
-        text: "⋆⭒友链⋆⭒",
+        text: "✨友链✨",
         style: {
           fill: isDark ? 0xbabbf1 : 0x7287fd,
           fontSize: 13,
