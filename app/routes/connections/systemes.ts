@@ -20,7 +20,7 @@ const GRAVITY = 481000;
 const ZODIAC_MASS = 99999999999;
 
 const COLLIDER_GROUP_1 = 0x00010002;
-const COLLIDER_GROUP_2 = 0x00020001;
+const COLLIDER_GROUP_2 = 0x00020003;
 
 /**
  * 生成所有对象，并且加载到场景上。
