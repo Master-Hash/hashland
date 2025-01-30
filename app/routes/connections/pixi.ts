@@ -69,6 +69,10 @@ export function pixiApp(
     //   (nowRotate / Math.PI) * 180,
     // );
     if (dragTarget) {
+      // 为了高速旋转的手感，这里有另一种方案
+      // zodiacAngularVelocity = Math.max(nowRotate - previousRotate, zodiacAngularVelocity);
+      // 但这样会牺牲低速手感，没法精确控制拖动距离
+      // 唯一两全其美的办法，就是弹簧了……
       zodiacAngularVelocity = nowRotate - previousRotate;
       container.rotation += zodiacAngularVelocity;
       // chronicleSprites.forEach((c) => {

@@ -1,7 +1,8 @@
+import RAPIER from "@dimforge/rapier2d-compat";
 import { Application } from "pixi.js";
 import { useEffect, useRef } from "react";
 import type { MetaFunction } from "react-router";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { clientOnly$ } from "vite-env-only/macros";
 import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
@@ -36,6 +37,7 @@ export const meta: MetaFunction = () => {
 // }
 
 export default function Pixi() {
+  const [searchParams] = useSearchParams();
   const ref = useRef<HTMLDivElement>(null);
   const isDark = useRef(false);
   const navigate = useNavigate();
@@ -66,6 +68,7 @@ export default function Pixi() {
       //   // Create a cuboid collider attached to the dynamic rigidBody.
       //   const colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5);
       //   const collider = world.createCollider(colliderDesc, rigidBody);
+      //   console.log(collider.mass(), rigidBody.mass());
 
       //   // Game loop. Replace by your own game loop system.
       //   const gameLoop = () => {
@@ -101,15 +104,16 @@ export default function Pixi() {
         reject(controller.signal.reason);
       });
       // if (import.meta.env.DEV) {
-      if (import.meta.env.DEV) {
-        Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
-          .then(([app, texture, RAPIER]) => {
+      if (searchParams.get("legacy") === null) {
+        Promise.all([promise, loadTexture(), RAPIER.init()])
+          .then(([app, texture, _RAPIER]) => {
+            console.log(RAPIER);
             // if (import.meta.env.DEV) {
             // @ts-expect-error for debug
             globalThis.__PIXI_APP__ = app;
             // }
             sectionContainer!.appendChild(app.canvas);
-            console.log(RAPIER);
+            // console.log(RAPIER);
             return setup({
               app,
               RAPIER,

@@ -1,16 +1,26 @@
 import Color from "colorjs.io";
-import type { Application, Texture } from "pixi.js";
 import { Container, Graphics, Sprite, Text } from "pixi.js";
-import type { NavigateFunction } from "react-router";
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
 import { colors } from "./colors.ts";
+import type { Context, DragTag } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
 const ZODIAC_Y_OFFSET = 365;
 const SECOND_IN_TROPIC_YEAR = 31556926;
-const PADDING = 2;
+const PADDING = 15;
+const DAMPING = 0.95;
+const REST_LENGTH = 0.0001;
+const STIFFNESS = 100000000;
+const SPRING_DAMPING = 10000000;
+const BUBBLE_STIFFNESS = 80000;
+const BUBBLE_DAMPING = 9000;
+const GRAVITY = 481000;
+const ZODIAC_MASS = 99999999999;
+
+const COLLIDER_GROUP_1 = 0x00010002;
+const COLLIDER_GROUP_2 = 0x00020001;
 
 /**
  * 生成所有对象，并且加载到场景上。
@@ -20,14 +30,49 @@ const PADDING = 2;
  * 我懒，所以就不写了
  * 反正现在捕获还没有表现出任何弊端
  */
-export function setup(ctx: {
-  app: Application;
-  RAPIER: typeof import("@dimforge/rapier2d");
-  texture: Record<string, Texture>;
-  isDark: boolean;
-  navigate: NavigateFunction;
-}) {
+export function setup(ctx: Context) {
+  // #region Rapier init
   const { app, RAPIER, texture, isDark, navigate } = ctx;
+  // 别想了！
+  // app.stage.scale.set(1, -1);
+  // 官方做法是用负数，但不用减法
+  // 我先试一试不转换坐标系行不行
+  // 反正负负得正
+  const world = new RAPIER.World({ x: 0, y: 0 });
+  globalThis.world = world;
+  const wallLeftColliderDesc = RAPIER.ColliderDesc.cuboid(
+    PADDING / 2,
+    (app.screen.height - PADDING) / 2,
+  )
+    .setTranslation(PADDING / 2, app.screen.height / 2)
+    .setCollisionGroups(COLLIDER_GROUP_1);
+  const wallLeftCollider = world.createCollider(wallLeftColliderDesc);
+  const wallRightColliderDesc = RAPIER.ColliderDesc.cuboid(
+    PADDING / 2,
+    (app.screen.height - PADDING) / 2,
+  )
+    .setTranslation(app.screen.width - PADDING / 2, app.screen.height / 2)
+    .setCollisionGroups(COLLIDER_GROUP_1);
+  const wallRightCollider = world.createCollider(wallRightColliderDesc);
+  const wallTopColliderDesc = RAPIER.ColliderDesc.cuboid(
+    (app.screen.width - PADDING) / 2,
+    PADDING / 2,
+  )
+    .setTranslation(app.screen.width / 2, PADDING / 2)
+    .setCollisionGroups(COLLIDER_GROUP_1);
+  const wallTopCollider = world.createCollider(wallTopColliderDesc);
+  const wallBottomColliderDesc = RAPIER.ColliderDesc.cuboid(
+    (app.screen.width - PADDING) / 2,
+    PADDING / 2,
+  )
+    .setTranslation(app.screen.width / 2, app.screen.height - PADDING / 2)
+    .setCollisionGroups(COLLIDER_GROUP_1);
+  const wallBottomCollider = world.createCollider(wallBottomColliderDesc);
+  const pointerRigidBodyDesc = RAPIER.RigidBodyDesc.kinematicPositionBased();
+  const pointerRigidBody = world.createRigidBody(pointerRigidBodyDesc);
+
+  // const texture = (await loadTexture()) as Record<string, Texture>;
+  // #endregion
   // #region Zodiac
   // 因为实际组件上都有交互，不适合再添加有交互的子元素，我建议照抄原来的方案
   // 并且 Pixi 8 已经 deprecate 了这种方法
@@ -36,7 +81,7 @@ export function setup(ctx: {
   // 老老实实嵌套 Container！
   const zodiacSprite = Sprite.from(texture["zodiac"]);
   const zodiacContainer = new Container();
-  const zodiac = new Zodiac(zodiacContainer, null);
+
   zodiacContainer.addChild(zodiacSprite);
   app.stage.addChild(zodiacContainer);
   zodiacSprite.anchor.set(0.5);
@@ -51,6 +96,15 @@ export function setup(ctx: {
       SECOND_IN_TROPIC_YEAR /
       500) *
     Math.PI;
+  const zodiacRigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
+    .setTranslation(zodiacContainer.x, zodiacContainer.y)
+    .lockTranslations()
+    // .setAdditionalMass(1)
+    .setAdditionalMassProperties(0, { x: 0, y: 0 }, ZODIAC_MASS)
+    .setAngularDamping(DAMPING)
+    .setRotation(zodiacContainer.rotation);
+  const zodiacRigidBody = world.createRigidBody(zodiacRigidBodyDesc);
+  const zodiac = new Zodiac(zodiacContainer, zodiacRigidBody);
   zodiacSprite.eventMode = "static";
   zodiacSprite.cursor = "pointer";
   // 这玩意显然算声明属性
@@ -66,14 +120,36 @@ export function setup(ctx: {
       return d < r + 40 && d > r - 35;
     },
   };
-  // 至于 pointermove 嘛……我想好了
-  // 这个我来自己维护！算 Kinematic！
   zodiacSprite.on("pointerdown", (e) => {
     zodiac.dragTag = true;
-    const { x, y } = e.global;
+    // console.log(e.getLocalPosition(zodiacContainer));
+    const { x, y } = e.getLocalPosition(zodiacContainer);
+    // zodiacRigidBody.setAngvel(0, true);
+    const params = RAPIER.JointData.spring(
+      REST_LENGTH,
+      STIFFNESS,
+      SPRING_DAMPING,
+      { x, y },
+      { x: 0, y: 0 },
+    );
+    // const params = RAPIER.JointData.rope(20, { x, y }, { x: 0, y: 0 });
+    pointerRigidBody.setTranslation(e.global, true);
+    const joint = world.createImpulseJoint(
+      params,
+      zodiacRigidBody,
+      pointerRigidBody,
+      true,
+    );
+    // console.log(joint);
+    zodiac.joint = joint;
     // console.log(x, y);
-    zodiac.dragPoint.set(x, y);
+    // zodiac.dragPoint.set(e.global.x, e.global.y);
     zodiac.dragPreviousPoint.set(x, y);
+    const r = Math.hypot(
+      e.global.x - zodiacContainer.x,
+      e.global.y - zodiacContainer.y,
+    );
+    zodiac.r = r;
     // 这个留给以后的 system
     // zodiac.angularVelocity = 0;
   });
@@ -89,7 +165,49 @@ export function setup(ctx: {
     //   dragPreviousPoint.y - container.y,
     //   dragPreviousPoint.x - container.x,
     // );
-    const { x, y } = e.global;
+    if (zodiac.dragTag) {
+      // const { x, y } = e.global;
+      // zodiac.dragPoint.set(x, y);
+      // const { x, y } = e.getLocalPosition(zodiacContainer);
+      // const params = RAPIER.JointData.spring(
+      //   Math.hypot(
+      //     x - zodiac.dragPreviousPoint.x,
+      //     y - zodiac.dragPreviousPoint.y,
+      //   ),
+      //   10,
+      //   2,
+      //   zodiac.dragPreviousPoint,
+      //   { x: 0, y: 0 },
+      // );
+      // const joint = world.createImpulseJoint(
+      //   params,
+      //   zodiacRigidBody,
+      //   pointerRigidBody,
+      //   true,
+      // );
+      // world.removeImpulseJoint(zodiac.joint!, true);
+      // zodiac.joint = joint;
+      const theta = Math.atan2(
+        e.global.y - zodiacContainer.y,
+        e.global.x - zodiacContainer.x,
+      );
+      pointerRigidBody.setTranslation(
+        {
+          x: zodiacContainer.x + zodiac.r * Math.cos(theta),
+          y: zodiacContainer.y + zodiac.r * Math.sin(theta),
+        },
+        true,
+      );
+      // pointerRigidBody.setTranslation(e.global, true);
+    }
+    // const params = RAPIER.JointData.spring(0, 10, 2, { x, y }, { x: 0, y: 0 });
+    // const params = RAPIER.JointData.rope(1, { x, y }, { x: 0, y: 0 });
+    // const joint = world.createImpulseJoint(
+    //   params,
+    //   zodiacRigidBody,
+    //   pointerRigidBody,
+    //   true,
+    // );
     // const nowRotate = Math.atan2(y - container.y, x - container.x);
     // console.log(
     //   (previousRotate / Math.PI) * 180,
@@ -98,13 +216,14 @@ export function setup(ctx: {
     // if (zodiac.dragTag) {
     // zodiacAngularVelocity = nowRotate - previousRotate;
     // container.rotation += zodiacAngularVelocity;
-    zodiac.dragPoint.set(x, y);
+
     // return;
     // }
   });
   // 记住，system 结束的时候，把所有 now 写入 previous！
 
   function onDragEnd() {
+    world.removeImpulseJoint(zodiac.joint!, true);
     zodiac.dragTag = false;
     zodiac.dragPreviousPoint.set(0, 0);
     zodiac.dragPoint.set(0, 0);
@@ -137,9 +256,18 @@ export function setup(ctx: {
       ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
       : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
 
+    const emojiColliderDesc = RAPIER.ColliderDesc.ball(14)
+      .setDensity(0)
+      .setTranslation(r * Math.cos(-radian), r * Math.sin(-radian))
+      .setCollisionGroups(COLLIDER_GROUP_1);
+    const emojiCollider = world.createCollider(
+      emojiColliderDesc,
+      zodiacRigidBody,
+    );
+
     const eventDataObj = new ChronicleGroup(
       eventContainer,
-      null,
+      emojiCollider,
       c.title,
       c.people,
       r,
@@ -203,7 +331,7 @@ export function setup(ctx: {
           )
           ?.focus();
       } else {
-      void navigate(`/post/事/${c.date}_${c.title}.md`);
+        void navigate(`/post/事/${c.date}_${c.title}.md`);
       }
     });
 
@@ -219,10 +347,23 @@ export function setup(ctx: {
   const bubbleMap = new Map<string, BubbleGroup>();
   const floatBubbles = bubbles.map((b, i) => {
     const bubbleContainer = new Container();
-    bubbleContainer.x =
-      Math.random() * (app.screen.width - PADDING * 2) + PADDING;
-    bubbleContainer.y =
-      Math.random() * (app.screen.height - PADDING * 2) + PADDING;
+    const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
+      y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
+    const bubbleRigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
+      .lockRotations()
+      .setLinearDamping(DAMPING)
+      .setCcdEnabled(true)
+      .setTranslation(x, y);
+    const bubbleRigidBody = world.createRigidBody(bubbleRigidBodyDesc);
+    const bubbleColliderDesc = RAPIER.ColliderDesc.ball(8)
+      .setDensity(1)
+      .setCollisionGroups(COLLIDER_GROUP_2);
+    const bubbleCollider = world.createCollider(
+      bubbleColliderDesc,
+      bubbleRigidBody,
+    );
+    bubbleContainer.x = x;
+    bubbleContainer.y = y;
 
     const bubbleGraphics = new Graphics().circle(0, 0, 8).fill(0xffffff);
     bubbleGraphics.cursor = "pointer";
@@ -233,7 +374,7 @@ export function setup(ctx: {
 
     bubbleContainer.addChild(bubbleGraphics);
     const nameText = new Text({
-      text: b.name as string,
+      text: b.name,
       style: {
         fill: isDark ? 0xe5c890 : 0xdf8e1d, // Yellow
         fontSize: 13,
@@ -254,7 +395,13 @@ export function setup(ctx: {
           .open(`/post/人/${b.name}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
       } else {
-      void navigate(`/post/人/${b.name}.md`);
+        void navigate(`/post/人/${b.name}.md`);
+      }
+    });
+    nameText.on("pointerup", (e) => {
+      // console.log("??????");
+      if (floating.joint !== null) {
+        world.removeImpulseJoint(floating.joint, true);
       }
     });
 
@@ -276,10 +423,18 @@ export function setup(ctx: {
       siteText.eventMode = "static";
       siteText.cursor = "pointer";
       siteText.on("pointerdown", () => {
-        window.open(b.site as string, "_blank", "noopener,noreferrer")?.focus();
+        window.open(b.site, "_blank", "noopener,noreferrer")?.focus();
+      });
+      siteText.on("pointerup", (e) => {
+        // console.log("??????");
+        if (floating.joint !== null) {
+          world.removeImpulseJoint(floating.joint, true);
+        }
       });
       bubbleContainer.addChild(siteText);
     }
+
+    console.log(bubbleCollider.mass());
 
     bubbleContainer.eventMode = "static";
     bubbleContainer.on("mouseenter", () => {
@@ -310,8 +465,8 @@ export function setup(ctx: {
 
     const floating = new BubbleGroup(
       bubbleContainer,
-      null,
-      b.name as string,
+      bubbleRigidBody,
+      b.name,
       [],
     );
 
@@ -322,7 +477,38 @@ export function setup(ctx: {
       },
     };
 
-    // Todo 一大堆 Graphics 的事件
+    bubbleGraphics.on("pointerdown", (e) => {
+      console.log("point down");
+      floating.dragTag = true;
+      const { x, y } = e.getLocalPosition(bubbleGraphics);
+      const params = RAPIER.JointData.spring(
+        REST_LENGTH,
+        BUBBLE_STIFFNESS,
+        BUBBLE_DAMPING,
+        { x, y },
+        { x: 0, y: 0 },
+      );
+      pointerRigidBody.setTranslation(e.global, true);
+      const joint = world.createImpulseJoint(
+        params,
+        bubbleRigidBody,
+        pointerRigidBody,
+        true,
+      );
+      floating.joint = joint;
+    });
+    bubbleGraphics.on("pointermove", (e) => {
+      if (floating.dragTag) {
+        pointerRigidBody.setTranslation(e.global, true);
+      }
+    });
+    bubbleGraphics.on("pointerup", (e) => {
+      console.log("point up");
+      floating.dragTag = false;
+      world.removeImpulseJoint(floating.joint!, true);
+      floating.joint = null;
+      // floating.dragTag = false;
+    });
 
     return floating;
   });
@@ -338,5 +524,77 @@ export function setup(ctx: {
       bubbleMap.get(p)?.attractedBy.push(e);
     });
   });
+
+  // floatBubbles.forEach((b) => {
+  //   console.log(b.attractedBy);
+  // });
+
   // #endregion
+  // zodiacRigidBody.setAdditionalMass(0.1, true);
+  console.log(zodiacRigidBody.mass());
+
+  // #region Eventloop
+  app.ticker.add(
+    (time) => {
+      zodiacRigidBody.resetForces(true);
+      floatBubbles.forEach((b) => {
+        b.rigid.resetForces(true);
+        b.attractedBy.forEach((e) => {
+          const { x: ex, y: ey } = e.conteneur.getGlobalPosition();
+          const dx = ex - b.rigid.translation().x;
+          const dy = ey - b.rigid.translation().y;
+          const distance = Math.hypot(dx, dy);
+          const force = (GRAVITY * b.rigid.mass() * 1) / Math.pow(distance, 2);
+          b.rigid.addForce(
+            { x: (force * dx) / distance, y: (force * dy) / distance },
+            true,
+          );
+          // 不符合牛顿第三定律？
+          // 我不符合的东西还多了呢，不差你
+          // 主要是 bug 修不来了OwO
+          // zodiacRigidBody.addForceAtPoint(
+          //   { x: (-force * dx) / distance, y: (-force * dy) / distance },
+          //   { x: ex, y: ey },
+          //   true,
+          // );
+        });
+      });
+    },
+    undefined,
+    10,
+  );
+  app.ticker.add(
+    (time) => {
+      world.step();
+    },
+    undefined,
+    5,
+  );
+  app.ticker.add(
+    (time) => {
+      zodiac.conteneur.rotation = zodiacRigidBody.rotation();
+      floatBubbles.forEach((b) => {
+        b.conteneur.x = b.rigid.translation().x;
+        b.conteneur.y = b.rigid.translation().y;
+      });
+      // console.log(pointerRigidBody.translation(), zodiac.joint);
+    },
+    undefined,
+    4,
+  );
+  // #endregion
+}
+
+function createSpring(dragables: DragTag[], ctx: Context) {
+  dragables.forEach((d) => {
+    if (d.dragTag) {
+      const { x, y } = d.dragPoint;
+      const { x: px, y: py } = d.dragPreviousPoint;
+      const dx = x - px;
+      const dy = y - py;
+      d.dragPreviousPoint.set(x, y);
+      d.conteneur.x += dx;
+      d.conteneur.y += dy;
+    }
+  });
 }

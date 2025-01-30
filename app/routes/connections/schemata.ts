@@ -1,6 +1,19 @@
-import type { Collider, RigidBody } from "@dimforge/rapier2d";
-import type { Container, Texture } from "pixi.js";
+import type {
+  Collider,
+  ImpulseJoint,
+  RigidBody,
+} from "@dimforge/rapier2d-compat";
+import type { Application, Container, Texture } from "pixi.js";
 import { Point } from "pixi.js";
+import type { NavigateFunction } from "react-router";
+
+export type Context = {
+  app: Application;
+  RAPIER: typeof import("@dimforge/rapier2d-compat");
+  texture: Record<string, Texture>;
+  isDark: boolean;
+  navigate: NavigateFunction;
+};
 
 // 考虑所有坐标都继承了 Container 类，我们不需要手动代理
 /**
@@ -15,8 +28,7 @@ export interface PixiTexture extends PixiConteneur {
 }
 
 // 至于这刚体是不是碰撞体，这个就交给物理引擎处理就好了
-// 显然除了 Zodiac 以外，其他的都是刚体
-// 有必要就加上好了
+// Zodiac 是刚体而不是碰撞体
 export interface RapierRigid extends PixiConteneur {
   rigid: RigidBody;
 }
@@ -28,20 +40,21 @@ export interface DragTag extends RapierRigid {
   dragPoint: Point;
 }
 
-export interface RapierCollider extends RapierRigid {
+// Chronicle 的碰撞体附加在 Zodiac 上
+export interface RapierCollider extends PixiConteneur {
   collider: Collider;
 }
 
-export interface KinematicBody extends RapierRigid {
-  // 由 zodiac 继承（啊希望能 lens 自动提示）
-  // chronicle 的……就不继承了，我用脑子记
-  // 我们私自维护角速度，包括阻力
-  // 但是传给引擎的是每刻钟的实际位置
+// export interface KinematicBody extends RapierRigid {
+//   // 由 zodiac 继承（啊希望能 lens 自动提示）
+//   // chronicle 的……就不继承了，我用脑子记
+//   // 我们私自维护角速度，包括阻力
+//   // 但是传给引擎的是每刻钟的实际位置
 
-  // 至于为什么不能从拖拽点推算？
-  // 因为拖拽结束后，还有惯性！
-  angularVelocity: number;
-}
+//   // 至于为什么不能从拖拽点推算？
+//   // 因为拖拽结束后，还有惯性！
+//   angularVelocity: number;
+// }
 
 // 就不给“事件”都打上 tag 了qaq
 export interface Attracted extends RapierRigid {
@@ -53,10 +66,10 @@ export interface Attracted extends RapierRigid {
 /**
  * @param {number} theta 右手系坐标，逆时针为正
  */
-export class ChronicleGroup implements PixiConteneur, RapierRigid, DragTag {
+export class ChronicleGroup implements PixiConteneur, RapierCollider {
   constructor(
     public readonly conteneur: Container,
-    public readonly rigid: RigidBody,
+    public readonly collider: Collider,
     public readonly title: string,
     public readonly people: Array<string>,
     public readonly r: number,
@@ -76,23 +89,23 @@ export class BubbleGroup
     public readonly rigid: RigidBody,
     public readonly name: string,
     public attractedBy: Array<ChronicleGroup> = [],
+    public joint: ImpulseJoint | null = null,
     public dragTag: boolean = false,
     public readonly dragPreviousPoint: Point = new Point(),
     public readonly dragPoint: Point = new Point(),
   ) {}
 }
 
-export class Zodiac
-  implements PixiConteneur, RapierRigid, DragTag, KinematicBody
-{
+export class Zodiac implements PixiConteneur, RapierRigid, DragTag {
   constructor(
     public readonly conteneur: Container,
-    // public readonly texture: Texture,
     public readonly rigid: RigidBody,
+    public joint: ImpulseJoint | null = null,
+    public r: number = 0,
     public dragTag: boolean = false,
     public readonly dragPreviousPoint: Point = new Point(),
     public readonly dragPoint: Point = new Point(),
-    public angularVelocity: number = 0,
+    // public angularVelocity: number = 0,
   ) {}
 }
 
