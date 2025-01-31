@@ -121,31 +121,33 @@ export function setup(ctx: Context) {
     },
   };
   zodiacSprite.on("pointerdown", (e) => {
-    zodiac.dragTag = true;
-    const { x, y } = e.getLocalPosition(zodiacContainer);
-    const params = RAPIER.JointData.spring(
-      REST_LENGTH,
-      STIFFNESS,
-      SPRING_DAMPING,
-      { x, y },
-      { x: 0, y: 0 },
-    );
-    // const params = RAPIER.JointData.rope(20, { x, y }, { x: 0, y: 0 });
-    pointerRigidBody.setTranslation(e.global, true);
-    const joint = world.createImpulseJoint(
-      params,
-      zodiacRigidBody,
-      pointerRigidBody,
-      true,
-    );
-    // console.log(joint);
-    zodiac.joint = joint;
-    // console.log(x, y);
-    const r = Math.hypot(
-      e.global.x - zodiacContainer.x,
-      e.global.y - zodiacContainer.y,
-    );
-    zodiac.r = r;
+    if (zodiac.joint === null) {
+      zodiac.dragTag = true;
+      const { x, y } = e.getLocalPosition(zodiacContainer);
+      const params = RAPIER.JointData.spring(
+        REST_LENGTH,
+        STIFFNESS,
+        SPRING_DAMPING,
+        { x, y },
+        { x: 0, y: 0 },
+      );
+      // const params = RAPIER.JointData.rope(20, { x, y }, { x: 0, y: 0 });
+      pointerRigidBody.setTranslation(e.global, true);
+      const joint = world.createImpulseJoint(
+        params,
+        zodiacRigidBody,
+        pointerRigidBody,
+        true,
+      );
+      // console.log(joint);
+      zodiac.joint = joint;
+      // console.log(x, y);
+      const r = Math.hypot(
+        e.global.x - zodiacContainer.x,
+        e.global.y - zodiacContainer.y,
+      );
+      zodiac.r = r;
+    }
   });
 
   zodiacSprite.on("pointermove", (e) => {
@@ -165,8 +167,10 @@ export function setup(ctx: Context) {
   });
 
   function onDragEnd() {
+    console.log("remove joint");
     world.removeImpulseJoint(zodiac.joint!, true);
     zodiac.dragTag = false;
+    zodiac.joint = null;
   }
   zodiacSprite.on("pointerup", onDragEnd);
   zodiacSprite.on("pointerupoutside", onDragEnd);
@@ -340,7 +344,10 @@ export function setup(ctx: Context) {
     nameText.on("pointerup", (e) => {
       // console.log("??????");
       if (floating.joint !== null) {
+        console.log("remove joint");
         world.removeImpulseJoint(floating.joint, true);
+        floating.dragTag = false;
+        floating.joint = null;
       }
     });
 
@@ -367,7 +374,10 @@ export function setup(ctx: Context) {
       siteText.on("pointerup", (e) => {
         // console.log("??????");
         if (floating.joint !== null) {
+          console.log("remove joint");
           world.removeImpulseJoint(floating.joint, true);
+          floating.dragTag = false;
+          floating.joint = null;
         }
       });
       bubbleContainer.addChild(siteText);
@@ -418,23 +428,25 @@ export function setup(ctx: Context) {
 
     bubbleGraphics.on("pointerdown", (e) => {
       console.log("point down");
-      floating.dragTag = true;
-      const { x, y } = e.getLocalPosition(bubbleGraphics);
-      const params = RAPIER.JointData.spring(
-        REST_LENGTH,
-        BUBBLE_STIFFNESS,
-        BUBBLE_DAMPING,
-        { x, y },
-        { x: 0, y: 0 },
-      );
-      pointerRigidBody.setTranslation(e.global, true);
-      const joint = world.createImpulseJoint(
-        params,
-        bubbleRigidBody,
-        pointerRigidBody,
-        true,
-      );
-      floating.joint = joint;
+      if (floating.joint === null) {
+        floating.dragTag = true;
+        const { x, y } = e.getLocalPosition(bubbleGraphics);
+        const params = RAPIER.JointData.spring(
+          REST_LENGTH,
+          BUBBLE_STIFFNESS,
+          BUBBLE_DAMPING,
+          { x, y },
+          { x: 0, y: 0 },
+        );
+        pointerRigidBody.setTranslation(e.global, true);
+        const joint = world.createImpulseJoint(
+          params,
+          bubbleRigidBody,
+          pointerRigidBody,
+          true,
+        );
+        floating.joint = joint;
+      }
     });
     bubbleGraphics.on("pointermove", (e) => {
       if (floating.dragTag) {
@@ -442,10 +454,11 @@ export function setup(ctx: Context) {
       }
     });
     bubbleGraphics.on("pointerup", (e) => {
-      console.log("point up");
-      floating.dragTag = false;
+      console.log("point up", floating.joint);
       world.removeImpulseJoint(floating.joint!, true);
+      floating.dragTag = false;
       floating.joint = null;
+      console.log("remove joint");
     });
 
     return floating;
