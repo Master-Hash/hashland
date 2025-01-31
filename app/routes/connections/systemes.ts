@@ -14,8 +14,10 @@ const DAMPING = 0.95;
 const REST_LENGTH = 0.0001;
 const STIFFNESS = 100000000;
 const SPRING_DAMPING = 10000000;
-const BUBBLE_STIFFNESS = 80000;
-const BUBBLE_DAMPING = 9000;
+const BUBBLE_DAMPING = 20;
+const BUBBLE_FREE_DAMPING = 1;
+const BUBBLE_STIFFNESS = 50000;
+const BUBBLE_STRING_DAMPING = 20;
 const GRAVITY = 481000;
 const ZODIAC_MASS = 99999999999;
 
@@ -39,7 +41,7 @@ export function setup(ctx: Context) {
   // 我先试一试不转换坐标系行不行
   // 反正负负得正
   const world = new RAPIER.World({ x: 0, y: 0 });
-  globalThis.world = world;
+  let currentPointerDown = null as BubbleGroup | null;
   const wallLeftColliderDesc = RAPIER.ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
@@ -294,7 +296,7 @@ export function setup(ctx: Context) {
       y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
     const bubbleRigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
       .lockRotations()
-      .setLinearDamping(DAMPING)
+      .setLinearDamping(BUBBLE_FREE_DAMPING)
       .setCcdEnabled(true)
       .setTranslation(x, y);
     const bubbleRigidBody = world.createRigidBody(bubbleRigidBodyDesc);
@@ -346,6 +348,7 @@ export function setup(ctx: Context) {
       if (floating.joint !== null) {
         console.log("remove joint");
         world.removeImpulseJoint(floating.joint, true);
+        bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
         floating.dragTag = false;
         floating.joint = null;
       }
@@ -376,6 +379,7 @@ export function setup(ctx: Context) {
         if (floating.joint !== null) {
           console.log("remove joint");
           world.removeImpulseJoint(floating.joint, true);
+          bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
           floating.dragTag = false;
           floating.joint = null;
         }
@@ -429,12 +433,13 @@ export function setup(ctx: Context) {
     bubbleGraphics.on("pointerdown", (e) => {
       console.log("point down");
       if (floating.joint === null) {
+        currentPointerDown = floating;
         floating.dragTag = true;
         const { x, y } = e.getLocalPosition(bubbleGraphics);
         const params = RAPIER.JointData.spring(
           REST_LENGTH,
           BUBBLE_STIFFNESS,
-          BUBBLE_DAMPING,
+          BUBBLE_STRING_DAMPING,
           { x, y },
           { x: 0, y: 0 },
         );
@@ -446,6 +451,7 @@ export function setup(ctx: Context) {
           true,
         );
         floating.joint = joint;
+        bubbleRigidBody.setLinearDamping(BUBBLE_DAMPING);
       }
     });
     bubbleGraphics.on("pointermove", (e) => {
@@ -454,11 +460,26 @@ export function setup(ctx: Context) {
       }
     });
     bubbleGraphics.on("pointerup", (e) => {
-      console.log("point up", floating.joint);
-      world.removeImpulseJoint(floating.joint!, true);
-      floating.dragTag = false;
-      floating.joint = null;
-      console.log("remove joint");
+      if (floating.joint !== null) {
+        console.log("point up", floating.joint);
+        world.removeImpulseJoint(floating.joint!, true);
+        bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
+        floating.dragTag = false;
+        floating.joint = null;
+        console.log("remove joint at the bubble");
+      } else if (currentPointerDown !== null) {
+        console.log(currentPointerDown);
+        console.log(
+          "Pointer up from another bubble!",
+          "If joint is null, this is a bug",
+          currentPointerDown.joint,
+        );
+        world.removeImpulseJoint(currentPointerDown.joint!, true);
+        currentPointerDown.rigid.setLinearDamping(BUBBLE_FREE_DAMPING);
+        currentPointerDown.dragTag = false;
+        currentPointerDown.joint = null;
+      }
+      currentPointerDown = null;
     });
 
     return floating;
