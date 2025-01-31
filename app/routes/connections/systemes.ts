@@ -507,6 +507,28 @@ export function setup(ctx: Context) {
 
   // #region Eventloop
   app.ticker.add(
+    () => {
+      const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
+        y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
+      floatBubbles.forEach((b) => {
+        const { x: bx, y: by } = b.rigid.translation();
+        // 如果在屏幕外，就有小概率传送回来
+        if (
+          (bx > app.screen.width ||
+            bx < 0 ||
+            by > app.screen.height ||
+            by < 0) &&
+          Math.random() < 1 / 240 &&
+          b.dragTag === false
+        ) {
+          b.rigid.setTranslation({ x, y }, true);
+        }
+      });
+    },
+    undefined,
+    11,
+  );
+  app.ticker.add(
     (time) => {
       zodiacRigidBody.resetForces(true);
       floatBubbles.forEach((b) => {
