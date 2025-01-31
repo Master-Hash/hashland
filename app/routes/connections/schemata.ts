@@ -4,7 +4,6 @@ import type {
   RigidBody,
 } from "@dimforge/rapier2d-compat";
 import type { Application, Container, Texture } from "pixi.js";
-import { Point } from "pixi.js";
 import type { NavigateFunction } from "react-router";
 
 export type Context = {
@@ -36,8 +35,6 @@ export interface RapierRigid extends PixiConteneur {
 export interface DragTag extends RapierRigid {
   // 我也不知道为什么没起名 isDragged
   dragTag: boolean;
-  dragPreviousPoint: Point;
-  dragPoint: Point;
 }
 
 // Chronicle 的碰撞体附加在 Zodiac 上
@@ -74,9 +71,6 @@ export class ChronicleGroup implements PixiConteneur, RapierCollider {
     public readonly people: Array<string>,
     public readonly r: number,
     public readonly theta: number,
-    public dragTag: boolean = false,
-    public readonly dragPreviousPoint: Point = new Point(),
-    public readonly dragPoint: Point = new Point(),
   ) {}
 }
 
@@ -91,8 +85,6 @@ export class BubbleGroup
     public attractedBy: Array<ChronicleGroup> = [],
     public joint: ImpulseJoint | null = null,
     public dragTag: boolean = false,
-    public readonly dragPreviousPoint: Point = new Point(),
-    public readonly dragPoint: Point = new Point(),
   ) {}
 }
 
@@ -103,9 +95,6 @@ export class Zodiac implements PixiConteneur, RapierRigid, DragTag {
     public joint: ImpulseJoint | null = null,
     public r: number = 0,
     public dragTag: boolean = false,
-    public readonly dragPreviousPoint: Point = new Point(),
-    public readonly dragPoint: Point = new Point(),
-    // public angularVelocity: number = 0,
   ) {}
 }
 

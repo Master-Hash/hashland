@@ -3,7 +3,7 @@ import { Container, Graphics, Sprite, Text } from "pixi.js";
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
 import { colors } from "./colors.ts";
-import type { Context, DragTag } from "./schemata.ts";
+import type { Context } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
@@ -122,9 +122,7 @@ export function setup(ctx: Context) {
   };
   zodiacSprite.on("pointerdown", (e) => {
     zodiac.dragTag = true;
-    // console.log(e.getLocalPosition(zodiacContainer));
     const { x, y } = e.getLocalPosition(zodiacContainer);
-    // zodiacRigidBody.setAngvel(0, true);
     const params = RAPIER.JointData.spring(
       REST_LENGTH,
       STIFFNESS,
@@ -143,50 +141,15 @@ export function setup(ctx: Context) {
     // console.log(joint);
     zodiac.joint = joint;
     // console.log(x, y);
-    // zodiac.dragPoint.set(e.global.x, e.global.y);
-    zodiac.dragPreviousPoint.set(x, y);
     const r = Math.hypot(
       e.global.x - zodiacContainer.x,
       e.global.y - zodiacContainer.y,
     );
     zodiac.r = r;
-    // 这个留给以后的 system
-    // zodiac.angularVelocity = 0;
   });
-  // 在原版程序里，角速度 zodiacAngularVelocity
-  // 是每帧移动的角度
-  // 我这里把这帧和上帧的点击位置都存下来了
-  // 具体转了多远，以后的流水线再说
 
-  // 新角度 = 旧角度 + 转动角度
-  // 显然没有直接算绝对值的方法
   zodiacSprite.on("pointermove", (e) => {
-    // const previousRotate = Math.atan2(
-    //   dragPreviousPoint.y - container.y,
-    //   dragPreviousPoint.x - container.x,
-    // );
     if (zodiac.dragTag) {
-      // const { x, y } = e.global;
-      // zodiac.dragPoint.set(x, y);
-      // const { x, y } = e.getLocalPosition(zodiacContainer);
-      // const params = RAPIER.JointData.spring(
-      //   Math.hypot(
-      //     x - zodiac.dragPreviousPoint.x,
-      //     y - zodiac.dragPreviousPoint.y,
-      //   ),
-      //   10,
-      //   2,
-      //   zodiac.dragPreviousPoint,
-      //   { x: 0, y: 0 },
-      // );
-      // const joint = world.createImpulseJoint(
-      //   params,
-      //   zodiacRigidBody,
-      //   pointerRigidBody,
-      //   true,
-      // );
-      // world.removeImpulseJoint(zodiac.joint!, true);
-      // zodiac.joint = joint;
       const theta = Math.atan2(
         e.global.y - zodiacContainer.y,
         e.global.x - zodiacContainer.x,
@@ -198,42 +161,18 @@ export function setup(ctx: Context) {
         },
         true,
       );
-      // pointerRigidBody.setTranslation(e.global, true);
     }
-    // const params = RAPIER.JointData.spring(0, 10, 2, { x, y }, { x: 0, y: 0 });
-    // const params = RAPIER.JointData.rope(1, { x, y }, { x: 0, y: 0 });
-    // const joint = world.createImpulseJoint(
-    //   params,
-    //   zodiacRigidBody,
-    //   pointerRigidBody,
-    //   true,
-    // );
-    // const nowRotate = Math.atan2(y - container.y, x - container.x);
-    // console.log(
-    //   (previousRotate / Math.PI) * 180,
-    //   (nowRotate / Math.PI) * 180,
-    // );
-    // if (zodiac.dragTag) {
-    // zodiacAngularVelocity = nowRotate - previousRotate;
-    // container.rotation += zodiacAngularVelocity;
-
-    // return;
-    // }
   });
-  // 记住，system 结束的时候，把所有 now 写入 previous！
 
   function onDragEnd() {
     world.removeImpulseJoint(zodiac.joint!, true);
     zodiac.dragTag = false;
-    zodiac.dragPreviousPoint.set(0, 0);
-    zodiac.dragPoint.set(0, 0);
   }
   zodiacSprite.on("pointerup", onDragEnd);
   zodiacSprite.on("pointerupoutside", onDragEnd);
   // #endregion
 
   // #region Events
-  // const eventMap = new Map<string, ChronicleGroup>();
   const events = chronicles.map((c) => {
     const eventContainer = new Container();
     const emojiSprite = Sprite.from(texture[c.emoji]);
@@ -243,7 +182,7 @@ export function setup(ctx: Context) {
     // 这里逆时针为正，而 pixi 顺时针为正
     // 所以使用时要取负
     // 但是物理引擎是逆时针为正
-    // 麻烦到家了
+    // 但是没关系，我们不做任何坐标变换
     const r =
       zodiac.conteneur.y * 0.66 +
       (date.valueOf() - new Date("2024-01-01").valueOf()) / 1000000000;
@@ -507,7 +446,6 @@ export function setup(ctx: Context) {
       floating.dragTag = false;
       world.removeImpulseJoint(floating.joint!, true);
       floating.joint = null;
-      // floating.dragTag = false;
     });
 
     return floating;
@@ -583,18 +521,4 @@ export function setup(ctx: Context) {
     4,
   );
   // #endregion
-}
-
-function createSpring(dragables: DragTag[], ctx: Context) {
-  dragables.forEach((d) => {
-    if (d.dragTag) {
-      const { x, y } = d.dragPoint;
-      const { x: px, y: py } = d.dragPreviousPoint;
-      const dx = x - px;
-      const dy = y - py;
-      d.dragPreviousPoint.set(x, y);
-      d.conteneur.x += dx;
-      d.conteneur.y += dy;
-    }
-  });
 }
