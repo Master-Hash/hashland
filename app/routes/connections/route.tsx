@@ -171,7 +171,7 @@ export default function Pixi() {
   );
 
   return (
-    <main className="prose prose-a:whitespace-nowrap relative mx-auto">
+    <main className="prose prose-a:whitespace-nowrap relative mx-auto select-none">
       {/* <MyComponent /> */}
       <section className="h-52" ref={ref}></section>
       <P
