@@ -1,9 +1,10 @@
 import Color from "colorjs.io";
+import type { FederatedPointerEvent } from "pixi.js";
 import { Container, Graphics, Sprite, Text } from "pixi.js";
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
 import { colors } from "./colors.ts";
-import type { Context } from "./schemata.ts";
+import type { Context, DragTag } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
@@ -41,7 +42,7 @@ export function setup(ctx: Context) {
   // 我先试一试不转换坐标系行不行
   // 反正负负得正
   const world = new RAPIER.World({ x: 0, y: 0 });
-  let currentPointerDown = null as BubbleGroup | null;
+  let currentPointerDown = null as DragTag | null;
   const wallLeftColliderDesc = RAPIER.ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
@@ -123,7 +124,8 @@ export function setup(ctx: Context) {
     },
   };
   zodiacSprite.on("pointerdown", (e) => {
-    if (zodiac.joint === null) {
+    if (currentPointerDown === null) {
+      currentPointerDown = zodiac;
       zodiac.dragTag = true;
       const { x, y } = e.getLocalPosition(zodiacContainer);
       const params = RAPIER.JointData.spring(
@@ -133,7 +135,6 @@ export function setup(ctx: Context) {
         { x, y },
         { x: 0, y: 0 },
       );
-      // const params = RAPIER.JointData.rope(20, { x, y }, { x: 0, y: 0 });
       pointerRigidBody.setTranslation(e.global, true);
       const joint = world.createImpulseJoint(
         params,
@@ -141,9 +142,7 @@ export function setup(ctx: Context) {
         pointerRigidBody,
         true,
       );
-      // console.log(joint);
-      zodiac.joint = joint;
-      // console.log(x, y);
+      currentPointerDown.joint = joint;
       const r = Math.hypot(
         e.global.x - zodiacContainer.x,
         e.global.y - zodiacContainer.y,
@@ -153,7 +152,7 @@ export function setup(ctx: Context) {
   });
 
   zodiacSprite.on("pointermove", (e) => {
-    if (zodiac.dragTag) {
+    if (currentPointerDown === zodiac) {
       const theta = Math.atan2(
         e.global.y - zodiacContainer.y,
         e.global.x - zodiacContainer.x,
@@ -168,11 +167,18 @@ export function setup(ctx: Context) {
     }
   });
 
-  function onDragEnd() {
-    console.log("remove joint");
-    world.removeImpulseJoint(zodiac.joint!, true);
-    zodiac.dragTag = false;
-    zodiac.joint = null;
+  function onDragEnd(e: FederatedPointerEvent) {
+    // 虽然没发生过，但实际上是谁都有可能！
+    if (currentPointerDown !== null) {
+      console.log("remove joint happens on", e);
+      world.removeImpulseJoint(currentPointerDown.joint!, true);
+      currentPointerDown.dragTag = false;
+      currentPointerDown.joint = null;
+      if (currentPointerDown instanceof BubbleGroup) {
+        currentPointerDown.rigid.setLinearDamping(BUBBLE_FREE_DAMPING);
+      }
+      currentPointerDown = null;
+    }
   }
   zodiacSprite.on("pointerup", onDragEnd);
   zodiacSprite.on("pointerupoutside", onDragEnd);
@@ -343,16 +349,6 @@ export function setup(ctx: Context) {
         void navigate(`/post/人/${b.name}.md`);
       }
     });
-    nameText.on("pointerup", (e) => {
-      // console.log("??????");
-      if (floating.joint !== null) {
-        console.log("remove joint");
-        world.removeImpulseJoint(floating.joint, true);
-        bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
-        floating.dragTag = false;
-        floating.joint = null;
-      }
-    });
 
     bubbleContainer.addChild(nameText);
 
@@ -373,16 +369,6 @@ export function setup(ctx: Context) {
       siteText.cursor = "pointer";
       siteText.on("pointerdown", () => {
         window.open(b.site, "_blank", "noopener,noreferrer")?.focus();
-      });
-      siteText.on("pointerup", (e) => {
-        // console.log("??????");
-        if (floating.joint !== null) {
-          console.log("remove joint");
-          world.removeImpulseJoint(floating.joint, true);
-          bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
-          floating.dragTag = false;
-          floating.joint = null;
-        }
       });
       bubbleContainer.addChild(siteText);
     }
@@ -432,7 +418,7 @@ export function setup(ctx: Context) {
 
     bubbleGraphics.on("pointerdown", (e) => {
       console.log("point down");
-      if (floating.joint === null) {
+      if (currentPointerDown === null) {
         currentPointerDown = floating;
         floating.dragTag = true;
         const { x, y } = e.getLocalPosition(bubbleGraphics);
@@ -455,31 +441,15 @@ export function setup(ctx: Context) {
       }
     });
     bubbleGraphics.on("pointermove", (e) => {
-      if (floating.dragTag) {
+      if (currentPointerDown === floating) {
         pointerRigidBody.setTranslation(e.global, true);
       }
     });
     bubbleGraphics.on("pointerup", (e) => {
-      if (floating.joint !== null) {
-        console.log("point up", floating.joint);
-        world.removeImpulseJoint(floating.joint!, true);
-        bubbleRigidBody.setLinearDamping(BUBBLE_FREE_DAMPING);
-        floating.dragTag = false;
-        floating.joint = null;
-        console.log("remove joint at the bubble");
-      } else if (currentPointerDown !== null) {
-        console.log(currentPointerDown);
-        console.log(
-          "Pointer up from another bubble!",
-          "If joint is null, this is a bug",
-          currentPointerDown.joint,
-        );
-        world.removeImpulseJoint(currentPointerDown.joint!, true);
-        currentPointerDown.rigid.setLinearDamping(BUBBLE_FREE_DAMPING);
-        currentPointerDown.dragTag = false;
-        currentPointerDown.joint = null;
-      }
-      currentPointerDown = null;
+      onDragEnd(e);
+    });
+    bubbleGraphics.on("pointerupoutside", (e) => {
+      onDragEnd(e);
     });
 
     return floating;

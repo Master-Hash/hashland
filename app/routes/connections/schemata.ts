@@ -35,6 +35,7 @@ export interface RapierRigid extends PixiConteneur {
 export interface DragTag extends RapierRigid {
   // 我也不知道为什么没起名 isDragged
   dragTag: boolean;
+  joint: ImpulseJoint | null;
 }
 
 // Chronicle 的碰撞体附加在 Zodiac 上
