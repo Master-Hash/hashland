@@ -99,10 +99,11 @@ export default function Pixi() {
           preference: "webgpu",
         })
         .then(() => resolve(app));
-      controller.signal.addEventListener("abort", () => {
+      function handler() {
         // console.log("abort");
         reject(controller.signal.reason);
-      });
+      }
+      controller.signal.addEventListener("abort", handler);
       // if (import.meta.env.DEV) {
       if (searchParams.get("legacy") === null) {
         Promise.all([promise, loadTexture(), RAPIER.init()])
@@ -142,6 +143,7 @@ export default function Pixi() {
       // void pixiApp(app, ref, isDark, navigate);
       return () => {
         controller.abort("The component is unmounted");
+        controller.signal.removeEventListener("abort", handler);
         console.log("Point clean", app, app.renderer);
 
         // 事实上，严格模式下装卸速度极快，不一定会给充足时间 init 也没人 await 你
@@ -165,9 +167,10 @@ export default function Pixi() {
           }
           // console.log("Point 3");
           app.destroy();
+          delete globalThis.__PIXI_APP__;
         }
       };
-    }, [navigate]),
+    }, [navigate, searchParams]),
   );
 
   return (
