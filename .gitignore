@@ -178,6 +178,7 @@ dist
 /stories/assets/accessibility.svg
 /stories/assets/accessibility.png
 localtest.sql
+/app/routes/connections/rapier2d/
 /app/routes/connections-rs/*.js
 /app/routes/connections-rs/*.wasm
 /app/routes/connections-rs/*.d.ts

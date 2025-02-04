@@ -1,9 +1,9 @@
 /**
  * @import { UserConfig } from "vite";
  */
+import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
-// import { flavors } from "@catppuccin/palette";
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
@@ -26,6 +26,9 @@ import {
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
 import { envOnlyMacros } from "vite-env-only";
+import virtual from "vite-plugin-virtual";
+import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
+// import topLevelAwait from "vite-plugin-top-level-await";
 // import wasm from "vite-plugin-wasm";
 // import { envOnlyMacros } from "vite-env-only";
 // import tailwindPostcss from "@tailwindcss/postcss";
@@ -35,6 +38,17 @@ import { envOnlyMacros } from "vite-env-only";
 // import BabelPluginReactCompiler from "babel-plugin-react-compiler";
 
 enableDeprecationWarnings(true, true);
+
+const partialChars = chronicles.map((chronicle) => {
+  if (chronicle.emoji.match(/[\p{RGI_Emoji}\u26f0]/v)) {
+    const codePoint = [...chronicle.emoji]
+      .map((char) => char.codePointAt(0)?.toString(16))
+      .join("-");
+    return codePoint;
+  } else {
+    return null;
+  }
+});
 
 // const toClass = transformerStyleToClass({
 //   classPrefix: "__shiki_",
@@ -59,13 +73,6 @@ const highlighter = await getSingletonHighlighterCore({
   ],
   engine: createOnigurumaEngine(getWasm),
 });
-
-const ReactCompilerConfig = {
-  // sources: (/** @type {string} */ filename) => {
-  //   const _filename = filename.replace(/\\/g, "/");
-  //   return _filename.indexOf("app/routes/post.$.tsx") === -1;
-  // },
-};
 
 const isStorybook = process.argv[1]?.includes("storybook");
 const isTypegen = process.argv[2]?.includes("typegen");
@@ -151,18 +158,14 @@ export default {
     !isStorybook && reactRouter(),
     !isTypegen && tailwindcss(),
     !isStorybook &&
-      false &&
-      babel({
-        filter: /\.(?:[jt]sx?)$/,
-        // I don't know why MDXContent isn't compiled
-        // Anyway, I'll wait for RSC so there'll be no need for client bundle
-        // filter: /\.(?:[jt]sx?|mdx?)$/,
-        babelConfig: {
-          presets: [BabelPresetTypescript], // if you use TypeScript
-          plugins: [[BabelPluginReactCompiler, ReactCompilerConfig]],
-        },
+      !isTypegen &&
+      virtual({
+        "virtual:partial-chars": Object.fromEntries(
+          Object.entries(chars).filter(([key]) => {
+            return partialChars.includes(key);
+          }),
+        ),
       }),
-    // !isStorybook && wasm(),
     envOnlyMacros(),
   ],
   optimizeDeps: {
@@ -170,6 +173,16 @@ export default {
     include: ["react/compiler-runtime", "react-router/dom"],
   },
   build: {
+    target: "esnext",
+    rollupOptions: {
+      // experimental: {
+      //   // strictExecutionOrder: false,
+      // },
+      // output: {
+      //   target: "esnext",
+      //   // advancedChunks: {},
+      // },
+    },
     assetsInlineLimit: 0,
     reportCompressedSize: false,
   },

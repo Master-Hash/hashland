@@ -4,6 +4,9 @@ import { Container, Graphics, Sprite, Text } from "pixi.js";
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
 import { colors } from "./colors.ts";
+import { JointData } from "./rapier2d/dynamics/impulse_joint.js";
+import { RigidBodyDesc } from "./rapier2d/dynamics/rigid_body.js";
+import { ColliderDesc } from "./rapier2d/geometry/collider.js";
 import type { Context, DragTag } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
@@ -35,43 +38,43 @@ const COLLIDER_GROUP_2 = 0x00020003;
  */
 export function setup(ctx: Context) {
   // #region Rapier init
-  const { app, RAPIER, texture, isDark, navigate } = ctx;
+  const { app, world, texture, isDark, navigate } = ctx;
+  // console.log(JSON.stringify(colors));
   // 别想了！
   // app.stage.scale.set(1, -1);
   // 官方做法是用负数，但不用减法
   // 我先试一试不转换坐标系行不行
   // 反正负负得正
-  const world = new RAPIER.World({ x: 0, y: 0 });
   let currentPointerDown = null as DragTag | null;
-  const wallLeftColliderDesc = RAPIER.ColliderDesc.cuboid(
+  const wallLeftColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
   )
     .setTranslation(PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1);
   const wallLeftCollider = world.createCollider(wallLeftColliderDesc);
-  const wallRightColliderDesc = RAPIER.ColliderDesc.cuboid(
+  const wallRightColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
   )
     .setTranslation(app.screen.width - PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1);
   const wallRightCollider = world.createCollider(wallRightColliderDesc);
-  const wallTopColliderDesc = RAPIER.ColliderDesc.cuboid(
+  const wallTopColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
     PADDING / 2,
   )
     .setTranslation(app.screen.width / 2, PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1);
   const wallTopCollider = world.createCollider(wallTopColliderDesc);
-  const wallBottomColliderDesc = RAPIER.ColliderDesc.cuboid(
+  const wallBottomColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
     PADDING / 2,
   )
     .setTranslation(app.screen.width / 2, app.screen.height - PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1);
   const wallBottomCollider = world.createCollider(wallBottomColliderDesc);
-  const pointerRigidBodyDesc = RAPIER.RigidBodyDesc.kinematicPositionBased();
+  const pointerRigidBodyDesc = RigidBodyDesc.kinematicPositionBased();
   const pointerRigidBody = world.createRigidBody(pointerRigidBodyDesc);
 
   // const texture = (await loadTexture()) as Record<string, Texture>;
@@ -99,7 +102,7 @@ export function setup(ctx: Context) {
       SECOND_IN_TROPIC_YEAR /
       500) *
     Math.PI;
-  const zodiacRigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
+  const zodiacRigidBodyDesc = RigidBodyDesc.dynamic()
     .setTranslation(zodiacContainer.x, zodiacContainer.y)
     .lockTranslations()
     // .setAdditionalMass(1)
@@ -128,7 +131,7 @@ export function setup(ctx: Context) {
       currentPointerDown = zodiac;
       zodiac.dragTag = true;
       const { x, y } = e.getLocalPosition(zodiacContainer);
-      const params = RAPIER.JointData.spring(
+      const params = JointData.spring(
         REST_LENGTH,
         STIFFNESS,
         SPRING_DAMPING,
@@ -207,7 +210,7 @@ export function setup(ctx: Context) {
       ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
       : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
 
-    const emojiColliderDesc = RAPIER.ColliderDesc.ball(14)
+    const emojiColliderDesc = ColliderDesc.ball(14)
       .setDensity(0)
       .setTranslation(r * Math.cos(-radian), r * Math.sin(-radian))
       .setCollisionGroups(COLLIDER_GROUP_1);
@@ -300,13 +303,13 @@ export function setup(ctx: Context) {
     const bubbleContainer = new Container();
     const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
       y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
-    const bubbleRigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
+    const bubbleRigidBodyDesc = RigidBodyDesc.dynamic()
       .lockRotations()
       .setLinearDamping(BUBBLE_FREE_DAMPING)
       .setCcdEnabled(true)
       .setTranslation(x, y);
     const bubbleRigidBody = world.createRigidBody(bubbleRigidBodyDesc);
-    const bubbleColliderDesc = RAPIER.ColliderDesc.ball(8)
+    const bubbleColliderDesc = ColliderDesc.ball(8)
       .setDensity(1)
       .setCollisionGroups(COLLIDER_GROUP_2);
     const bubbleCollider = world.createCollider(
@@ -422,7 +425,7 @@ export function setup(ctx: Context) {
         currentPointerDown = floating;
         floating.dragTag = true;
         const { x, y } = e.getLocalPosition(bubbleGraphics);
-        const params = RAPIER.JointData.spring(
+        const params = JointData.spring(
           REST_LENGTH,
           BUBBLE_STIFFNESS,
           BUBBLE_STRING_DAMPING,
@@ -507,8 +510,9 @@ export function setup(ctx: Context) {
           const { x: ex, y: ey } = e.conteneur.getGlobalPosition();
           const dx = ex - b.rigid.translation().x;
           const dy = ey - b.rigid.translation().y;
-          const distance = Math.hypot(dx, dy);
-          const force = (GRAVITY * b.rigid.mass() * 1) / Math.pow(distance, 2);
+          const distanceSquared = dx * dx + dy * dy;
+          const distance = Math.sqrt(distanceSquared);
+          const force = (GRAVITY * b.rigid.mass() * 1) / distanceSquared;
           b.rigid.addForce(
             { x: (force * dx) / distance, y: (force * dy) / distance },
             true,

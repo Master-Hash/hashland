@@ -22,3 +22,8 @@ declare module "*.mdx" {
   export const frontmatter: any;
   export default MDXComponent;
 }
+
+declare module "virtual:partial-chars" {
+  const chars: Record<string, string>;
+  export default chars;
+}

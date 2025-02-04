@@ -1,4 +1,3 @@
-import RAPIER from "@dimforge/rapier2d-compat";
 import { Application } from "pixi.js";
 import { useEffect, useRef } from "react";
 import type { MetaFunction } from "react-router";
@@ -7,7 +6,8 @@ import { clientOnly$ } from "vite-env-only/macros";
 import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
 import { loadTexture, unloadTexture } from "./loadtexture.js";
-import { pixiApp } from "./pixi.js";
+import { World } from "./rapier2d/pipeline/world.js";
+import init from "./rapier2d/rapier_wasm2d.js";
 import { setup } from "./systemes.js";
 
 export const meta: MetaFunction = () => {
@@ -52,21 +52,21 @@ export default function Pixi() {
       // void import("@dimforge/rapier2d").then((RAPIER) => {
       //   // Use the RAPIER module here.
       //   const gravity = { x: 0.0, y: -9.81 };
-      //   const world = new RAPIER.World(gravity);
+      //   const world = new World(gravity);
 
       //   // Create the ground
-      //   const groundColliderDesc = RAPIER.ColliderDesc.cuboid(10.0, 0.1);
+      //   const groundColliderDesc = ColliderDesc.cuboid(10.0, 0.1);
       //   world.createCollider(groundColliderDesc);
 
       //   // Create a dynamic rigid-body.
-      //   const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(
+      //   const rigidBodyDesc = RigidBodyDesc.dynamic().setTranslation(
       //     0.0,
       //     1.0,
       //   );
       //   const rigidBody = world.createRigidBody(rigidBodyDesc);
 
       //   // Create a cuboid collider attached to the dynamic rigidBody.
-      //   const colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5);
+      //   const colliderDesc = ColliderDesc.cuboid(0.5, 0.5);
       //   const collider = world.createCollider(colliderDesc, rigidBody);
       //   console.log(collider.mass(), rigidBody.mass());
 
@@ -88,6 +88,8 @@ export default function Pixi() {
       const sectionContainer = ref.current;
       const app = new Application();
       const { promise, resolve, reject } = Promise.withResolvers<Application>();
+      let world: World;
+
       void app
         .init({
           backgroundAlpha: 0,
@@ -106,18 +108,23 @@ export default function Pixi() {
       controller.signal.addEventListener("abort", handler);
       // if (import.meta.env.DEV) {
       if (searchParams.get("legacy") === null) {
-        Promise.all([promise, loadTexture(), RAPIER.init()])
-          .then(([app, texture, _RAPIER]) => {
-            console.log(RAPIER);
+        // Promise.all([promise, loadTexture(), init()])
+        // Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
+        Promise.all([promise, loadTexture(), init()])
+          // .then(([app, texture, _RAPIER]) => {
+          .then(([app, texture, _wasm]) => {
+            // console.log(_version());
+            // console.log(RAPIER);
             // if (import.meta.env.DEV) {
             // @ts-expect-error for debug
             globalThis.__PIXI_APP__ = app;
             // }
+            world = new World({ x: 0, y: 0 });
             sectionContainer!.appendChild(app.canvas);
             // console.log(RAPIER);
             return setup({
               app,
-              RAPIER,
+              world,
               texture,
               isDark: isDark.current,
               navigate,
@@ -127,14 +134,14 @@ export default function Pixi() {
             console.log("Abort reason:", error);
           });
       } else {
-        Promise.all([promise, loadTexture()])
-          .then(([app, texture]) => {
+        Promise.all([promise, loadTexture(), import("./pixi.ts")])
+          .then(([app, texture, p]) => {
             // if (import.meta.env.DEV) {
             // @ts-expect-error for debug
             globalThis.__PIXI_APP__ = app;
             // }
             sectionContainer!.appendChild(app.canvas);
-            return pixiApp(app, isDark.current, navigate, texture);
+            return p.pixiApp(app, isDark.current, navigate, texture);
           })
           .catch((error) => {
             console.log("Abort reason:", error);
@@ -167,6 +174,9 @@ export default function Pixi() {
           }
           // console.log("Point 3");
           app.destroy();
+          if (world !== undefined) {
+            world.free();
+          }
           delete globalThis.__PIXI_APP__;
         }
       };

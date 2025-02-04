@@ -1,14 +1,15 @@
+import type { Application, Container, Texture } from "pixi.js";
+import type { NavigateFunction } from "react-router";
 import type {
   Collider,
   ImpulseJoint,
   RigidBody,
-} from "@dimforge/rapier2d-compat";
-import type { Application, Container, Texture } from "pixi.js";
-import type { NavigateFunction } from "react-router";
+  World,
+} from "./rapier2d/rapier.d.ts";
 
 export type Context = {
   app: Application;
-  RAPIER: typeof import("@dimforge/rapier2d-compat");
+  world: World;
   texture: Record<string, Texture>;
   isDark: boolean;
   navigate: NavigateFunction;

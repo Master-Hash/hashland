@@ -13,9 +13,11 @@ React Router 组件相当解耦，版本不一致一般没问题，但新功能�
 
 `/public/zodiac-white.png`：带有月份图标的黄道圈。源代码见 `/app/routes/zodiac[.]svg.tsx`，用 `rsvg-convert.exe year.svg -o zodiac-white.png` 生成 PNG 图像。
 
-`/public/{game-icons,fluent-emoji-high-contrast}`：在 [icônes](https://icones.js.org/) 下载图标包，手动把宽高调整至 256x256，颜色调为白色，再用 `rsvg-convert` 生成 PNG 图像。
+`/public/{game-icons,fluent-emoji-high-contrast,...}`：在 [icônes](https://icones.js.org/) 下载图标包，手动把宽高调整至 256x256，颜色调为白色，再用 `rsvg-convert` 生成 PNG 图像。
 
 `/public/assets/`：文章配图，不会影响前端编译。[文章仓库](https://github.com/Master-Hash/post-test/)有相关说明。
+
+Bevy 游戏和 Rapier 物理引擎：分别从[此](https://github.com/Master-Hash/connections-rs)以及[此](https://github.com/Master-Hash/rapier.js/)仓库编译。Bevy 可以从 CI 下载工件，解压到路由模块目录即可；Rapier 需要自己编译，扔进路由目录的 rapier2d 子目录。
 
 D1 schema：在[这里](https://github.com/Master-Hash/discuss/blob/main/schema.sql)。本人可以导出生产环境的数据作 mock，读者应当各显神通。
 
@@ -28,7 +30,10 @@ D1 schema：在[这里](https://github.com/Master-Hash/discuss/blob/main/schema.
  -->
 <!-- file:../../vite/packages/vite -->
 
-<!-- 从 Atom 做起，慢慢加。-->
+<!-- 从 Atom 做起，慢慢加。
+
+"react-router": "file:../../react-router/packages/react-router",
+"@react-router/dev": "file:../../react-router/packages/react-router-dev",
 
 ## 技术栈
 

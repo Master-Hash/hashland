@@ -1,6 +1,7 @@
-import { chars } from "@iconify-json/fluent-emoji-high-contrast";
+// import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { Assets } from "pixi.js";
-import chronicles from "./chronicle.js";
+import chars from "virtual:partial-chars";
+import chronicles from "./chronicles.json" with { type: "json" };
 
 export async function loadTexture() {
   if (Assets.resolver.resolve("zodiac").src !== "/zodiac-white.png") {
@@ -15,6 +16,7 @@ export async function loadTexture() {
           .join("-");
         // console.log(codePoint);
         const emojiName = chars[codePoint];
+        console.log(codePoint);
         Assets.add({
           src:
             "/fluent-emoji-high-contrast/fluent-emoji-high-contrast_" +

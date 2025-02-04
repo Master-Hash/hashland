@@ -2,6 +2,8 @@
   "include": [
     "env.d.ts",
     "vite.config.mjs",
+    "eslint.config.mjs",
+    "react-router.config.ts",
     "load-context.ts",
     "functions.[[path]].ts",
     "app/**/*.js",
@@ -27,6 +29,7 @@
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
+    "useDefineForClassFields": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",
