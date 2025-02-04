@@ -7,7 +7,7 @@ import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
 import { loadTexture, unloadTexture } from "./loadtexture.js";
 import { World } from "./rapier2d/pipeline/world.js";
-import init from "./rapier2d/rapier_wasm2d.js";
+import init, { version } from "./rapier2d/rapier_wasm2d.js";
 import { setup } from "./systemes.js";
 
 export const meta: MetaFunction = () => {
@@ -113,7 +113,7 @@ export default function Pixi() {
         Promise.all([promise, loadTexture(), init()])
           // .then(([app, texture, _RAPIER]) => {
           .then(([app, texture, _wasm]) => {
-            // console.log(_version());
+            console.log(version());
             // console.log(RAPIER);
             // if (import.meta.env.DEV) {
             // @ts-expect-error for debug
