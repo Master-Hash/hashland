@@ -13,16 +13,16 @@ import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 const ZODIAC_SCALE = 0.54;
 const ZODIAC_Y_OFFSET = 365;
 const SECOND_IN_TROPIC_YEAR = 31556926;
-const PADDING = 15;
+const PADDING = 4;
 const DAMPING = 0.95;
 const REST_LENGTH = 0.0001;
 const STIFFNESS = 100000000;
 const SPRING_DAMPING = 10000000;
-const BUBBLE_DAMPING = 20;
+const BUBBLE_DAMPING = 24;
 const BUBBLE_FREE_DAMPING = 1;
-const BUBBLE_STIFFNESS = 50000;
-const BUBBLE_STRING_DAMPING = 20;
-const GRAVITY = 481000;
+const BUBBLE_STIFFNESS = 60000;
+const BUBBLE_STRING_DAMPING = 2;
+const GRAVITY = 441000;
 const ZODIAC_MASS = 99999999999;
 
 const COLLIDER_GROUP_1 = 0x00010002;
@@ -199,8 +199,8 @@ export function setup(ctx: Context) {
     // 但是物理引擎是逆时针为正
     // 但是没关系，我们不做任何坐标变换
     const r =
-      zodiac.conteneur.y * 0.66 +
-      (date.valueOf() - new Date("2024-01-01").valueOf()) / 1000000000;
+      zodiac.conteneur.y * 0.72 +
+      (date.valueOf() - new Date("2024-01-01").valueOf()) / 3000000000;
     const radian =
       ((date.valueOf() / 1000 - new Date("2024-01-01").valueOf() / 1000) /
         SECOND_IN_TROPIC_YEAR) *
