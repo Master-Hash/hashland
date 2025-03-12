@@ -4,7 +4,7 @@
   "license": "Unlicense",
   "sideEffects": false,
   "type": "module",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.7.0",
   "scripts": {
     "build": "vite build",
     "routes": "react-router routes",
