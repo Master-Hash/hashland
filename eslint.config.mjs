@@ -1,16 +1,23 @@
+import eslintReact from "@eslint-react/eslint-plugin";
+import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
-import react from "eslint-plugin-react";
+import compat from "eslint-plugin-compat";
 import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
 import storybook from "eslint-plugin-storybook";
 import globals from "globals";
+import path from "node:path";
 import tseslint from "typescript-eslint";
+
+const gitignorePath = path.resolve(import.meta.dirname, ".gitignore");
 
 /** @type {import("@typescript-eslint/utils").TSESLint.FlatConfig.ConfigFile} */
 export default [
+  includeIgnoreFile(gitignorePath),
   {
     files: ["**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}"],
     settings: {
+      lintAllEsApis: true,
       react: {
         version: "detect",
       },
@@ -33,18 +40,19 @@ export default [
       },
     },
   },
+  compat.configs["flat/recommended"],
   js.configs.recommended,
+  eslintReact.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   ...storybook.configs["flat/recommended"],
-  react.configs.flat.recommended,
-  react.configs.flat["jsx-runtime"],
-  {
-    plugins: {
-      "react-hooks": reactHooks,
-    },
-    rules: reactHooks.configs.recommended.rules,
-  },
-  // reactHooks.configs["recommended-latest"],
+  // ...pixi,
+  // {
+  //   plugins: {
+  //     "react-hooks": reactHooks,
+  //   },
+  //   rules: reactHooks.configs.recommended.rules,
+  // },
+  reactHooks.configs["recommended-latest"],
   reactCompiler.configs.recommended,
   // ...fixupConfigRules(
   //   compat.extends(

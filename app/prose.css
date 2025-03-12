@@ -10,6 +10,21 @@
       "Noto Color Emoji"; */
 }
 
+body {
+  /* https://unsplash.com/photos/black-and-white-abstract-painting-cqhXfrRHCPo */
+  /* 能用采样，我为什么要生造滤镜！ */
+  /* background-image: url(./resources/faux-papier.avif); */
+  /* background-image: url(./resources/ep_naturalwhite.png); */
+  background-image: url(./resources/palace-museum.avif);
+  /* @apply bg-center; */
+  @apply bg-blend-luminosity dark:bg-blend-multiply;
+  /* @apply bg-no-repeat; */
+  /* @apply bg-contain; */
+  /* @apply bg-auto; */
+  /* @apply bg-cover; */
+  @apply bg-[50%_auto];
+}
+
 @theme {
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     Droid Sans Mono, Liberation Mono, Courier New, ui-sans-serif, system-ui,
@@ -100,6 +115,11 @@ a[href*="?q=%23"] {
     @apply max-w-[72.5ch];
     @apply dark:prose-invert;
     @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
+    /* @apply font-serif; */
+    /* @apply prose-p:leading-[1.625] */
+    /* @apply prose-p:leading-[1.75] */
+    /* @apply prose-p:leading-[2] */
+
   }
 
   table {
@@ -128,6 +148,7 @@ hr::after {
   @apply visible block text-2xl;
   /* @apply relative -top-3 print:top-0; */
   @apply my-8;
+  @apply font-[Times_New_Roman,serif];
   content: "* * *";
 }
 

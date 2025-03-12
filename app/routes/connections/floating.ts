@@ -73,11 +73,9 @@ export function addBubble(
     text.cursor = "pointer";
     text.on("pointerdown", (e) => {
       if (e.ctrlKey) {
-        window
-          .open(`/post/人/${name}.md`, "_blank", "noopener,noreferrer")
-          ?.focus();
+        window.open(`/人/${name}.md`, "_blank", "noopener,noreferrer")?.focus();
       } else {
-        void navigate(`/post/人/${name}.md`);
+        void navigate(`/人/${name}.md`);
       }
     });
     if (mockData[name] !== undefined) {

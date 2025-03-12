@@ -3,8 +3,8 @@
  *       否则挨着改导入的 Markdown 太太麻烦了
  */
 
-export const fetchRejectedOnNotOk = (async (input) => {
-  const a = await fetch(input);
+export const fetchRejectedOnNotOk = (async (input, init?) => {
+  const a = await fetch(input, init);
   console.log(a.status);
   if (a.ok) return a;
   else throw new Error();

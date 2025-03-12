@@ -8,12 +8,13 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
+  "eslint.useFlatConfig": true,
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
   },
-  "eslint.nodePath": ".yarn/sdks",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // "eslint.nodePath": ".yarn/sdks",
   // "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

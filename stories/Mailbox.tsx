@@ -21,7 +21,7 @@ export type Message = {
 // 方便调试
 export function Mailbox({ messages }: { messages: Message[] }) {
   return (
-    <table className="cat-latte prose bg-cat-base text-cat-text dark:cat-frappe prose-headings:text-cat-text">
+    <table className="cat-latte prose text-cat-text dark:cat-frappe prose-headings:text-cat-text">
       <thead>
         {messages[0].subject === undefined ? (
           <tr>
@@ -72,7 +72,12 @@ export function Mailbox({ messages }: { messages: Message[] }) {
                     {isContainName[1]}
                   </a>
                 ) : (
-                  <span className="text-center">{message.address}</span>
+                  <span className="text-center">
+                    {message.recipientLength !== undefined &&
+                    message.recipientLength >= 2
+                      ? message.address.replace("~~", "")
+                      : message.address}
+                  </span>
                 )}
                 {message.recipientLength !== undefined &&
                 message.recipientLength >= 2 ? (

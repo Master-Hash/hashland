@@ -278,14 +278,10 @@ export function setup(ctx: Context) {
     lable.on("pointerdown", (e) => {
       if (e.ctrlKey) {
         window
-          .open(
-            `/post/事/${c.date}_${c.title}.md`,
-            "_blank",
-            "noopener,noreferrer",
-          )
+          .open(`/事/${c.date}_${c.title}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
       } else {
-        void navigate(`/post/事/${c.date}_${c.title}.md`);
+        void navigate(`/事/${c.date}_${c.title}.md`);
       }
     });
 
@@ -346,10 +342,10 @@ export function setup(ctx: Context) {
     nameText.on("pointerdown", (e) => {
       if (e.ctrlKey) {
         window
-          .open(`/post/人/${b.name}.md`, "_blank", "noopener,noreferrer")
+          .open(`/人/${b.name}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
       } else {
-        void navigate(`/post/人/${b.name}.md`);
+        void navigate(`/人/${b.name}.md`);
       }
     });
 

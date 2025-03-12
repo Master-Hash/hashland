@@ -185,8 +185,14 @@ localtest.sql
 /app/routes/bevy-logical-resolution/*.js
 /app/routes/bevy-logical-resolution/*.wasm
 /app/routes/bevy-logical-resolution/*.d.ts
+/app/resources/*
 
 # Emacs
 *~
 \#*\#
 
+# PowerSession
+*.cast
+
+# sonda
+sonda-report.html

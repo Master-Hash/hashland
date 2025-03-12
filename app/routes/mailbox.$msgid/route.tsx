@@ -2,7 +2,7 @@ import PostalMime from "postal-mime";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { HAN_REGEX } from "../../utils/constant.js";
 import { dateFormat } from "../../utils/dateFormat.js";
-import type { ComponentProps } from "./+types.route.js";
+import type { Route } from "./+types/route.ts";
 
 export const meta: MetaFunction = ({ data }) => {
   return [{ title: `${data.email.subject} « 故人故事故纸堆` }];
@@ -11,20 +11,36 @@ export const meta: MetaFunction = ({ data }) => {
 /**
  * @todo 同理，回复线程，真的有人回复了再写。
  */
-export const loader = async ({ context, params }: LoaderFunctionArgs) => {
-  const { DB, R2 } = context.cloudflare.env as Env;
-  const r2url = "Discuss/" + params.msgid?.slice(1, -1) + ".eml";
+export const loader = async ({
+  context,
+  params,
+  request,
+}: LoaderFunctionArgs) => {
+  const u = new URL(request.url);
+  const { R2, REAL_NAME } = context.cloudflare.env as Env;
+  const isPrivate = u.searchParams.has("p");
+  const r2url =
+    (isPrivate ? "private/" : "Discuss/") + params.msgid?.slice(1, -1) + ".eml";
   const msg = await R2.get(r2url);
   if (msg === null) {
     throw new Response("Not Found", { status: 404, statusText: "Not Found" });
   } else {
     const email = await PostalMime.parse(msg.body);
+    if (isPrivate) {
+      if (email.from.name.replaceAll(" ", "") === REAL_NAME) {
+        email.from.name = "[hash]";
+      }
+      if (email.sender?.name?.replaceAll(" ", "") === REAL_NAME) {
+        email.sender.name = "[hash]";
+      }
+      email.headers = [];
+    }
     console.log(email);
     return { email, r2url };
   }
 };
 
-export default function DisplayMailbox({ loaderData }: ComponentProps) {
+export default function DisplayMailbox({ loaderData }: Route.ComponentProps) {
   const { email, r2url } = loaderData;
   const humanDate = dateFormat.format(new Date(email.date!));
   const isHan = (email.text || "").match(HAN_REGEX);
@@ -47,7 +63,11 @@ export default function DisplayMailbox({ loaderData }: ComponentProps) {
         <small>
           <code>Message-ID: {email.messageId}</code>
           <br />
-          <a href={import.meta.env.VITE_ASSETSURL + "/" + r2url}>
+          <a
+            href={import.meta.env.VITE_ASSETSURL + "/" + r2url}
+            target="_blank"
+            rel="noreferrer"
+          >
             下载原始消息
           </a>
         </small>

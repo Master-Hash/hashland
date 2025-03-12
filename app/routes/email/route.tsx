@@ -1,11 +1,11 @@
 // import { useLoaderData } from "react-router";
 import { useEffect } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import type { Message } from "../../../stories/Mailbox.js";
-import { Mailbox } from "../../../stories/Mailbox.js";
-import { HrefToLink } from "../../utils/components.js";
-import { useTime } from "../../utils/hooks.js";
-import type { ComponentProps } from "./+types.route.js";
+import type { Message } from "../../../stories/Mailbox.tsx";
+import { Mailbox } from "../../../stories/Mailbox.tsx";
+import { HrefToLink } from "../../utils/components.tsx";
+import { useTime } from "../../utils/hooks.ts";
+import type { Route } from "./+types/route.ts";
 import P1 from "./p1.md";
 import P2 from "./p2.md";
 import P3 from "./p3.md";
@@ -153,7 +153,7 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   };
 };
 
-export default function Email({ loaderData }: ComponentProps) {
+export default function Email({ loaderData }: Route.ComponentProps) {
   const { inbox, sent, threads, earistThreadTime } = loaderData;
   const time = Math.floor(useTime().valueOf() / 1000);
   // 类型推断一团糟

@@ -1,19 +1,22 @@
 import type { FC, ReactElement } from "react";
-import { Fragment, useContext } from "react";
+import { Fragment, use } from "react";
 import type { HeadersFunction, LinksFunction } from "react-router";
 import {
+  isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
 } from "react-router";
 
-// import "./main.css";
-import style from "./main.css?url";
-import { NonceContext } from "./utils/components.js";
+import "./main.css";
+// import style from "./main.css?url";
+// 后者有 bug，会导致 client 和 server 的 css 双双被加载
+import type { Route } from "./+types/root.ts";
+import { NonceContext } from "./utils/components.tsx";
 
 // 这些应该在页面路由，而不是根路由
 // export const meta: MetaFunction = () => {
@@ -31,16 +34,20 @@ import { NonceContext } from "./utils/components.js";
 
 export const links: LinksFunction = () => {
   return [
-    {
-      href: style,
-      rel: "preload",
-      as: "style",
-    },
+    // {
+    //   href: style,
+    //   rel: "preload",
+    //   as: "style",
+    // },
     {
       rel: "icon",
       href: "/favicon.ico",
       type: "image/svg+xml",
     },
+    // {
+    //   href: "https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap",
+    //   rel: "stylesheet",
+    // },
     // {
     //   rel: "alternate",
     //   type: "application/rss+xml",
@@ -49,14 +56,20 @@ export const links: LinksFunction = () => {
     // },
     {
       rel: "alternate",
-      type: "application/rss+xml",
-      href: "https://rsshub.app/telegram/channel/hash_elbeszelese",
-      title: "Hash Elbeszélése & Kívánsága",
+      type: "application/atom+xml",
+      href: "https://rsshub.app/telegram/channel/hash_elbeszelese?format=atom",
+      title: "Hash Elbeszélése & Kívánsága (RSSHub)",
     },
     {
-      rel: "stylesheet",
-      href: style,
+      rel: "alternate",
+      type: "application/atom+xml",
+      href: "https://github.com/Master-Hash/hashland/commits/main.atom",
+      title: "Recent Commits to hashland:main",
     },
+    // {
+    //   rel: "stylesheet",
+    //   href: style,
+    // },
     // {
     //   rel: "search",
     //   type: "application/opensearchdescription+xml",
@@ -82,48 +95,65 @@ export default function App() {
   return <Outlet />;
 }
 
-export const ErrorBoundary = () => {
-  const error = useRouteError() as {
-    status: number;
-    statusText: string;
-    internal: boolean;
-    data: string;
-    error: Error;
-  };
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  // const error = useRouteError() as {
+  //   status: number;
+  //   statusText: string;
+  //   internal: boolean;
+  //   data: string;
+  //   error: Error;
+  // };
   // console.error(error);
-  return (
-    // https://react.dev/reference/react-dom/components/title#special-rendering-behavior
-    // react@canary 会把 <meta> <title> 等自动插入 <head>
-    // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
-    <Fragment key="I'm unique">
-      <title>{`${error.status} ${error.statusText}`}</title>
-      <main className="prose prose-a:break-words relative mx-auto">
-        <h1>{`${error.status} ${error.statusText}`}</h1>
-        {error.status === 404 ? (
-          <p>
-            <a
-              href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404"
-              target="_blank"
-              rel="noreferrer"
-            >
-              404
-            </a>
-            属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？
-          </p>
-        ) : (
-          <p>{error.data}</p>
-        )}
-      </main>
-    </Fragment>
-  );
-  // if (isRouteErrorResponse(error)) {
-  // }
-};
+  if (isRouteErrorResponse(error)) {
+    return (
+      // https://react.dev/reference/react-dom/components/title#special-rendering-behavior
+      // react@canary 会把 <meta> <title> 等自动插入 <head>
+      // 期待 Remix 的 <Meta> <Link> 如何相应更改——把逻辑移入底层是好的
+      <Fragment key="I'm unique">
+        <title>{`${error.status} ${error.statusText}`}</title>
+        <main className="prose prose-a:break-words relative mx-auto">
+          <h1>{`${error.status} ${error.statusText}`}</h1>
+          {error.status === 404 ? (
+            <>
+              <p>
+                {/* <a
+                href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/404"
+                target="_blank"
+                rel="noreferrer"
+                >
+                404
+                </a>
+                属于客户端错误。你从哪里来，到哪里去，你想清楚了吗？ */}
+                本站还在施工（对手指），如果踩空链接打消了读者阅读的兴致，实在抱歉。
+              </p>
+              <p>
+                我打算在这里设计一点奇思妙想：基于词嵌入的相关推荐，或者请大模型抽取一桩奇闻轶事。这样404的死胡同里就能有些生气了。
+              </p>
+            </>
+          ) : (
+            <p>{error.data}</p>
+          )}
+        </main>
+      </Fragment>
+    );
+  } else {
+    return (
+      <Fragment key="I'm unique too">
+        <title>未知错误</title>
+        <main className="prose prose-a:break-words relative mx-auto">
+          <h1>未知错误</h1>
+          <p>为保护当事人隐私，本篇暂不公开。熟识的读者可以私下戳我预览！</p>
+          <p>本错误页面亦可能由网络连接不佳，以及服务器故障引起。</p>
+        </main>
+      </Fragment>
+    );
+  }
+}
 
 export const Layout: FC<{
   children: ReactElement;
 }> = ({ children }) => {
-  const nonce = useContext(NonceContext); // 这一行没有编译到客户端，这是为什么？
+  const nonce = use(NonceContext); // 这一行没有编译到客户端，这是为什么？
   return (
     <html lang="zh-CN">
       <head>
@@ -139,6 +169,13 @@ export const Layout: FC<{
         <FooterComponent />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+        {/* Cloudflare Web Analytics */}
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "7f3186f1aa024cc38438e5416264242e"}'
+        />
+        {/* End Cloudflare Web Analytics */}
       </body>
     </html>
   );
@@ -162,7 +199,7 @@ function HeaderComponent() {
 
         {[
           ["/connections", "故人"],
-          ["/experiences", "故事"],
+          ["/narrative", "故事"],
           ["/kami", "故纸堆"],
         ].map(([pathname, text], index) => (
           <Fragment key={pathname}>
@@ -177,10 +214,11 @@ function HeaderComponent() {
             >
               {text}
             </NavLink>
-            ・{/* {index !== 2 ? "・" : ""} */}
+            {/* ・ */}
+            {index !== 2 ? "・" : ""}
           </Fragment>
         ))}
-        <a
+        {/* <a
           href="https://rsshub.app/telegram/channel/hash_elbeszelese"
           // content-center
           // but now is not needed?
@@ -190,7 +228,7 @@ function HeaderComponent() {
         >
           <span className="icon-[streamline--rss-symbol-solid] text-[1rem]" />
           RSS feed
-        </a>
+        </a> */}
       </nav>
     </header>
   );
@@ -221,6 +259,15 @@ function FooterComponent() {
           >
             文章仓库
           </a>
+          {"・"}
+          <a
+            href="https://www.travellings.cn/go.html"
+            target="_blank"
+            rel="noreferrer"
+            // className="hover:text-cat-teal"
+          >
+            开往
+          </a>
         </small>
       </div>
       <div>
@@ -234,6 +281,12 @@ function FooterComponent() {
             CC0
           </a>{" "}
           © 公共领域
+        </small>
+      </div>
+      <div>
+        <small className="before:content-[' ']">
+          文章内容可能涉及隐私，若希望修改或隐藏，请
+          <Link to="/email">来信</Link>联系。
         </small>
       </div>
     </footer>

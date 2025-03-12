@@ -148,10 +148,10 @@ export function pixiApp(
       lable.visible = false;
     });
     // eventContainer.on("mousedown", (e) => {
-    //   navigate(`/post/事/${c.date}_${c.title}.md`);
+    //   navigate(`/事/${c.date}_${c.title}.md`);
     // });
     eventContainer.on("tap", (e) => {
-      // navigate(`/post/事/${c.date}_${c.title}.md`);
+      // navigate(`/事/${c.date}_${c.title}.md`);
       lable.visible = true;
       setTimeout(() => {
         lable.visible = false;
@@ -162,14 +162,10 @@ export function pixiApp(
     lable.on("pointerdown", (e) => {
       if (e.ctrlKey) {
         window
-          .open(
-            `/post/事/${c.date}_${c.title}.md`,
-            "_blank",
-            "noopener,noreferrer",
-          )
+          .open(`/事/${c.date}_${c.title}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
       } else {
-        void navigate(`/post/事/${c.date}_${c.title}.md`);
+        void navigate(`/事/${c.date}_${c.title}.md`);
       }
     });
 

@@ -1,7 +1,7 @@
 import { Suspense, lazy } from "react";
-import type { LoaderFunction, MetaFunction } from "react-router";
-import { HrefToLink } from "../utils/components.js";
-import type { ComponentProps, LoaderArgs } from "./+types.post.$.d.ts";
+import type { MetaFunction } from "react-router";
+import { HrefToLink } from "../utils/components.tsx";
+import type { Route } from "./+types/_post.$.ts";
 
 const m = import.meta.glob([
   "/post-test/人/*.md",
@@ -24,10 +24,11 @@ export const meta: MetaFunction = ({ data }: { data: { slug: string } }) => {
   ];
 };
 
-export const loader = (async ({ params }: LoaderArgs) => {
-  const filePath = params["*"]!;
+export const loader = ({ params }: Route.LoaderArgs) => {
+  const filePath = params["*"];
 
   if (!(`/post-test/${filePath}` in m)) {
+    console.log(filePath);
     throw new Response("Not Found", { status: 404, statusText: "Not Found" });
   }
 
@@ -43,9 +44,9 @@ export const loader = (async ({ params }: LoaderArgs) => {
     slug,
     // Markdown: <Cop />
   };
-}) satisfies LoaderFunction;
+};
 
-export default function Post({ loaderData }: ComponentProps) {
+export default function Post({ loaderData }: Route.ComponentProps) {
   // const { type, slug, filePath } = useLoaderData<typeof loader>();
   const { type, slug, filePath } = loaderData;
   const Markdown = ls.get(`/post-test/${filePath}`)!;
@@ -55,6 +56,7 @@ export default function Post({ loaderData }: ComponentProps) {
       <Markdown
         components={{
           a: HrefToLink,
+          // img: ImageCloudflareTransform,
         }}
       />
     </Suspense>

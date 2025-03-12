@@ -1,7 +1,7 @@
 // import { LoaderFunctionArgs, useLoaderData } from "react-router";
 import type { MetaFunction } from "react-router";
 import P from "../../../post-test/now.md";
-import { HrefToLink } from "../../utils/components.js";
+import { HrefToLink } from "../../utils/components.tsx";
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -17,6 +17,7 @@ export default function Now() {
       <P
         components={{
           a: HrefToLink,
+          // img: ImageCloudflareTransform,
         }}
       />
     </main>

@@ -14,6 +14,17 @@ function parse(url: string): URL | null {
   }
 }
 
+export const ImageCloudflareTransform: FC<{
+  src: string;
+  props: Record<string, unknown>;
+}> = ({ src, ...props }) => {
+  return import.meta.env.DEV ? (
+    <img src={src} {...props} />
+  ) : (
+    <img src={"/cdn-cgi/image/f=auto,q=70" + src} {...props} />
+  );
+};
+
 export const HrefToLink: FC<{
   href: string;
   children: string;

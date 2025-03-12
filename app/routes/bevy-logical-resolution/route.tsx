@@ -14,7 +14,7 @@ export default function ConnectionsRs() {
       //   await init();
       //   greet();
       // })();
-      init().then((wasm) => {
+      void init().then((wasm) => {
         wasm.__wbindgen_start();
       });
       // wasm.greet();

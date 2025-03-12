@@ -21,7 +21,7 @@
 @import "./slide-enter.css";
 @import "./colore.css";
 
-@source "../post-test/";
+/* @source "../post-test/"; */
 
 @plugin "@tailwindcss/typography";
 @plugin "./iconify-compat.mjs";
