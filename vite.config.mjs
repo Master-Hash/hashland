@@ -1,11 +1,11 @@
 /**
  * @import { UserConfig } from "vite";
  */
+import { cloudflare } from "@cloudflare/vite-plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import { reactRouter } from "@react-router/dev/vite";
-import { cloudflareDevProxy as reactRouterCloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
@@ -28,6 +28,7 @@ import getWasm from "shiki/wasm";
 import { envOnlyMacros } from "vite-env-only";
 import virtual from "vite-plugin-virtual";
 import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
+// import sonda from "sonda/vite";
 // import topLevelAwait from "vite-plugin-top-level-await";
 // import wasm from "vite-plugin-wasm";
 // import { envOnlyMacros } from "vite-env-only";
@@ -154,7 +155,16 @@ export default {
         }),
         // enforce: "pre",
       },
-    !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
+    // !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
+    !isStorybook &&
+      !isTypegen &&
+      !isBuild &&
+      cloudflare({
+        persistState: true,
+        viteEnvironment: {
+          name: "ssr",
+        },
+      }),
     !isStorybook && reactRouter(),
     !isTypegen && tailwindcss(),
     !isStorybook &&
@@ -167,12 +177,14 @@ export default {
         ),
       }),
     envOnlyMacros(),
+    // !isStorybook && !isTypegen && sonda(),
   ],
   optimizeDeps: {
     holdUntilCrawlEnd: false,
     include: ["react/compiler-runtime", "react-router/dom"],
   },
   build: {
+    // sourcemap: true,
     target: "esnext",
     rollupOptions: {
       // experimental: {
@@ -194,6 +206,9 @@ export default {
     postcss: {
       // plugins: [tailwindPostcss],
     },
+  },
+  resolve: {
+    external: ["cloudflare:workers"],
   },
 };
 

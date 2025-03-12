@@ -1,7 +1,9 @@
 #:schema https://unpkg.com/wrangler@3.80.4/config-schema.json
 name = "land"
 compatibility_date = "2024-12-21"
-main = "./build/worker/index.js"
+# main = "./build/worker/index.js"
+main = "./functions/worker.ts"
+# main = "./build/server/index.js"
 assets = { directory = "./build/client", binding = "ASSETS" }
 workers_dev = false
 route = { pattern = "land.hash.memorial", custom_domain = true }

@@ -1,11 +1,12 @@
 {
   "include": [
     "env.d.ts",
+    "prettier.config.cjs",
     "vite.config.mjs",
     "eslint.config.mjs",
     "react-router.config.ts",
     "load-context.ts",
-    "functions.[[path]].ts",
+    "functions/worker.ts",
     "app/**/*.js",
     "app/**/*.ts",
     "app/**/*.tsx",
@@ -13,10 +14,11 @@
     "app/**/.server/**/*.tsx",
     "app/**/.client/**/*.ts",
     "app/**/.client/**/*.tsx",
+    "stories/**/*.tsx",
     ".react-router/types/**/*.d.ts",
     "worker-configuration.d.ts"
   ],
-  "exclude": ["build/**/*.js"],
+  "exclude": ["build/**/*.js", "node_modules"],
   "compilerOptions": {
     // "plugins": [{ "name": "@react-router/dev" }],
     "rootDirs": [".", "./.react-router/types"],
