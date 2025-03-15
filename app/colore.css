@@ -5,6 +5,12 @@
     @apply text-cat-lavender;
   }
 
+  a[href^="https"],
+  a[href^="tg://"]
+  {
+    @apply inline-block;
+  }
+
   a[href^="https"]::after,
   a[href^="tg://"]::after
   {
