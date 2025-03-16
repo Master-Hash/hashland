@@ -26,6 +26,9 @@ export const loader = async () => {
       fetchRejectedOnNotOk(
         "https://rsshub.rssforever.com/telegram/channel/hash_elbeszelese?format=json",
       ),
+      fetchRejectedOnNotOk(
+        "https://rss-bridge.org/bridge01/?action=display&bridge=TelegramBridge&username=%40hash_elbeszelese&format=Json",
+      ),
     ]);
     return { data: d.json() };
   } catch {
@@ -54,7 +57,9 @@ export default function Narrative({ loaderData }: Route.ComponentProps) {
         <hr />
         {items.toReversed().map((item, index) => {
           const id = item.id.split("/").at(-1);
-          const date = dateFormat.format(new Date(item.date_published!));
+          const date = dateFormat.format(
+            new Date(item.date_published ?? item.date_modified ?? ""),
+          );
           return (
             !deleted.includes(Number(id)) && (
               <section id={id}>
