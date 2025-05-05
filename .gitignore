@@ -185,6 +185,7 @@ localtest.sql
 /app/routes/bevy-logical-resolution/*.js
 /app/routes/bevy-logical-resolution/*.wasm
 /app/routes/bevy-logical-resolution/*.d.ts
+app/routes/count8/data.json
 /app/resources/*
 
 # Emacs
