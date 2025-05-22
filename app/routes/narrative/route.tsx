@@ -1,19 +1,10 @@
 // import { LoaderFunctionArgs, useLoaderData } from "react-router";
 import type Feed from "@json-feed-types/1_1";
 import { Suspense, use } from "react";
-import type { MetaFunction } from "react-router";
 import { Link } from "react-router";
 import { dateFormat } from "../../utils/dateFormat.js";
 import { fetchRejectedOnNotOk } from "../../utils/functions.js";
 import type { Route } from "./+types/route.ts";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: `日记 « 故人故事故纸堆` },
-    // { name: "description", content: "Welcome to Remix!" },
-    // 等人工智能来归纳
-  ];
-};
 
 export const loader = async () => {
   // Sorry DIYgod, I'll use my own deployment as soon as RSSHub supports Cloudlfare Workers.
@@ -51,6 +42,7 @@ export default function Narrative({ loaderData }: Route.ComponentProps) {
   // console.log(items);
   return (
     <main className="prose prose-a:break-words relative mx-auto">
+      <title>日记 « 故人故事故纸堆</title>
       <h1>故事</h1>
       <Suspense fallback="">
         <p>{description?.split("-").at(0)}</p>
@@ -128,25 +120,23 @@ export const ErrorBoundary = () => {
   //   console.error(error);
   // });
   return (
-    <>
+    <main className="prose prose-a:break-words relative mx-auto">
       <title>500 Internal Server Error</title>
-      <main className="prose prose-a:break-words relative mx-auto">
-        <h1>500 Internal Server Error</h1>
-        <p>
-          因为上游或我们的服务器故障，暂时无法显示内容。请稍后重试或给我写信报修。
-        </p>
-        <p>
-          或者，直接在
-          <a
-            href="https://t.me/s/hash_elbeszelese"
-            target="_blank"
-            rel="noreferrer"
-          >
-            我的 Telegram 频道
-          </a>
-          里查看正文。
-        </p>
-      </main>
-    </>
+      <h1>500 Internal Server Error</h1>
+      <p>
+        因为上游或我们的服务器故障，暂时无法显示内容。请稍后重试或给我写信报修。
+      </p>
+      <p>
+        或者，直接在
+        <a
+          href="https://t.me/s/hash_elbeszelese"
+          target="_blank"
+          rel="noreferrer"
+        >
+          我的 Telegram 频道
+        </a>
+        里查看正文。
+      </p>
+    </main>
   );
 };

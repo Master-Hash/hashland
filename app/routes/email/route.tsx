@@ -1,36 +1,25 @@
 // import { useLoaderData } from "react-router";
-import { useEffect } from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import type { Message } from "../../../stories/Mailbox.tsx";
-import { Mailbox } from "../../../stories/Mailbox.tsx";
-import { HrefToLink } from "../../utils/components.tsx";
-import { useTime } from "../../utils/hooks.ts";
 import type { Route } from "./+types/route.ts";
-import P1 from "./p1.md";
-import P2 from "./p2.md";
-import P3 from "./p3.md";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: `电子邮件 « 故人故事故纸堆` },
-    // { name: "description", content: "Welcome to Remix!" },
-    // 等人工智能来归纳
-  ];
-};
+import { EmailClient } from "./c.tsx";
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const { DB } = context.cloudflare.env as Env;
-  const statementInbox = DB.prepare(
+  // const { DB } = context.cloudflare.env as Env;
+  // console.log(globalThis.__hash_env__);
+  const { DB } = globalThis.__hash_env__ as Env;
+  const session = DB.withSession("first-unconstrained");
+  const statementInbox = session.prepare(
     // It suppose each Epoch is unique. Any more elegant way?
     "SELECT Epoch, json_extract(Author, '$.address'), MessageIDHash FROM GlobalMessages WHERE Folder = 'Inbox' AND Epoch IN (SELECT MAX(Epoch) FROM GlobalMessages WHERE Folder = 'Inbox' GROUP BY json_extract(Author, '$.address')) ORDER BY Epoch DESC LIMIT 5",
   );
-  const statementSent = DB.prepare(
+  const statementSent = session.prepare(
     "SELECT Epoch, json_extract(Recipients, '$[0].address'), json_array_length(Recipients), MessageIDHash FROM GlobalMessages WHERE Folder = 'Sent' AND Epoch IN (SELECT MAX(Epoch) FROM GlobalMessages WHERE Folder = 'Sent' GROUP BY json_extract(Recipients, '$[0].address'), json_extract(Recipients, '$[1].address'), json_extract(Recipients, '$[2].address')) ORDER BY Epoch DESC LIMIT 5",
   );
-  const statementThreads = DB.prepare(
+  const statementThreads = session.prepare(
     "SELECT Epoch, json(Author), MessageID, SubjectLine FROM GlobalMessages WHERE Folder = 'Discuss' AND unixepoch() - EPOCH > 37 * 60 AND InReplyTo IS NULL ORDER BY Epoch DESC LIMIT 5",
   );
-  const statementEarliestInQueue = DB.prepare(
+  const statementEarliestInQueue = session.prepare(
     "SELECT Epoch FROM GlobalMessages WHERE Folder = 'Discuss' AND unixepoch() - EPOCH < 37 * 60 ORDER BY Epoch ASC LIMIT 1",
   );
   const rows = await DB.batch([
@@ -154,58 +143,5 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
 };
 
 export default function Email({ loaderData }: Route.ComponentProps) {
-  const { inbox, sent, threads, earistThreadTime } = loaderData;
-  const time = Math.floor(useTime().valueOf() / 1000);
-  // 类型推断一团糟
-  const delta = earistThreadTime ? earistThreadTime - time + 37 * 60 : null;
-  useEffect(() => {
-    // console.log(delta);
-    if (earistThreadTime && delta && delta < 0 && delta > -36000) {
-      location.reload();
-    }
-  });
-  const s = delta ? delta % 60 : null,
-    m = delta && s ? (delta - s) / 60 : null;
-
-  return (
-    <main className="prose relative mx-auto">
-      {/* <aside className="absolute bottom-0 right-0 text-6xl text-cat-text md:-right-12 md:top-0 lg:-right-24">
-        <div className="icon-[fluent-emoji-high-contrast--postbox] -rotate-[9deg]" />
-      </aside> */}
-      <P1
-        components={{
-          a: HrefToLink,
-        }}
-      />
-      <h2>收件</h2>
-      <Mailbox messages={inbox} />
-      <h2>寄件</h2>
-      <Mailbox messages={sent} />
-      <P2
-        components={{
-          a: HrefToLink,
-        }}
-      />
-      <Mailbox messages={threads} />
-      {/* 这句话，真有信在排队再放上去罢 */}
-      {earistThreadTime ? (
-        <p>
-          邮件会在送达的37分钟后公开展示。如果最近一封是你所发，再过
-          <span>
-            {/** @todo 用 Intl.??? 尝试重写 */}
-            {m != 0 ? `${m}分` : null}
-            {s}秒
-          </span>
-          ，大家就能看到它啦。
-        </p>
-      ) : (
-        <p>邮件会在送达的37分钟后公开展示。暂时还没有新来信~</p>
-      )}
-      <P3
-        components={{
-          a: HrefToLink,
-        }}
-      />
-    </main>
-  );
+  return <EmailClient loaderData={loaderData} />;
 }

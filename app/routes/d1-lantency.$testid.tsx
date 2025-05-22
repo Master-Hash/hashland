@@ -1,25 +1,30 @@
 import { Fragment } from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import { Link } from "react-router";
-import type {
-  ComponentProps,
-  LoaderArgs,
-} from "./+types.d1-lantency.$testid.js";
-
-export const meta: MetaFunction = ({ params }) => {
-  return [{ title: `D1延迟测试${params.testid} « 故人故事故纸堆` }];
-};
+import type { Route } from "./+types/d1-lantency.$testid.ts";
 
 export const loader = async ({
   context,
   params,
-}: LoaderArgs & LoaderFunctionArgs) => {
-  const { DB } = context.cloudflare.env as Env;
+}: Route.LoaderArgs & LoaderFunctionArgs) => {
+  // const { DB } = context.cloudflare.env as Env;
+  const { DB } = globalThis.__hash_env__ as Env;
   const workerdStartTime = new Date().valueOf() / 1000;
   const statement = DB.prepare("SELECT unixepoch('subsec')");
   // const statement2 = DB.prepare("SELECT unixepoch()");
   //  console.log("WorkerD Time:", workerdStartTime);
   switch (params.testid) {
+    case "meta": {
+      const res = await statement.run();
+      console.log(res.meta);
+      const workerdEndTime = new Date().valueOf() / 1000;
+      return {
+        workerdStartTime,
+        res: res.results[0]["unixepoch('subsec')"],
+        workerdEndTime,
+        // meta: res.meta,
+      };
+    }
     case "1": {
       // 典型的查询时间是 0.2ms，可以忽略，我就懒得从 meta 里提取，放前端显示了。
       const res = await statement.first<number>("unixepoch('subsec')");
@@ -43,7 +48,7 @@ export const loader = async ({
         res[0].results[0]["unixepoch('subsec')"],
         res[1].results[0]["unixepoch('subsec')"],
       ];
-      console.log(r1, r2);
+      console.log(res[0].meta, res[1].meta);
       const workerdEndTime = new Date().valueOf() / 1000;
       return { workerdStartTime, res: r1, res2: r2, workerdEndTime };
     }
@@ -56,13 +61,31 @@ export const loader = async ({
       const workerdEndTime = new Date().valueOf() / 1000;
       return { workerdStartTime, res, res2, workerdEndTime };
     }
+    case "5": {
+      const session = DB.withSession("first-unconstrained");
+      const res = await session.prepare("SELECT unixepoch('subsec')").run();
+      const res2 = await session.prepare("SELECT unixepoch('subsec')").run();
+      const workerdEndTime = new Date().valueOf() / 1000;
+      console.log(session, res.meta, res2.meta);
+      return {
+        workerdStartTime,
+        res: res.results[0]["unixepoch('subsec')"],
+        res2: res2.results[0]["unixepoch('subsec')"],
+        workerdEndTime,
+        // meta: res.meta,
+        // meta2: res2.meta,
+      };
+    }
     default:
       throw new Response("Not Found", { status: 404, statusText: "Not Found" });
   }
 };
 
-export default function DisplayMailbox({ loaderData, params }: ComponentProps) {
-  const allTests = [1, 2, 3, 4];
+export default function DisplayMailbox({
+  loaderData,
+  params,
+}: Route.ComponentProps) {
+  const allTests = [1, 2, 3, 4, 5];
   const delta1 = 1000 * (loaderData.res! - loaderData.workerdStartTime);
   const delta2 = loaderData.res2
     ? 1000 * (loaderData.res2 - loaderData.res!)
@@ -74,6 +97,7 @@ export default function DisplayMailbox({ loaderData, params }: ComponentProps) {
 
   return (
     <main className="prose mx-auto">
+      <title>D1延迟测试${params.testid} « 故人故事故纸堆</title>
       <h1>D1延迟测试{params.testid}</h1>
       <ul>
         <li>{loaderData.workerdStartTime}：WorkerD 开始时间</li>

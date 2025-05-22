@@ -1,8 +1,7 @@
-import type { FC } from "react";
-import { createContext } from "react";
-import { Link } from "react-router";
+"use client";
 
-export const NonceContext = createContext<string | undefined>(undefined);
+import type { FC } from "react";
+import { Link } from "react-router";
 
 // https://github.com/zloirock/core-js/blob/master/packages/core-js/modules/web.url.parse.js
 // Below is temporary polyfill

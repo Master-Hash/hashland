@@ -1,12 +1,8 @@
 import PostalMime from "postal-mime";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import { HAN_REGEX } from "../../utils/constant.js";
 import { dateFormat } from "../../utils/dateFormat.js";
 import type { Route } from "./+types/route.ts";
-
-export const meta: MetaFunction = ({ data }) => {
-  return [{ title: `${data.email.subject} « 故人故事故纸堆` }];
-};
 
 /**
  * @todo 同理，回复线程，真的有人回复了再写。
@@ -17,7 +13,8 @@ export const loader = async ({
   request,
 }: LoaderFunctionArgs) => {
   const u = new URL(request.url);
-  const { R2, REAL_NAME } = context.cloudflare.env as Env;
+  // const { R2, REAL_NAME } = context.cloudflare.env as Env;
+  const { R2, REAL_NAME } = globalThis.__hash_env__ as Env;
   const isPrivate = u.searchParams.has("p");
   const r2url =
     (isPrivate ? "private/" : "Discuss/") + params.msgid?.slice(1, -1) + ".eml";
@@ -44,8 +41,10 @@ export default function DisplayMailbox({ loaderData }: Route.ComponentProps) {
   const { email, r2url } = loaderData;
   const humanDate = dateFormat.format(new Date(email.date!));
   const isHan = (email.text || "").match(HAN_REGEX);
+  const t = `${email.subject} « 故人故事故纸堆`;
   return (
     <main className="prose mx-auto">
+      <title>{t}</title>
       {/* h1 应当是唯一的 */}
       {/* <h1>邮件存档</h1> */}
       <h2>{email.subject}</h2>

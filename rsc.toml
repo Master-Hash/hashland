@@ -1,0 +1,22 @@
+#:schema node_modules/wrangler/config-schema.json
+
+name = "land-server"
+main = "./app/entry.rsc.tsx"
+compatibility_date = "2025-05-14"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+[observability]
+enabled = true
+logs.enabled = true
+logs.invocation_logs = true
+
+
+[[d1_databases]]
+binding = "DB"
+database_name = "local"
+database_id = "24f36833-9890-493d-ab34-7549fc414340"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "assets"

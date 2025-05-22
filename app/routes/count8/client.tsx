@@ -1,21 +1,14 @@
+"use client";
+
 import cytoscape from "cytoscape";
 import { useEffect, useRef } from "react";
-import type { LoaderFunctionArgs } from "react-router";
 import { clientOnly$ } from "vite-env-only/macros";
-import { Count8Client } from "./client.tsx";
-// import data from "./data.json" with { type: "json" };
 
-const d = import.meta.glob("./*.json", { import: "default" });
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const n = url.searchParams.get("c") ?? "8";
-  const data = await d[`./data${n}.json`]();
-  return { data };
-}
-
-export default function Count8({ loaderData }) {
-  const data = loaderData.data;
+export function Count8Client({
+  data,
+}: {
+  data: cytoscape.ElementDefinition[];
+}) {
   const ref = useRef<HTMLDivElement>(null);
   clientOnly$(
     useEffect(() => {
@@ -156,11 +149,5 @@ export default function Count8({ loaderData }) {
       };
     }, []),
   );
-  return (
-    <main className="prose mx-auto">
-      <title>凑8图论演示 « 故人故事故纸堆</title>
-      <h1>凑8图论演示</h1>
-      <Count8Client data={data} />
-    </main>
-  );
+  return <section className="h-96" ref={ref}></section>;
 }

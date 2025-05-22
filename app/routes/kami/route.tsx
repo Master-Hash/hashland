@@ -1,11 +1,11 @@
 // import { LoaderFunctionArgs, useLoaderData } from "react-router";
-import P from "../../../post-test/now.md";
 import { HrefToLink } from "../../utils/components.tsx";
+import P from "./kami.md";
 
-export default function Now() {
+export default function Kami() {
   return (
-    <main className="prose relative mx-auto">
-      <title>近况 « 故人故事故纸堆</title>
+    <main className="prose prose-a:whitespace-nowrap relative mx-auto">
+      <title>故纸堆 « 故人故事故纸堆</title>
       <P
         components={{
           a: HrefToLink,

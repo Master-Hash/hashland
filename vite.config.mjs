@@ -2,10 +2,12 @@
  * @import { UserConfig } from "vite";
  */
 import { cloudflare } from "@cloudflare/vite-plugin";
+// import rsc from "@hiogawa/vite-rsc/plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
+import reactServerDOM from "@jacob-ebey/vite-react-server-dom";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
-import { reactRouter } from "@react-router/dev/vite";
+// import { reactRouter } from "@react-router/dev/vite";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
@@ -25,6 +27,9 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
+// import type { UserConfig } from "vite";
+// import react from "@vitejs/plugin-react-oxc";
+import path from "node:path";
 import { envOnlyMacros } from "vite-env-only";
 import virtual from "vite-plugin-virtual";
 import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
@@ -33,10 +38,18 @@ import chronicles from "./app/routes/connections/chronicles.json" with { type: "
 // import wasm from "vite-plugin-wasm";
 // import { envOnlyMacros } from "vite-env-only";
 // import tailwindPostcss from "@tailwindcss/postcss";
-// import babel from "vite-plugin-babel";
 // import forgetti from "vite-plugin-forgetti";
+// import babel from "vite-plugin-babel";
 // import BabelPresetTypescript from "@babel/preset-typescript";
 // import BabelPluginReactCompiler from "babel-plugin-react-compiler";
+
+// babel({
+//   filter: /\.[jt]sx?$/,
+//   babelConfig: {
+//     presets: [BabelPresetTypescript], // if you use TypeScript
+//     plugins: [[BabelPluginReactCompiler, {}]],
+//   },
+// }),
 
 enableDeprecationWarnings(true, true);
 
@@ -78,12 +91,40 @@ const highlighter = await getSingletonHighlighterCore({
 const isStorybook = process.argv[1]?.includes("storybook");
 const isTypegen = process.argv[2]?.includes("typegen");
 const isBuild =
-  process.argv[1]?.includes("@react-router") &&
-  process.argv[2]?.includes("build");
+  process.argv[1]?.includes("vite") && process.argv[2]?.includes("build");
 // console.log(process.argv);
 
 /** @type {UserConfig} */
 export default {
+  environments: {
+    client: {
+      build: {
+        rollupOptions: {
+          input: "./app/entry.browser.tsx",
+          treeshake: {
+            moduleSideEffects: () => {
+              return false;
+            },
+          },
+        },
+      },
+      resolve: {
+        conditions: ["module-sync"],
+      },
+    },
+    ssr: {
+      resolve: {
+        noExternal: true,
+        conditions: ["module-sync"],
+      },
+    },
+    server: {
+      resolve: {
+        noExternal: true,
+        conditions: ["module-sync"],
+      },
+    },
+  },
   plugins: [
     !isStorybook &&
       !isTypegen && {
@@ -153,19 +194,56 @@ export default {
             ],
           ],
         }),
-        // enforce: "pre",
+        enforce: "pre",
       },
     // !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
+    // !isStorybook && reactRouter(),
+    // !isStorybook &&
+    //   !isTypegen &&
+    //   react({ include: /\.(md|mdx|js|jsx|ts|tsx)$/ }),
+    // !isStorybook &&
+    //   !isTypegen &&
+    //   rsc({
+    //     entries: {
+    //       browser: "./app/entry.browser.tsx",
+    //       ssr: "./app/entry.ssr.tsx",
+    //       rsc: "./app/entry.rsc.tsx",
+    //     },
+    //   }),
+    reactServerDOM({
+      browserEnvironment: "client",
+      serverEnvironments: ["server"],
+      ssrEnvironments: ["ssr"],
+      runtime: {
+        browser: {
+          importFrom: path.resolve("./framework/references.browser.ts"),
+        },
+        server: {
+          importFrom: path.resolve("./framework/references.rsc.ts"),
+        },
+        ssr: {
+          importFrom: path.resolve("./framework/references.ssr.ts"),
+        },
+      },
+    }),
     !isStorybook &&
       !isTypegen &&
-      !isBuild &&
       cloudflare({
         persistState: true,
+        configPath: "./wrangler.toml",
         viteEnvironment: {
           name: "ssr",
         },
+        auxiliaryWorkers: [
+          {
+            configPath: "./rsc.toml",
+            viteEnvironment: {
+              name: "server",
+            },
+          },
+        ],
       }),
-    !isStorybook && reactRouter(),
+    // isTypegen && reactRouter(),
     !isTypegen && tailwindcss(),
     !isStorybook &&
       !isTypegen &&
@@ -185,10 +263,15 @@ export default {
   },
   build: {
     // sourcemap: true,
+    // modulePreload: {
+    //   polyfill: false,
+    // },
+    minify: "oxc",
+    cssMinify: "lightningcss",
     target: "esnext",
     rollupOptions: {
       // experimental: {
-      //   // strictExecutionOrder: false,
+      // strictExecutionOrder: false,
       // },
       // output: {
       //   target: "esnext",
@@ -201,14 +284,18 @@ export default {
   experimental: {
     // skipSsrTransform: true,
     // enableNativePlugin: true,
+    // importGlobRestoreExtension: true,
   },
   css: {
     postcss: {
       // plugins: [tailwindPostcss],
     },
   },
-  resolve: {
-    external: ["cloudflare:workers"],
+  // resolve: {
+  // external: ["cloudflare:workers"],
+  // },
+  server: {
+    allowedHosts: ["raissa.hash.memorial"],
   },
 };
 

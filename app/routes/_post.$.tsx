@@ -1,28 +1,31 @@
-import { Suspense, lazy } from "react";
-import type { MetaFunction } from "react-router";
 import { HrefToLink } from "../utils/components.tsx";
 import type { Route } from "./+types/_post.$.ts";
 
-const m = import.meta.glob([
-  "/post-test/人/*.md",
-  "/post-test/事/*.md",
-  "/post-test/物/*.md",
-  "/post-test/情思/*.md",
-]);
+const m = import.meta.glob(
+  [
+    "/post-test/人/*.md",
+    "/post-test/事/*.md",
+    "/post-test/物/*.md",
+    "/post-test/情思/*.md",
+  ],
+  {
+    import: "default",
+  },
+);
 
-const ls = new Map<string, string>();
+// const ls = new Map<string, string>();
 
-for (const key in m) {
-  ls.set(key, lazy(m[key]));
-}
+// for (const key in m) {
+//   ls.set(key, lazy(m[key]));
+// }
 
-export const meta: MetaFunction = ({ data }: { data: { slug: string } }) => {
-  return [
-    { title: `${data.slug.split("_").at(-1)} « Hashland` },
-    // { name: "description", content: "Welcome to Remix!" },
-    // 等人工智能来归纳
-  ];
-};
+// export const meta: MetaFunction = ({ data }: { data: { slug: string } }) => {
+//   return [
+//     { title: `${data.slug.split("_").at(-1)} « Hashland` },
+//     // { name: "description", content: "Welcome to Remix!" },
+//     // 等人工智能来归纳
+//   ];
+// };
 
 export const loader = ({ params }: Route.LoaderArgs) => {
   const filePath = params["*"];
@@ -35,30 +38,43 @@ export const loader = ({ params }: Route.LoaderArgs) => {
   const _t = filePath.match(/(人|事|物|情思)\/(.+)\.md/) as Array<string>;
   const { [1]: type, [2]: slug } = _t;
 
-  // const module = await m[`/post-test/${filePath}`]();
-  // const Markdown = module.default;
-
   return {
     filePath,
     type,
     slug,
-    // Markdown: <Cop />
+    // Markdown: (
+    //   <Markdown
+    //     components={{
+    //       a: HrefToLink,
+    //       // img: ImageCloudflareTransform,
+    //     }}
+    //   />
+    // ),
   };
 };
 
-export default function Post({ loaderData }: Route.ComponentProps) {
+export default async function Post({ loaderData }: Route.ComponentProps) {
   // const { type, slug, filePath } = useLoaderData<typeof loader>();
   const { type, slug, filePath } = loaderData;
-  const Markdown = ls.get(`/post-test/${filePath}`)!;
+  const Markdown = await m[`/post-test/${filePath}`]();
+
+  // const Markdown = ls.get(`/post-test/${filePath}`)!;
   // const L = lazy(m[`/post-test/${filePath}`]);
+
+  const t = `${slug.split("_").at(-1)} « 故人故事故纸堆`;
   return (
-    <Suspense fallback="">
+    <main className="prose mx-auto">
+      <title>{t}</title>
       <Markdown
         components={{
           a: HrefToLink,
-          // img: ImageCloudflareTransform,
         }}
       />
-    </Suspense>
+      {/* {Markdown({
+        components: {
+          a: HrefToLink,
+        },
+      })} */}
+    </main>
   );
 }
