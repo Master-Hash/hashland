@@ -26,7 +26,6 @@
     "types": [
       "@react-router/cloudflare",
       "vite/client",
-      "@cloudflare/workers-types"
     ],
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
