@@ -1,42 +1,15 @@
+import { Resources } from "@hiogawa/vite-rsc/rsc";
 import type { FC, ReactElement } from "react";
 import { Outlet } from "react-router";
 import type { Route } from "./+types/root.ts";
-import style from "./main.css?url";
+import "./main.css";
 import {
   ErrorReporter,
   FooterComponent,
   HeaderComponent,
   WrappedScrollRestoration,
 } from "./root.client.tsx";
-// import style from "./main.css?url";
-// 后者有 bug，会导致 client 和 server 的 css 双双被加载
-// import { useNonce } from "./utils/components.tsx";
-
-// 这些应该在页面路由，而不是根路由
-// export const meta: MetaFunction = () => {
-//   return [
-//     {
-//       // "og:site_name": "Hashland",
-//       // title: "Hashland",
-//       // "og:title": "Hashland",
-//       // "og:description": "()",
-//       // description: "()",
-//       robots: "follow, index",
-//     },
-//   ];
-// };
-
-// export const loader = defineLoader(({ response }) => {
-// export const loader = () => {
-// response.headers.append(
-//   "content-security-policy",
-//   "default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' data: " +
-//     (import.meta.env.DEV ? "" : ""),
-// );
-// return {nonce};
-// };
-
-// export const headers: HeadersFunction = () => ({});
+import { ServerHmr } from "./server-hmr.tsx";
 
 export default function App() {
   return <Outlet />;
@@ -52,7 +25,7 @@ export const Layout: FC<{
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
-        <link rel="stylesheet" href={style} />
+        {/* <link rel="stylesheet" href={style} /> */}
         <link
           rel="alternate"
           type="application/atom+xml"
@@ -66,8 +39,10 @@ export const Layout: FC<{
           title="Recent Commits to hashland:main"
         />
         {/* <Links /> */}
+        <Resources />
       </head>
       <body className="bg-cat-base text-cat-text grid min-h-screen grid-rows-[auto_1fr_auto] print:block">
+        <ServerHmr />
         <HeaderComponent />
         {children}
         <FooterComponent />
@@ -78,6 +53,7 @@ export const Layout: FC<{
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token": "7f3186f1aa024cc38438e5416264242e"}'
+          suppressHydrationWarning
         /> */}
         {/* End Cloudflare Web Analytics */}
       </body>

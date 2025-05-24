@@ -1,36 +1,41 @@
 import {
   createFromReadableStream,
   encodeReply,
-} from "@jacob-ebey/react-server-dom-vite/client";
+  initialize,
+  setServerCallback,
+} from "@hiogawa/vite-rsc/browser";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-// @ts-expect-error - no types yet
-import { manifest } from "virtual:react-manifest";
-
 import {
-  type DecodeServerResponseFunction,
-  type EncodeActionFunction,
   createCallServer,
   getServerStream,
   RSCHydratedRouter,
 } from "react-router";
 import type { ServerPayload } from "react-router/rsc";
 
-const encodeAction: EncodeActionFunction = (args: unknown[]) =>
-  encodeReply(args);
+initialize({
+  onHmrReload() {
+    // currently handle by `<ServerHmr />` in `root.client.tsx`
+  },
+});
 
-const decode: DecodeServerResponseFunction = (body) =>
-  createFromReadableStream(body, manifest, { callServer });
+setServerCallback(
+  createCallServer({
+    decode: (body) => createFromReadableStream(body),
+    encodeAction: (args) => encodeReply(args),
+  }),
+);
 
-const callServer = createCallServer({ decode, encodeAction });
-
-createFromReadableStream(getServerStream(), manifest, { callServer }).then(
+createFromReadableStream<ServerPayload>(getServerStream()).then(
   (payload: ServerPayload) => {
     startTransition(() => {
       hydrateRoot(
         document,
         <StrictMode>
-          <RSCHydratedRouter decode={decode} payload={payload} />
+          <RSCHydratedRouter
+            decode={(body) => createFromReadableStream(body)}
+            payload={payload as any}
+          />
         </StrictMode>,
       );
     });

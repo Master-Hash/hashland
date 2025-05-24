@@ -2,8 +2,8 @@ import { createRequestListener } from "@mjackson/node-fetch-server";
 import compression from "compression";
 import express from "express";
 
-import server from "./dist/server/entry.rsc.js";
-import ssr from "./dist/ssr/entry.ssr.js";
+import server from "./dist/rsc/index.js";
+import ssr from "./dist/ssr/index.js";
 
 const app = express();
 

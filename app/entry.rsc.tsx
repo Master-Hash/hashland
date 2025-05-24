@@ -1,19 +1,31 @@
-import type { ServerRouteObject } from "react-router/rsc";
-import { decodeReply, renderToReadableStream } from "../framework/server.ts";
-// @ts-expect-error - no types yet
-import { manifest } from "virtual:react-manifest";
-
+import {
+  decodeAction,
+  decodeReply,
+  importSsr,
+  initialize,
+  loadServerAction,
+  renderToReadableStream,
+} from "@hiogawa/vite-rsc/rsc";
 import {
   type DecodeCallServerFunction,
+  type DecodeFormActionFunction,
   matchRSCServerRequest,
+  type ServerRouteObject,
 } from "react-router/rsc";
+
+// import routes from "../app/routes.ts?react-router-routes";
+// import routes from "../ff/app/routes.ts?react-router-routes";
 
 const routes = [
   {
     id: "root",
-    // lazy: () => import("../routes/root/root.tsx"),
     lazy: () => import("./root.tsx"),
     children: [
+      // {
+      //   id: "favicon",
+      //   path: "favicon.ico",
+      //   lazy: () => import("./routes/favicon[.]ico.tsx"),
+      // },
       {
         id: "index",
         index: true,
@@ -44,11 +56,6 @@ const routes = [
         path: "*",
         lazy: () => import("./routes/_post.$.tsx"),
       },
-      // {
-      //   id: "favicon",
-      //   path: "favicon.ico",
-      //   lazy: () => import("./routes/favicon[.]ico.tsx"),
-      // },
       {
         id: "now",
         path: "now",
@@ -74,84 +81,54 @@ const routes = [
         path: "d1-lantency/:testid",
         lazy: () => import("./routes/d1-lantency.$testid.tsx"),
       },
-
-      // {
-      //   id: "connections",
-      //   path: "connections",
-      //   lazy: () => import("./routes/connections/route.tsx"),
-      // },
     ],
   },
 ] satisfies ServerRouteObject[];
 
-// export const routes = [
-//   {
-//     id: "root",
-//     path: "",
-//     // requiredCSS: ["/index.css"],
-//     lazy: () => import("../routes/root/root.tsx"),
-//     children: [
-//       {
-//         id: "home",
-//         index: true,
-//         lazy: () => import("../routes/home/home.tsx"),
-//       },
-//       {
-//         id: "about",
-//         path: "about",
-//         lazy: () => import("../routes/about/about.tsx"),
-//       },
-//       {
-//         id: "parent",
-//         path: "parent",
-//         lazy: () => import("../routes/parent/parent.tsx"),
-//         children: [
-//           {
-//             id: "parent-index",
-//             index: true,
-//             lazy: () => import("../routes/parent-index/parent-index.tsx"),
-//           },
-//           {
-//             id: "child",
-//             path: "child",
-//             lazy: () => import("../routes/child/child.tsx"),
-//           },
-//         ],
-//       },
-//       {
-//         id: "redirect",
-//         path: "redirect",
-//         lazy: () => import("../routes/redirect.ts"),
-//       },
-//     ],
-//   },
-// ] satisfies ServerRouteObject[];
+initialize();
 
 const decodeCallServer: DecodeCallServerFunction = async (actionId, reply) => {
   const args = await decodeReply(reply);
-  const reference = manifest.resolveServerReference(actionId);
-  await reference.preload();
-  const action = reference.get() as (...args: unknown[]) => Promise<unknown>;
+  const action = await loadServerAction(actionId);
   return action.bind(null, ...args);
 };
 
-export default {
-  fetch(request, env) {
-    globalThis.__hash_env__ = env;
-    return matchRSCServerRequest({
-      decodeCallServer,
-      request,
-      routes,
-      generateResponse(match) {
-        if (match instanceof Response) {
-          return match;
-        }
+const decodeFormAction: DecodeFormActionFunction = async (formData) => {
+  return await decodeAction(formData);
+};
 
-        return new Response(renderToReadableStream(match.payload), {
-          status: match.statusCode,
-          headers: match.headers,
-        });
-      },
-    });
+async function callServer(request: Request) {
+  return await matchRSCServerRequest({
+    decodeCallServer,
+    decodeFormAction,
+    request,
+    routes,
+    generateResponse(match) {
+      return new Response(renderToReadableStream(match.payload), {
+        status: match.statusCode,
+        headers: match.headers,
+      });
+    },
+  });
+}
+
+let mod;
+
+async function handler(request: Request) {
+  const ssr = await importSsr<typeof import("./entry.ssr")>();
+  return ssr.default(request, callServer);
+}
+
+const m = {
+  async fetch(request, env) {
+    globalThis.__hash_env__ = env;
+    return callServer(request);
   },
 } satisfies ExportedHandler;
+if (import.meta.env.DEV) {
+  mod = handler;
+}
+if (import.meta.env.PROD) {
+  mod = m;
+}
+export default mod;

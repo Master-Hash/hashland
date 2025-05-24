@@ -188,6 +188,9 @@ localtest.sql
 app/routes/count8/data.json
 /app/resources/*
 
+# Workers
+worker-configuration.d.ts
+
 # Emacs
 *~
 \#*\#
@@ -197,3 +200,4 @@ app/routes/count8/data.json
 
 # sonda
 sonda-report.html
+.vite-inspect/

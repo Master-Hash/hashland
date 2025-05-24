@@ -2,9 +2,13 @@
 
 name = "land-server"
 main = "./app/entry.rsc.tsx"
+# main = "./dist/rsc/index.js"
 compatibility_date = "2025-05-14"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_als"]
 workers_dev = false
+
+# no_bundle = true
+# rules = [{ type = "ESModule", globs = ["**/*.js", "**/*.mjs"] }]
 
 [observability]
 enabled = true

@@ -1,0 +1,22 @@
+diff --git a/dist/plugin.js b/dist/plugin.js
+index fd9edad83b9ee3293b441ed110cc745b425f93c7..508273644fd88156a14e4458d32887081d8438b5 100644
+--- a/dist/plugin.js
++++ b/dist/plugin.js
+@@ -51,7 +51,7 @@ function vitePluginRsc({ entries }) {
+ 								rollupOptions: { input: { index: ENTRIES.ssr } }
+ 							},
+ 							resolve: { noExternal: [PKG_NAME] },
+-							optimizeDeps: { exclude: [PKG_NAME] }
++							// optimizeDeps: { exclude: [PKG_NAME] }
+ 						},
+ 						rsc: {
+ 							resolve: {
+@@ -70,7 +70,7 @@ function vitePluginRsc({ entries }) {
+ 									"react/jsx-dev-runtime",
+ 									"react-server-dom-webpack/server.edge"
+ 								],
+-								exclude: [PKG_NAME]
++								// exclude: [PKG_NAME]
+ 							},
+ 							build: {
+ 								outDir: "dist/rsc",

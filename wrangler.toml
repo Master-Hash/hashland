@@ -1,15 +1,21 @@
-#:schema node_modules/wrangler/config-schema.jsonname = "land"
+#:schema node_modules/wrangler/config-schema.json
+
+name = "land"
 compatibility_date = "2025-05-14"
 # main = "./build/worker/index.js"
 # main = "./functions/worker.ts"
 # main = "./build/server/index.js"
 main = "./app/entry.ssr.tsx"
+# main = "./dist/ssr/index.js"
 # assets = { directory = "./build/client", binding = "ASSETS" }
 assets = { directory = "./dist/client", binding = "ASSETS" }
 workers_dev = false
 route = { pattern = "land.hash.memorial", custom_domain = true }
 
-compatibility_flags = ["nodejs_compat"]
+# no_bundle = true
+# rules = [{ type = "ESModule", globs = ["**/*.js", "**/*.mjs"] }]
+
+compatibility_flags = ["nodejs_als"]
 services = [{ binding = "SERVER", service = "land-server" }]
 
 

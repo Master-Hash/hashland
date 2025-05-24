@@ -2,17 +2,16 @@
  * @import { UserConfig } from "vite";
  */
 import { cloudflare } from "@cloudflare/vite-plugin";
-// import rsc from "@hiogawa/vite-rsc/plugin";
+import rsc from "@hiogawa/vite-rsc/plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
-import reactServerDOM from "@jacob-ebey/vite-react-server-dom";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
-// import { reactRouter } from "@react-router/dev/vite";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import { transformerRenderWhitespace } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react-oxc";
 import process from "node:process";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -27,18 +26,12 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
-// import type { UserConfig } from "vite";
-// import react from "@vitejs/plugin-react-oxc";
-import path from "node:path";
 import { envOnlyMacros } from "vite-env-only";
+import inspect from "vite-plugin-inspect";
 import virtual from "vite-plugin-virtual";
 import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
+// import { reactRouter } from "./framework/plugin.ts";
 // import sonda from "sonda/vite";
-// import topLevelAwait from "vite-plugin-top-level-await";
-// import wasm from "vite-plugin-wasm";
-// import { envOnlyMacros } from "vite-env-only";
-// import tailwindPostcss from "@tailwindcss/postcss";
-// import forgetti from "vite-plugin-forgetti";
 // import babel from "vite-plugin-babel";
 // import BabelPresetTypescript from "@babel/preset-typescript";
 // import BabelPluginReactCompiler from "babel-plugin-react-compiler";
@@ -96,36 +89,33 @@ const isBuild =
 
 /** @type {UserConfig} */
 export default {
-  environments: {
-    client: {
-      build: {
-        rollupOptions: {
-          input: "./app/entry.browser.tsx",
-          treeshake: {
-            moduleSideEffects: () => {
-              return false;
-            },
-          },
-        },
-      },
-      resolve: {
-        conditions: ["module-sync"],
-      },
-    },
-    ssr: {
-      resolve: {
+  define: isBuild
+    ? {
+        "process.env.NODE_ENV": JSON.stringify(
+          process.env.NODE_ENV || "production",
+        ),
+      }
+    : {},
+  resolve: isBuild
+    ? {
         noExternal: true,
-        conditions: ["module-sync"],
-      },
-    },
-    server: {
-      resolve: {
-        noExternal: true,
-        conditions: ["module-sync"],
-      },
-    },
-  },
+      }
+    : {},
+  // environments: {
+  // client: {},
+  // ssr: {
+  //   resolve: {
+  //     noExternal: true,
+  //   },
+  // },
+  // rsc: {
+  //   resolve: {
+  //     noExternal: true,
+  //   },
+  // },
+  // },
   plugins: [
+    !isTypegen && tailwindcss(),
     !isStorybook &&
       !isTypegen && {
         ...mdx({
@@ -166,27 +156,6 @@ export default {
                 transformers: [
                   transformerTwoslash(),
                   transformerColorizedBrackets(),
-                  // shikiColorizedBrackets({
-                  //   defaultColor: false,
-                  //   colors: {
-                  //     light: [
-                  //       flavors.latte.colors.red.hex,
-                  //       flavors.latte.colors.peach.hex,
-                  //       flavors.latte.colors.yellow.hex,
-                  //       flavors.latte.colors.green.hex,
-                  //       flavors.latte.colors.sapphire.hex,
-                  //       flavors.latte.colors.lavender.hex,
-                  //     ],
-                  //     dark: [
-                  //       flavors.frappe.colors.red.hex,
-                  //       flavors.frappe.colors.peach.hex,
-                  //       flavors.frappe.colors.yellow.hex,
-                  //       flavors.frappe.colors.green.hex,
-                  //       flavors.frappe.colors.sapphire.hex,
-                  //       flavors.frappe.colors.lavender.hex,
-                  //     ],
-                  //   },
-                  // }),
                   transformerRenderWhitespace(),
                   // toClass,
                 ],
@@ -198,35 +167,8 @@ export default {
       },
     // !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
     // !isStorybook && reactRouter(),
-    // !isStorybook &&
-    //   !isTypegen &&
-    //   react({ include: /\.(md|mdx|js|jsx|ts|tsx)$/ }),
-    // !isStorybook &&
-    //   !isTypegen &&
-    //   rsc({
-    //     entries: {
-    //       browser: "./app/entry.browser.tsx",
-    //       ssr: "./app/entry.ssr.tsx",
-    //       rsc: "./app/entry.rsc.tsx",
-    //     },
-    //   }),
-    reactServerDOM({
-      browserEnvironment: "client",
-      serverEnvironments: ["server"],
-      ssrEnvironments: ["ssr"],
-      runtime: {
-        browser: {
-          importFrom: path.resolve("./framework/references.browser.ts"),
-        },
-        server: {
-          importFrom: path.resolve("./framework/references.rsc.ts"),
-        },
-        ssr: {
-          importFrom: path.resolve("./framework/references.ssr.ts"),
-        },
-      },
-    }),
-    !isStorybook &&
+    isBuild &&
+      !isStorybook &&
       !isTypegen &&
       cloudflare({
         persistState: true,
@@ -238,13 +180,31 @@ export default {
           {
             configPath: "./rsc.toml",
             viteEnvironment: {
-              name: "server",
+              name: "rsc",
             },
           },
         ],
       }),
+    // now React Compiler is not compatible with React Router RSC
+    !isStorybook &&
+      !isTypegen &&
+      react({
+        include: /\.(md|mdx|js|jsx|ts|tsx)$/,
+        // babel: {
+        //   // presets: [BabelPresetTypescript], // if you use TypeScript
+        //   plugins: [[BabelPluginReactCompiler, {}]],
+        // },
+      }),
+    !isStorybook &&
+      !isTypegen &&
+      rsc({
+        entries: {
+          browser: "./app/entry.browser.tsx",
+          ssr: "./app/entry.ssr.tsx",
+          rsc: "./app/entry.rsc.tsx",
+        },
+      }),
     // isTypegen && reactRouter(),
-    !isTypegen && tailwindcss(),
     !isStorybook &&
       !isTypegen &&
       virtual({
@@ -255,10 +215,15 @@ export default {
         ),
       }),
     envOnlyMacros(),
+    inspect({
+      // buggy on wasm
+      // build: true,
+    }),
     // !isStorybook && !isTypegen && sonda(),
   ],
   optimizeDeps: {
     holdUntilCrawlEnd: false,
+    exclude: [],
     include: ["react/compiler-runtime", "react-router/dom"],
   },
   build: {
@@ -286,14 +251,6 @@ export default {
     // enableNativePlugin: true,
     // importGlobRestoreExtension: true,
   },
-  css: {
-    postcss: {
-      // plugins: [tailwindPostcss],
-    },
-  },
-  // resolve: {
-  // external: ["cloudflare:workers"],
-  // },
   server: {
     allowedHosts: ["raissa.hash.memorial"],
   },
