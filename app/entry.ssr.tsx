@@ -99,7 +99,7 @@ async function handler(
   const h: HeadersInit = new Headers();
   h.set(
     "content-security-policy",
-    `default-src 'self'; style-src-attr 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'nonce-${nonce}'${import.meta.env.PROD ? " https://static.cloudflareinsights.com/" : ""}; worker-src 'self' blob:; img-src 'self' data:` +
+    `default-src 'self'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'nonce-${nonce}'${import.meta.env.PROD ? " https://static.cloudflareinsights.com/" : ""}; worker-src 'self' blob:; img-src 'self' data:` +
       (import.meta.env.DEV
         ? "; style-src-elem 'unsafe-inline'"
         : "; connect-src 'self' https://cloudflareinsights.com/"),

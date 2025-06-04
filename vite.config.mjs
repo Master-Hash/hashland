@@ -8,7 +8,10 @@ import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
-import { transformerRenderWhitespace } from "@shikijs/transformers";
+import {
+  transformerRenderWhitespace,
+  transformerStyleToClass,
+} from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-oxc";
@@ -57,9 +60,9 @@ const partialChars = chronicles.map((chronicle) => {
   }
 });
 
-// const toClass = transformerStyleToClass({
-//   classPrefix: "__shiki_",
-// });
+const toClass = transformerStyleToClass({
+  classPrefix: "__shiki_",
+});
 
 const highlighter = await getSingletonHighlighterCore({
   themes: [
@@ -219,6 +222,29 @@ export default {
       // buggy on wasm
       // build: true,
     }),
+    {
+      // 我担心，这玩意在开发环境下不会运行
+      // 但是 rolldown 全打包开发就要出来了
+      // 这马上就不是问题了，应该
+      name: "shiki-append-class-css",
+      generateBundle(_, bundle) {
+        const css = toClass.getCSS();
+        for (const fileName in bundle) {
+          if (Object.prototype.hasOwnProperty.call(bundle, fileName)) {
+            const asset = bundle[fileName];
+            if (asset.type === "asset" && fileName.endsWith(".css")) {
+              console.log(
+                "\nAppending shiki class definition to",
+                asset.fileName,
+              );
+              // append the class CSS to the end of the CSS file
+              asset.source += css + "\n";
+              break;
+            }
+          }
+        }
+      },
+    },
     // !isStorybook && !isTypegen && sonda(),
   ],
   optimizeDeps: {
