@@ -131,6 +131,9 @@ a[href*="?q=%23"] {
     @apply bg-inherit;
   }
 
+  --tw-prose-pre-code: unset;
+  --tw-prose-pre-bg: unset;
+
   /* figure {
       @apply mx-auto;
     } */
