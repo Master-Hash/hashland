@@ -252,6 +252,8 @@ export function setup(ctx: Context) {
       style: {
         align: "center",
         fontSize: 13,
+        fontFamily:
+          '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         fill: isDark ? 0x85c1dc : 0x209fb5, // Sapphire
       },
     });
@@ -276,12 +278,18 @@ export function setup(ctx: Context) {
     lable.eventMode = "static";
     lable.cursor = "pointer";
     lable.on("pointerdown", (e) => {
-      if (e.ctrlKey) {
-        window
-          .open(`/事/${c.date}_${c.title}.md`, "_blank", "noopener,noreferrer")
-          ?.focus();
+      // test if `c.alt` is full URL
+      const outURL = URL.parse(c.alt!);
+      if (outURL !== null) {
+        window.open(c.alt, "_blank", "noopener,noreferrer")?.focus();
       } else {
-        void navigate(`/事/${c.date}_${c.title}.md`);
+        const t = "alt" in c ? c.alt : `/事/${c.date}_${c.title}.md`;
+        console.log("fuck", t);
+        if (e.ctrlKey) {
+          window.open(t, "_blank", "noopener,noreferrer")?.focus();
+        } else {
+          void navigate(t!);
+        }
       }
     });
 
@@ -330,7 +338,8 @@ export function setup(ctx: Context) {
         fontSize: 13,
         // 非常无奈，Noto Emoji 并不在我的系统可用
         // 不常见本地字体可以用来指纹识别，所以被 Firefox 禁用了
-        fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
+        fontFamily:
+          '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         align: "center",
       },
     });
@@ -357,7 +366,8 @@ export function setup(ctx: Context) {
         style: {
           fill: isDark ? 0xbabbf1 : 0x7287fd, // Lavender
           fontSize: 13,
-          fontFamily: 'ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
+          fontFamily:
+            '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
           align: "center",
         },
       });
