@@ -51,28 +51,32 @@ export function setup(ctx: Context) {
     (app.screen.height - PADDING) / 2,
   )
     .setTranslation(PADDING / 2, app.screen.height / 2)
-    .setCollisionGroups(COLLIDER_GROUP_1);
+    .setCollisionGroups(COLLIDER_GROUP_1)
+    .setRestitution(1);
   const wallLeftCollider = world.createCollider(wallLeftColliderDesc);
   const wallRightColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
   )
     .setTranslation(app.screen.width - PADDING / 2, app.screen.height / 2)
-    .setCollisionGroups(COLLIDER_GROUP_1);
+    .setCollisionGroups(COLLIDER_GROUP_1)
+    .setRestitution(1);
   const wallRightCollider = world.createCollider(wallRightColliderDesc);
   const wallTopColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
     PADDING / 2,
   )
     .setTranslation(app.screen.width / 2, PADDING / 2)
-    .setCollisionGroups(COLLIDER_GROUP_1);
+    .setCollisionGroups(COLLIDER_GROUP_1)
+    .setRestitution(1);
   const wallTopCollider = world.createCollider(wallTopColliderDesc);
   const wallBottomColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
     PADDING / 2,
   )
     .setTranslation(app.screen.width / 2, app.screen.height - PADDING / 2)
-    .setCollisionGroups(COLLIDER_GROUP_1);
+    .setCollisionGroups(COLLIDER_GROUP_1)
+    .setRestitution(1);
   const wallBottomCollider = world.createCollider(wallBottomColliderDesc);
   const pointerRigidBodyDesc = RigidBodyDesc.kinematicPositionBased();
   const pointerRigidBody = world.createRigidBody(pointerRigidBodyDesc);
@@ -213,7 +217,8 @@ export function setup(ctx: Context) {
     const emojiColliderDesc = ColliderDesc.ball(14)
       .setDensity(0)
       .setTranslation(r * Math.cos(-radian), r * Math.sin(-radian))
-      .setCollisionGroups(COLLIDER_GROUP_1);
+      .setCollisionGroups(COLLIDER_GROUP_1)
+      .setRestitution(0.35);
     const emojiCollider = world.createCollider(
       emojiColliderDesc,
       zodiacRigidBody,
@@ -315,7 +320,8 @@ export function setup(ctx: Context) {
     const bubbleRigidBody = world.createRigidBody(bubbleRigidBodyDesc);
     const bubbleColliderDesc = ColliderDesc.ball(8)
       .setDensity(1)
-      .setCollisionGroups(COLLIDER_GROUP_2);
+      .setCollisionGroups(COLLIDER_GROUP_2)
+      .setRestitution(0.8);
     const bubbleCollider = world.createCollider(
       bubbleColliderDesc,
       bubbleRigidBody,
@@ -487,9 +493,9 @@ export function setup(ctx: Context) {
   // #region Eventloop
   app.ticker.add(
     () => {
-      const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
-        y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
       floatBubbles.forEach((b) => {
+        const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
+          y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
         const { x: bx, y: by } = b.rigid.translation();
         // 如果在屏幕外，就有小概率传送回来
         if (
@@ -548,6 +554,13 @@ export function setup(ctx: Context) {
     (time) => {
       zodiac.conteneur.rotation = zodiacRigidBody.rotation();
       floatBubbles.forEach((b) => {
+        // 如果移动太小，则不予更新
+        // 但是渲染引擎有次像素渲染，这样会导致量子化移动，不好
+        // const dx = b.rigid.translation().x - b.conteneur.x,
+        //   dy = b.rigid.translation().y - b.conteneur.y;
+        // if (dx * dx + dy * dy < 0.5) {
+        //   return;
+        // }
         b.conteneur.x = b.rigid.translation().x;
         b.conteneur.y = b.rigid.translation().y;
       });
