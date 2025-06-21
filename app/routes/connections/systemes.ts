@@ -16,14 +16,14 @@ const SECOND_IN_TROPIC_YEAR = 31556926;
 const PADDING = 4;
 const DAMPING = 0.95;
 const REST_LENGTH = 0.0001;
-const STIFFNESS = 100000000;
-const SPRING_DAMPING = 10000000;
+const STIFFNESS = 1e8;
+const SPRING_DAMPING = 1e7;
 const BUBBLE_DAMPING = 24;
 const BUBBLE_FREE_DAMPING = 1;
 const BUBBLE_STIFFNESS = 60000;
 const BUBBLE_STRING_DAMPING = 2;
 const GRAVITY = 441000;
-const ZODIAC_MASS = 99999999999;
+const ZODIAC_ANGULAR_INERTIA = 1e8;
 
 const COLLIDER_GROUP_1 = 0x00010002;
 const COLLIDER_GROUP_2 = 0x00020003;
@@ -110,7 +110,7 @@ export function setup(ctx: Context) {
     .setTranslation(zodiacContainer.x, zodiacContainer.y)
     .lockTranslations()
     // .setAdditionalMass(1)
-    .setAdditionalMassProperties(0, { x: 0, y: 0 }, ZODIAC_MASS)
+    .setAdditionalMassProperties(0, { x: 0, y: 0 }, ZODIAC_ANGULAR_INERTIA)
     .setAngularDamping(DAMPING)
     .setRotation(zodiacContainer.rotation);
   const zodiacRigidBody = world.createRigidBody(zodiacRigidBodyDesc);
