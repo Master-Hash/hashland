@@ -516,6 +516,7 @@ export function setup(ctx: Context) {
   app.ticker.add(
     (time) => {
       zodiacRigidBody.resetForces(true);
+      zodiacRigidBody.resetTorques(true);
       floatBubbles.forEach((b) => {
         b.rigid.resetForces(true);
         b.attractedBy.forEach((e) => {
@@ -532,11 +533,11 @@ export function setup(ctx: Context) {
           // 不符合牛顿第三定律？
           // 我不符合的东西还多了呢，不差你
           // 主要是 bug 修不来了OwO
-          // zodiacRigidBody.addForceAtPoint(
-          //   { x: (-force * dx) / distance, y: (-force * dy) / distance },
-          //   { x: ex, y: ey },
-          //   true,
-          // );
+          zodiacRigidBody.addForceAtPoint(
+            { x: (-force * dx) / distance, y: (-force * dy) / distance },
+            { x: ex, y: ey },
+            true,
+          );
         });
       });
     },
