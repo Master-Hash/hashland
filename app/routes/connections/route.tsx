@@ -1,5 +1,6 @@
 import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
+import { NoSafari } from "./nosafari.tsx";
 import { Pixi } from "./p.tsx";
 
 export default function PixiServer() {
@@ -8,6 +9,7 @@ export default function PixiServer() {
       <title>故人 « 故人故事故纸堆</title>
       {/* <MyComponent /> */}
       <Pixi />
+      <NoSafari />
       <P
         components={{
           a: HrefToLink,

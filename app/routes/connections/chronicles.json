@@ -6,73 +6,91 @@
     "people": ["Xecades", "junyu33"]
   },
   {
-    "title": "初次日常裙装",
+    "title": "日常裙装",
     "date": "2024-04-17",
     "emoji": "👗",
-    "people": []
+    "people": [],
+    "alt": "https://t.me/hash_elbeszelese/27"
   },
   {
     "title": "旁听科学仪器史",
     "date": "2024-03-27",
     "emoji": "game-icons:astrolabe",
     "series": true,
-    "people": ["Spheniscidae"]
+    "people": ["Spheniscidae"],
+    "alt": "https://t.me/hash_elbeszelese/16"
   },
   {
     "title": "初见阿鱼",
     "date": "2024-06-29",
     "emoji": "🎹",
     "important": true,
-    "people": ["Ayu"]
+    "people": ["Ayu"],
+    "alt": "https://t.me/hash_elbeszelese/65"
   },
   {
-    "title": "修订网站(1)",
+    "title": "表达连接",
     "date": "2024-07-14",
-    "emoji": "🚧",
+    "emoji": "game-icons:orbital",
     "important": true,
     "series": true,
-    "people": ["Ayu"]
+    "people": ["Ayu"],
+    "alt": "https://t.me/hash_elbeszelese/76"
   },
   {
     "title": "玩图灵完备",
     "date": "2024-10-09",
     "emoji": "fluent:brain-circuit-24-regular",
-    "people": []
+    "people": [],
+    "alt": "https://t.me/hash_elbeszelese/137"
   },
   {
-    "title": "初识哲涵",
+    "title": "初识 ada",
     "date": "2024-10-20",
     "emoji": "👻",
-    "people": ["Spheniscidae", "哲涵"]
+    "people": ["Spheniscidae", "ada"],
+    "alt": "/人/ada.md#相识"
   },
   {
     "title": "学 CSAPP",
     "date": "2024-11-9",
     "emoji": "fluent:memory-16-regular",
-    "people": ["Kevin Liu"]
-  },
-  {
-    "title": "第二份前端工作",
-    "date": "2024-11-27",
-    "emoji": "\u26f0",
-    "people": ["哲涵", "续本达"]
+    "people": ["Kevin Liu"],
+    "alt": "https://t.me/hash_elbeszelese/159"
   },
   {
     "title": "Connected through Gravity",
     "date": "2024-12-05",
     "emoji": "game-icons:mesh-network",
-    "people": ["哲涵", "续本达"]
+    "people": ["ada", "续本达"],
+    "alt": "https://t.me/hash_elbeszelese/180"
   },
   {
     "title": "争吵",
     "date": "2024-12-20",
     "emoji": "💔",
-    "people": ["Spheniscidae"]
+    "people": ["Spheniscidae"],
+    "alt": "https://t.me/hash_elbeszelese/189"
   },
   {
     "title": "解析技术",
     "date": "2025-01-12",
     "emoji": "tabler:binary-tree",
-    "people": []
+    "people": [],
+    "alt": "https://t.me/hash_elbeszelese/183"
+  },
+  {
+    "title": "你不能成天只吃面包和牛奶",
+    "date": "2025-02-28",
+    "emoji": "🍅",
+    "people": [],
+    "alt": "https://t.me/hash_elbeszelese/244"
+  },
+  {
+    "title": "错过",
+    "date": "2025-04-01",
+    "emoji": "⏳",
+    "people": ["ada"],
+    "alt": "/人/ada.md#幻想的交换生活"
   }
 ]

@@ -1,6 +1,6 @@
 上图里是我的生命中值得纪念的事和影响我的人们。参与事件的人会被代表事件的符号吸附。
 
-现版交互方案由 [Ayu](https://ayu.land/) 设计。
+现版交互方案由 [Ayu](https://ayu.land/) 设计，物理效果在 [ada](https://note.adamanteye.cc/) 和 [Ajax](https://aajax.top/) 指导下完成。
 
 <!-- 讨论时留下的手稿现藏于[故纸堆](/kami)中。 -->
 
