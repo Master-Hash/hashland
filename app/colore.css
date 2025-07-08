@@ -1,7 +1,7 @@
 @media not print {
   a[href^="https"],
-  a[href^="tg://"]
-  {
+  a[href^="tg://"],
+  a[href^="mailto:"] {
     @apply text-cat-lavender;
   }
 
@@ -18,14 +18,19 @@
     content: "";
   }
 
-  /* a[href^="https://assets.hash.memorial/"]::after
+  a[href^="mailto:"]::after {
+    @apply icon-[ph--envelope];
+    content: "";
+  }
+
+  /* a[href^="https://assets.hash.moe/"]::after
     {
       @apply icon-[ph--database];
       content: "";
     } */
 
   a[href^="https://github.com/Master-Hash/post-test"]::after,
-  a[href^="https://assets.hash.memorial/private"]::after
+  a[href^="https://assets.hash.moe/private"]::after
   {
     @apply icon-[ph--lock];
   }
@@ -58,13 +63,13 @@
     & > a[href="/kami"] {
       @apply text-cat-green;
     }
-    & > a[href^="/narrative"] {
+    & > a[href^="/now"] {
       @apply text-cat-sapphire;
     }
   }
 
-  [href*="人/"],
-  [href*="%E4%BA%BA/"] {
+  a[href*="人/"],
+  a[href*="%E4%BA%BA/"] {
     @apply text-cat-yellow;
   }
 
@@ -73,7 +78,7 @@
   a[href*="事/"],
   a[href*="%E4%BA%8B/"],
   /* a[href^="/narrative"], */
-  a[href^="/now"] {
+  a[href^="/narrative"] {
     @apply text-cat-sapphire;
   }
 
@@ -81,6 +86,7 @@
   a[href*="%E7%89%A9/"],
   a[href^="/email"],
   a[href^="/mailbox"],
+  a[href^="/count8"],
   a[href^="/lists"] {
     @apply text-cat-pink;
   }

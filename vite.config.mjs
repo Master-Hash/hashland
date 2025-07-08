@@ -2,7 +2,6 @@
  * @import { UserConfig } from "vite";
  */
 import { cloudflare } from "@cloudflare/vite-plugin";
-import rsc from "@hiogawa/vite-rsc/plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
@@ -15,6 +14,7 @@ import {
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-oxc";
+import rsc from "@vitejs/plugin-rsc";
 import process from "node:process";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -23,6 +23,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import smartypants from "remark-smartypants";
 import {
   enableDeprecationWarnings,
   getSingletonHighlighterCore,
@@ -92,31 +93,32 @@ const isBuild =
 
 /** @type {UserConfig} */
 export default {
-  define: isBuild
-    ? {
-        "process.env.NODE_ENV": JSON.stringify(
-          process.env.NODE_ENV || "production",
-        ),
-      }
-    : {},
-  resolve: isBuild
-    ? {
-        noExternal: true,
-      }
-    : {},
-  // environments: {
-  // client: {},
-  // ssr: {
-  //   resolve: {
-  //     noExternal: true,
-  //   },
-  // },
-  // rsc: {
-  //   resolve: {
-  //     noExternal: true,
-  //   },
-  // },
-  // },
+  // define: isBuild
+  //   ? {
+  //       "process.env.NODE_ENV": JSON.stringify(
+  //         process.env.NODE_ENV || "production",
+  //       ),
+  //     }
+  //   : {},
+  environments: {
+    ssr: {
+      optimizeDeps: {
+        include: [
+          "react",
+          "react/compiler-runtime",
+          "react/jsx-runtime",
+          "react/jsx-dev-runtime",
+          "react-dom",
+          "react-dom/server.edge",
+        ],
+      },
+    },
+    rsc: {
+      optimizeDeps: {
+        include: ["react-router"],
+      },
+    },
+  },
   plugins: [
     !isTypegen && tailwindcss(),
     !isStorybook &&
@@ -126,6 +128,7 @@ export default {
           remarkPlugins: [
             remarkFrontmatter,
             remarkMdxFrontmatter,
+            smartypants,
             remarkGfm,
             remarkMath,
           ],
@@ -160,7 +163,7 @@ export default {
                   transformerTwoslash(),
                   transformerColorizedBrackets(),
                   transformerRenderWhitespace(),
-                  // toClass,
+                  toClass,
                 ],
               },
             ],
@@ -170,8 +173,7 @@ export default {
       },
     // !isStorybook && !isTypegen && !isBuild && reactRouterCloudflareDevProxy(),
     // !isStorybook && reactRouter(),
-    isBuild &&
-      !isStorybook &&
+    !isStorybook &&
       !isTypegen &&
       cloudflare({
         persistState: true,
@@ -202,10 +204,11 @@ export default {
       !isTypegen &&
       rsc({
         entries: {
-          browser: "./app/entry.browser.tsx",
+          client: "./app/entry.browser.tsx",
           ssr: "./app/entry.ssr.tsx",
           rsc: "./app/entry.rsc.tsx",
         },
+        serverHandler: false,
       }),
     // isTypegen && reactRouter(),
     !isStorybook &&
@@ -218,9 +221,10 @@ export default {
         ),
       }),
     envOnlyMacros(),
+    // arraybuffer(),
     inspect({
       // buggy on wasm
-      // build: true,
+      build: true,
     }),
     {
       // 我担心，这玩意在开发环境下不会运行
@@ -245,13 +249,51 @@ export default {
         }
       },
     },
+    {
+      name: "fix-up",
+      enforce: "post",
+      configEnvironment(name) {
+        if (name !== "client") {
+          return {
+            build: {
+              rollupOptions: {
+                // avoid "node:module" from "rolldown:runtime"
+                platform: "neutral",
+              },
+            },
+          };
+        }
+      },
+      config(config) {
+        // TODO: cloudflare should allow optimizeDeps.exclude for esm packages?
+        // for now we patch out https://github.com/cloudflare/workers-sdk/blob/33830214ff76ec4738b3e998370eca7568240e12/packages/vite-plugin-cloudflare/src/index.ts#L197
+        const plugin = config.plugins
+          .flat()
+          .find((p) => p && "name" in p && p.name === "vite-plugin-cloudflare");
+        const original = plugin.configResolved;
+        plugin.configResolved = function (...args) {
+          try {
+            return original.apply(this, args);
+          } catch (e) {
+            console.log(
+              "[patched cloudflare plugin error]",
+              e instanceof Error ? e.message : e,
+            );
+          }
+        };
+        // workaround (fixed in Vite 7) https://github.com/vitejs/vite/pull/20077
+        config.environments.ssr.resolve.noExternal = true;
+        config.environments.rsc.resolve.noExternal = true;
+        // overwrite server entries
+        // TODO: better plugin API to customize?
+        // config.environments.ssr.build.rollupOptions.input.index =
+        //   "./cf/entry.ssr.tsx";
+        // config.environments.rsc.build.rollupOptions.input.index =
+        //   "./cf/entry.rsc.tsx";
+      },
+    },
     // !isStorybook && !isTypegen && sonda(),
   ],
-  optimizeDeps: {
-    holdUntilCrawlEnd: false,
-    exclude: [],
-    include: ["react/compiler-runtime", "react-router/dom"],
-  },
   build: {
     // sourcemap: true,
     // modulePreload: {
@@ -273,12 +315,12 @@ export default {
     reportCompressedSize: false,
   },
   experimental: {
+    enableNativePlugin: "resolver",
     // skipSsrTransform: true,
-    // enableNativePlugin: true,
     // importGlobRestoreExtension: true,
   },
   server: {
-    allowedHosts: ["raissa.hash.memorial"],
+    allowedHosts: ["raissa.hash.moe"],
   },
 };
 

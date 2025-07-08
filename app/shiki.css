@@ -2,11 +2,10 @@
 /* https://antfu.me/posts/shikiji-twoslash */
 /* https://github.com/antfu/antfu.me/commit/d2dfb25139e9f2d42f4135998ad2052179237641#diff-4d6623b7b5a58b55089c020280cacb81da653ce66367cf41d1ab976838a1fddd */
 
-
 .shiki,
 .shiki span {
   color: var(--shiki-light);
-  background-color: var(--shiki-light-bg);
+  /* background-color: var(--shiki-light-bg); */
   /* Optional, if you also want font styles */
   /* font-style: var(--shiki-light-font-style); */
   font-weight: var(--shiki-light-font-weight);
@@ -19,7 +18,7 @@
   .shiki,
   .shiki span {
     color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
+    /* background-color: var(--shiki-dark-bg); */
     /* Optional, if you also want font styles */
     /* font-style: var(--shiki-dark-font-style); */
     font-weight: var(--shiki-dark-font-weight);
@@ -40,11 +39,11 @@
 }
 
 .shiki .tab::before {
-  content: '⇥';
+  content: "⇥";
 }
 
 .shiki .space::before {
-  content: '·';
+  content: "·";
 }
 
 /* https://github.com/shikijs/shiki/issues/3#issuecomment-830564854 */
@@ -54,7 +53,7 @@
 }
 
 .shiki .line::before {
-  @apply w-4 mr-6 inline-block text-right;
+  @apply mr-6 inline-block w-4 text-right;
   content: counter(step);
   counter-increment: step;
   color: var(--color-cat-overlay1);

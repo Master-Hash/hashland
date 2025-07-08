@@ -9,6 +9,7 @@ import {
 } from "react-router";
 import { NonceContext } from "../app/nonce.client.tsx";
 import type { Route } from "./+types/root.ts";
+import shiwake from "./shiwake.html?url";
 
 export function WrappedScrollRestoration() {
   const nonce = use(NonceContext);
@@ -33,7 +34,7 @@ export function HeaderComponent() {
 
         {[
           ["/connections", "故人"],
-          ["/narrative", "故事"],
+          ["/now", "故事"],
           ["/kami", "故纸堆"],
         ].map(([pathname, text], index) => (
           <Fragment key={pathname}>
@@ -119,7 +120,10 @@ export function FooterComponent() {
       </div>
       <div className="hidden">
         <small>
-          <a href="/shiwake">彩弹</a>
+          <a href={shiwake}>彩弹</a>
+          <a rel="me" href="https://cuc.closed.social/@hash">
+            Mastodon
+          </a>
         </small>
       </div>
       <div>

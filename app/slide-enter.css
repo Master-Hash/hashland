@@ -1,85 +1,87 @@
-/* https://antfu.me/posts/sliding-enter-animation */
-@keyframes slide-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
+@media not print {
+  /* https://antfu.me/posts/sliding-enter-animation */
+  @keyframes slide-enter {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    main.prose > *,
+    main.prose > hr::after {
+      --delay: 120ms;
+      --start: 0ms;
+      animation: slide-enter 0.6s both 0.6;
+      animation-delay: calc(var(--start) + var(--stagger) * var(--delay));
+    }
+    main.prose {
+      --stagger: 0;
+    }
   }
 
-  to {
-    opacity: 1;
-    transform: none;
+  main.prose > *:nth-child(1) {
+    --stagger: 1;
   }
-}
-@media (prefers-reduced-motion: no-preference) {
-  main.prose > *,
-  main.prose > hr::after {
-    --delay: 120ms;
-    --start: 0ms;
-    animation: slide-enter 0.6s both 0.6;
-    animation-delay: calc(var(--start) + var(--stagger) * var(--delay));
+  main.prose > *:nth-child(2) {
+    --stagger: 2;
   }
-  main.prose {
-    --stagger: 0;
+  main.prose > *:nth-child(3) {
+    --stagger: 3;
   }
-}
-
-main.prose > *:nth-child(1) {
-  --stagger: 1;
-}
-main.prose > *:nth-child(2) {
-  --stagger: 2;
-}
-main.prose > *:nth-child(3) {
-  --stagger: 3;
-}
-main.prose > *:nth-child(4) {
-  --stagger: 4;
-}
-main.prose > *:nth-child(5) {
-  --stagger: 5;
-}
-main.prose > *:nth-child(6) {
-  --stagger: 6;
-}
-main.prose > *:nth-child(7) {
-  --stagger: 7;
-}
-main.prose > *:nth-child(8) {
-  --stagger: 8;
-}
-main.prose > *:nth-child(9) {
-  --stagger: 9;
-}
-main.prose > *:nth-child(10) {
-  --stagger: 10;
-}
-main.prose > *:nth-child(11) {
-  --stagger: 11;
-}
-main.prose > *:nth-child(12) {
-  --stagger: 12;
-}
-main.prose > *:nth-child(13) {
-  --stagger: 13;
-}
-main.prose > *:nth-child(14) {
-  --stagger: 14;
-}
-main.prose > *:nth-child(15) {
-  --stagger: 15;
-}
-main.prose > *:nth-child(16) {
-  --stagger: 16;
-}
-main.prose > *:nth-child(17) {
-  --stagger: 17;
-}
-main.prose > *:nth-child(18) {
-  --stagger: 18;
-}
-main.prose > *:nth-child(19) {
-  --stagger: 19;
-}
-main.prose > *:nth-child(20) {
-  --stagger: 20;
+  main.prose > *:nth-child(4) {
+    --stagger: 4;
+  }
+  main.prose > *:nth-child(5) {
+    --stagger: 5;
+  }
+  main.prose > *:nth-child(6) {
+    --stagger: 6;
+  }
+  main.prose > *:nth-child(7) {
+    --stagger: 7;
+  }
+  main.prose > *:nth-child(8) {
+    --stagger: 8;
+  }
+  main.prose > *:nth-child(9) {
+    --stagger: 9;
+  }
+  main.prose > *:nth-child(10) {
+    --stagger: 10;
+  }
+  main.prose > *:nth-child(11) {
+    --stagger: 11;
+  }
+  main.prose > *:nth-child(12) {
+    --stagger: 12;
+  }
+  main.prose > *:nth-child(13) {
+    --stagger: 13;
+  }
+  main.prose > *:nth-child(14) {
+    --stagger: 14;
+  }
+  main.prose > *:nth-child(15) {
+    --stagger: 15;
+  }
+  main.prose > *:nth-child(16) {
+    --stagger: 16;
+  }
+  main.prose > *:nth-child(17) {
+    --stagger: 17;
+  }
+  main.prose > *:nth-child(18) {
+    --stagger: 18;
+  }
+  main.prose > *:nth-child(19) {
+    --stagger: 19;
+  }
+  main.prose > *:nth-child(20) {
+    --stagger: 20;
+  }
 }

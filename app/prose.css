@@ -25,11 +25,51 @@ body {
   @apply bg-[50%_auto];
 }
 
+/* https://stackoverflow.com/questions/16348489/is-there-a-way-to-apply-styles-to-safari-only */
+/* https://browserstrangeness.github.io/css_hacks.html#safari */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-touch-callout */
+
+@supports (-webkit-touch-callout: none) {
+  body {
+    @apply bg-none;
+  }
+}
+
+/* 目前只适配了 Windows, Android
+   Linux 和 MacOS 用户得先忍一忍
+*/
 @theme {
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    Droid Sans Mono, Liberation Mono, Courier New, ui-sans-serif, system-ui,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
-    Noto Color Emoji;
+  --font-zh:
+    "Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-ja:
+    "Yu Gothic", "SEC CJK JP", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-eu:
+    "Arial", "Roboto", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Droid Sans Mono,
+    Liberation Mono, Courier New, ui-sans-serif, system-ui, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+*[lang^="zh"]:not(code):not(pre) {
+  @apply font-zh;
+}
+
+*[lang^="ja"]:not(code):not(pre) {
+  @apply font-ja;
+}
+
+*[lang^="en"]:not(code):not(pre),
+*[lang^="de"]:not(code):not(pre),
+*[lang^="fr"]:not(code):not(pre),
+*[lang^="it"]:not(code):not(pre) {
+  @apply font-eu;
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
@@ -119,7 +159,6 @@ a[href*="?q=%23"] {
     /* @apply prose-p:leading-[1.625] */
     /* @apply prose-p:leading-[1.75] */
     /* @apply prose-p:leading-[2] */
-
   }
 
   table {

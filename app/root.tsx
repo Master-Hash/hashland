@@ -1,7 +1,8 @@
-import { Resources } from "@hiogawa/vite-rsc/rsc";
+// import { Resources } from "@hiogawa/vite-rsc/rsc";
 import type { FC, ReactElement } from "react";
 import { Outlet } from "react-router";
 import type { Route } from "./+types/root.ts";
+import { GlobalLoading } from "./load-indicator.tsx";
 import "./main.css";
 import {
   ErrorReporter,
@@ -35,27 +36,27 @@ export const Layout: FC<{
         <link
           rel="alternate"
           type="application/atom+xml"
-          href="https://github.com/Master-Hash/hashland/commits/main.atom"
-          title="Recent Commits to hashland:main"
+          href="https://github.com/Master-Hash/hashland/commits/vite.atom"
+          title="Recent Commits to hashland:vite"
         />
         {/* <Links /> */}
-        <Resources />
+        {/* <Resources /> */}
       </head>
       <body className="bg-cat-base text-cat-text grid min-h-screen grid-rows-[auto_1fr_auto] print:block">
-        <ServerHmr />
+        {import.meta.env.DEV && <ServerHmr />}
+        <GlobalLoading />
         <HeaderComponent />
         {children}
         <FooterComponent />
-        <WrappedScrollRestoration />
-        {/* <Scripts nonce={nonce} /> */}
-        {/* Cloudflare Web Analytics */}
-        {/* <script
+        <script
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "7f3186f1aa024cc38438e5416264242e"}'
+          data-cf-beacon='{"token": "fe619b97279f44bfa14a19312c4141b5"}'
           suppressHydrationWarning
-        /> */}
-        {/* End Cloudflare Web Analytics */}
+        />
+        {/* <!-- End Cloudflare Web Analytics --> */}
+        <WrappedScrollRestoration />
+        {/* <!-- Cloudflare Web Analytics --> */}
       </body>
     </html>
   );
