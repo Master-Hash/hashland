@@ -1,17 +1,10 @@
 import {
   decodeAction,
   decodeReply,
-  importSsr,
-  initialize,
   loadServerAction,
   renderToReadableStream,
-} from "@hiogawa/vite-rsc/rsc";
-import {
-  type DecodeCallServerFunction,
-  type DecodeFormActionFunction,
-  matchRSCServerRequest,
-  type ServerRouteObject,
-} from "react-router/rsc";
+} from "@vitejs/plugin-rsc/rsc";
+import { unstable_matchRSCServerRequest as matchRSCServerRequest } from "react-router";
 
 // import routes from "../app/routes.ts?react-router-routes";
 // import routes from "../ff/app/routes.ts?react-router-routes";
@@ -83,24 +76,13 @@ const routes = [
       },
     ],
   },
-] satisfies ServerRouteObject[];
+];
 
-initialize();
-
-const decodeCallServer: DecodeCallServerFunction = async (actionId, reply) => {
-  const args = await decodeReply(reply);
-  const action = await loadServerAction(actionId);
-  return action.bind(null, ...args);
-};
-
-const decodeFormAction: DecodeFormActionFunction = async (formData) => {
-  return await decodeAction(formData);
-};
-
-async function callServer(request: Request) {
+export async function callServer(request: Request) {
   return await matchRSCServerRequest({
-    decodeCallServer,
-    decodeFormAction,
+    decodeReply,
+    decodeAction,
+    loadServerAction,
     request,
     routes,
     generateResponse(match) {
@@ -112,23 +94,9 @@ async function callServer(request: Request) {
   });
 }
 
-let mod;
-
-async function handler(request: Request) {
-  const ssr = await importSsr<typeof import("./entry.ssr")>();
-  return ssr.default(request, callServer);
-}
-
-const m = {
-  async fetch(request, env) {
+export default {
+  fetch(request, env) {
     globalThis.__hash_env__ = env;
     return callServer(request);
   },
-} satisfies ExportedHandler;
-if (import.meta.env.DEV) {
-  mod = handler;
-}
-if (import.meta.env.PROD) {
-  mod = m;
-}
-export default mod;
+} satisfies ExportedHandler<Env>;

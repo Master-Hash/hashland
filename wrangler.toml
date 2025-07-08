@@ -8,16 +8,25 @@ compatibility_date = "2025-05-14"
 main = "./app/entry.ssr.tsx"
 # main = "./dist/ssr/index.js"
 # assets = { directory = "./build/client", binding = "ASSETS" }
-assets = { directory = "./dist/client", binding = "ASSETS" }
+assets = { binding = "ASSETS" }
 workers_dev = false
-route = { pattern = "land.hash.memorial", custom_domain = true }
-
+# route = { pattern = "land.hash.moe", custom_domain = true }
+routes = [
+  { pattern = "land.hash.moe", custom_domain = true },
+  { pattern = "land.hash.memorial", custom_domain = true },
+]
+send_metrics = false
 # no_bundle = true
 # rules = [{ type = "ESModule", globs = ["**/*.js", "**/*.mjs"] }]
-
 compatibility_flags = ["nodejs_als"]
 services = [{ binding = "SERVER", service = "land-server" }]
 
+[[kv_namespaces]]
+binding = "DAILY_VIEWER"
+id = "20b4ba20e13442acba779202a1df67fb"
+
+[triggers]
+crons = ["32 4 * * *"]
 
 [observability]
 enabled = true

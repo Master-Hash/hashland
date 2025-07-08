@@ -1,40 +1,33 @@
 import {
   createFromReadableStream,
   encodeReply,
-  initialize,
   setServerCallback,
-} from "@hiogawa/vite-rsc/browser";
+} from "@vitejs/plugin-rsc/browser";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
+import type { unstable_RSCPayload as RSCPayload } from "react-router";
 import {
-  createCallServer,
-  getServerStream,
-  RSCHydratedRouter,
+  unstable_createCallServer as createCallServer,
+  unstable_getRSCStream as getRSCStream,
+  unstable_RSCHydratedRouter as RSCHydratedRouter,
 } from "react-router";
-import type { ServerPayload } from "react-router/rsc";
-
-initialize({
-  onHmrReload() {
-    // currently handle by `<ServerHmr />` in `root.client.tsx`
-  },
-});
 
 setServerCallback(
   createCallServer({
-    decode: (body) => createFromReadableStream(body),
-    encodeAction: (args) => encodeReply(args),
+    createFromReadableStream,
+    encodeReply,
   }),
 );
 
-createFromReadableStream<ServerPayload>(getServerStream()).then(
-  (payload: ServerPayload) => {
+createFromReadableStream<RSCPayload>(getRSCStream()).then(
+  (payload: RSCPayload) => {
     startTransition(() => {
       hydrateRoot(
         document,
         <StrictMode>
           <RSCHydratedRouter
-            decode={(body) => createFromReadableStream(body)}
-            payload={payload as any}
+            payload={payload}
+            createFromReadableStream={createFromReadableStream}
           />
         </StrictMode>,
       );
