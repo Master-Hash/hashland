@@ -24,6 +24,13 @@ export default {
       }
     }
 
+    if (u.pathname === "/count" && request.method === "POST") {
+      // Proxy to GoatCounter
+      u.hostname = "hash.goatcounter.com";
+      u.pathname = "/count";
+      return fetch(new Request(u, request));
+    }
+
     const callServer = (request: Request) => SERVER.fetch(request);
     const data = logToKV(request);
     ctx.waitUntil(
@@ -119,10 +126,10 @@ async function handler(
   const h: HeadersInit = new Headers();
   h.set(
     "content-security-policy",
-    `default-src 'self'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'nonce-${nonce}'${import.meta.env.PROD ? " https://static.cloudflareinsights.com/" : ""}; worker-src 'self' blob:; img-src 'self' data:` +
+    `default-src 'self'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'nonce-${nonce}'; worker-src 'self' blob:; img-src 'self' data:` +
       (import.meta.env.DEV
         ? "; style-src-elem 'self' 'unsafe-inline'"
-        : "; connect-src 'self' https://cloudflareinsights.com/"),
+        : "; connect-src 'self'"),
   );
   const bootstrapScriptContent =
     await import.meta.viteRsc.loadBootstrapScriptContent("index");
@@ -155,8 +162,8 @@ function logToKV(request: Request) {
   const ray = request.headers.get("cf-ray") || "";
   const data = {
     timestamp: Date.now(),
-    url: request.url,
-    referer: request.referrer || "",
+    url: decodeURI(request.url),
+    referer: request.headers.get("referer") || "",
     method: request.method,
     ray: ray,
     ip:

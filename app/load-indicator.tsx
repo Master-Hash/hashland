@@ -8,11 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "react-router";
 
 export function GlobalLoading() {
-  let transition = useNavigation();
-  let active = transition.state !== "idle";
+  const transition = useNavigation();
+  const active = transition.state !== "idle";
 
-  let ref = useRef<HTMLDivElement>(null);
-  let [animating, setAnimating] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -24,8 +24,15 @@ export function GlobalLoading() {
     });
 
     if (active) {
-      let id = setTimeout(() => setAnimating(true), 100);
+      const id = setTimeout(() => setAnimating(true), 100);
       return () => clearTimeout(id);
+    } else {
+      // console.log("load complete");
+      if ("goatcounter" in window) {
+        window.goatcounter.count({
+          path: location.pathname + location.search + location.hash,
+        });
+      }
     }
   }, [active]);
 

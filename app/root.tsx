@@ -4,6 +4,7 @@ import { Outlet } from "react-router";
 import type { Route } from "./+types/root.ts";
 import { GlobalLoading } from "./load-indicator.tsx";
 import "./main.css";
+import c from "./resources/count.v5.js?url";
 import {
   ErrorReporter,
   FooterComponent,
@@ -48,15 +49,22 @@ export const Layout: FC<{
         <HeaderComponent />
         {children}
         <FooterComponent />
-        <script
+        {/* <!-- Cloudflare Web Analytics --> */}
+        {/* <script
           defer
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token": "fe619b97279f44bfa14a19312c4141b5"}'
           suppressHydrationWarning
-        />
+        /> */}
         {/* <!-- End Cloudflare Web Analytics --> */}
+        <script
+          data-goatcounter="/count"
+          data-goatcounter-settings='{"no_onload": true}'
+          src={c}
+          integrity="sha384-iHVIwTpVBF7d5D17p+85C6pV1+nQhdZ/wedywT12Rw/1sXmrPz2mkbGQBH4t1DNm"
+          suppressHydrationWarning
+        />
         <WrappedScrollRestoration />
-        {/* <!-- Cloudflare Web Analytics --> */}
       </body>
     </html>
   );
