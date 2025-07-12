@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { clientOnly$ } from "vite-env-only/macros";
 import { loadTexture, unloadTexture } from "./loadtexture.js";
+// import { reserveMemory } from "./rapier2d/exports.js";
 import { World } from "./rapier2d/pipeline/world.js";
 import init, { version } from "./rapier2d/rapier_wasm2d.js";
 // import { init, version, World } from "@dimforge/rapier2d-simd-compat";
@@ -12,7 +13,8 @@ import { setup } from "./systemes.js";
 
 export function Pixi() {
   const [searchParams] = useSearchParams();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLCanvasElement>(null);
+  const refContainer = useRef<HTMLDivElement>(null);
   const isDark = useRef(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -59,7 +61,8 @@ export function Pixi() {
       //   gameLoop();
       // });
       const controller = new AbortController();
-      const sectionContainer = ref.current;
+      const canvasContainer = ref.current;
+      // const c = canvasContainer!.transferControlToOffscreen();
       const app = new Application();
       const { promise, resolve, reject } = Promise.withResolvers<Application>();
       let world: World;
@@ -71,8 +74,9 @@ export function Pixi() {
           roundPixels: true,
           autoDensity: true,
           resolution: window.devicePixelRatio,
-          resizeTo: sectionContainer!,
           preference: "webgpu",
+          canvas: canvasContainer!,
+          resizeTo: refContainer.current!,
         })
         .then(() => resolve(app));
       function handler() {
@@ -89,6 +93,7 @@ export function Pixi() {
           .then(([app, texture, _wasm]) => {
             console.log(version());
             console.info(_wasm);
+            // reserveMemory(1024 * 1024 * 10); // 10 MiB
             // globalThis.w = _wasm;
             // console.log(RAPIER);
             // if (import.meta.env.DEV) {
@@ -96,7 +101,6 @@ export function Pixi() {
             globalThis.__PIXI_APP__ = app;
             // }
             world = new World({ x: 0, y: 0 });
-            sectionContainer!.appendChild(app.canvas);
             // console.log(RAPIER);
             return setup({
               app,
@@ -116,7 +120,6 @@ export function Pixi() {
             // @ts-expect-error for debug
             globalThis.__PIXI_APP__ = app;
             // }
-            sectionContainer!.appendChild(app.canvas);
             return p.pixiApp(app, isDark.current, navigate, texture);
           })
           .catch((error) => {
@@ -138,7 +141,6 @@ export function Pixi() {
         ) {
           // console.log(app.screen);
           // console.log(sectionContainer);
-          sectionContainer?.removeChild(app.renderer.canvas);
 
           // 资源顺利释放了
           // 你可以注意到，重新加载页面时是重新下载了图片的（从浏览器缓存，而不是压根没记录）
@@ -159,5 +161,9 @@ export function Pixi() {
     }, [navigate, searchParams]),
   );
 
-  return <section className="h-52" ref={ref}></section>;
+  return (
+    <section className="h-52" ref={refContainer}>
+      <canvas ref={ref} className="h-full w-full" />
+    </section>
+  );
 }
