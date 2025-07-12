@@ -1,4 +1,5 @@
 import {
+  createTemporaryReferenceSet,
   decodeAction,
   decodeReply,
   loadServerAction,
@@ -80,13 +81,14 @@ const routes = [
 
 export async function callServer(request: Request) {
   return await matchRSCServerRequest({
+    createTemporaryReferenceSet,
     decodeReply,
     decodeAction,
     loadServerAction,
     request,
     routes,
-    generateResponse(match) {
-      return new Response(renderToReadableStream(match.payload), {
+    generateResponse(match, options) {
+      return new Response(renderToReadableStream(match.payload, options), {
         status: match.statusCode,
         headers: match.headers,
       });

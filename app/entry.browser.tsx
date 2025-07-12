@@ -1,5 +1,6 @@
 import {
   createFromReadableStream,
+  createTemporaryReferenceSet,
   encodeReply,
   setServerCallback,
 } from "@vitejs/plugin-rsc/browser";
@@ -15,6 +16,7 @@ import {
 setServerCallback(
   createCallServer({
     createFromReadableStream,
+    createTemporaryReferenceSet,
     encodeReply,
   }),
 );

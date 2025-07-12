@@ -9,7 +9,7 @@ import {
 } from "react-router";
 import { NonceContext } from "../app/nonce.client.tsx";
 import type { Route } from "./+types/root.ts";
-import shiwake from "./shiwake.html?url";
+import shiwake from "./resources/shiwake.html?url";
 
 export function WrappedScrollRestoration() {
   const nonce = use(NonceContext);

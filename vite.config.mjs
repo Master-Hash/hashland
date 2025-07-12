@@ -103,6 +103,11 @@ export default {
   //     }
   //   : {},
   environments: {
+    client: {
+      optimizeDeps: {
+        include: ["react-router", "react-router/internal/react-server-client"],
+      },
+    },
     ssr: {
       optimizeDeps: {
         include: [
@@ -112,12 +117,27 @@ export default {
           "react/jsx-dev-runtime",
           "react-dom",
           "react-dom/server.edge",
+          "react-router > cookie",
+          "react-router > set-cookie-parser",
         ],
+        exclude: ["react-router"],
+      },
+      build: {
+        rollupOptions: {
+          platform: "neutral",
+        },
       },
     },
     rsc: {
       optimizeDeps: {
-        include: ["react-router"],
+        include: ["react-router > cookie", "react-router > set-cookie-parser"],
+        exclude: ["react-router"],
+      },
+      build: {
+        rollupOptions: {
+          // @ts-ignore rolldown
+          platform: "neutral",
+        },
       },
     },
   },
@@ -274,73 +294,18 @@ export default {
         }
       },
     },
-    {
-      name: "fix-up",
-      enforce: "post",
-      configEnvironment(name) {
-        if (name !== "client") {
-          return {
-            build: {
-              rollupOptions: {
-                // avoid "node:module" from "rolldown:runtime"
-                platform: "neutral",
-              },
-            },
-          };
-        }
-      },
-      config(config) {
-        // TODO: cloudflare should allow optimizeDeps.exclude for esm packages?
-        // for now we patch out https://github.com/cloudflare/workers-sdk/blob/33830214ff76ec4738b3e998370eca7568240e12/packages/vite-plugin-cloudflare/src/index.ts#L197
-        const plugin = config.plugins
-          .flat()
-          .find((p) => p && "name" in p && p.name === "vite-plugin-cloudflare");
-        const original = plugin.configResolved;
-        plugin.configResolved = function (...args) {
-          try {
-            return original.apply(this, args);
-          } catch (e) {
-            console.log(
-              "[patched cloudflare plugin error]",
-              e instanceof Error ? e.message : e,
-            );
-          }
-        };
-        // workaround (fixed in Vite 7) https://github.com/vitejs/vite/pull/20077
-        config.environments.ssr.resolve.noExternal = true;
-        config.environments.rsc.resolve.noExternal = true;
-        // overwrite server entries
-        // TODO: better plugin API to customize?
-        // config.environments.ssr.build.rollupOptions.input.index =
-        //   "./cf/entry.ssr.tsx";
-        // config.environments.rsc.build.rollupOptions.input.index =
-        //   "./cf/entry.rsc.tsx";
-      },
-    },
     // !isStorybook && !isTypegen && sonda(),
   ],
   build: {
     // sourcemap: true,
-    // modulePreload: {
-    //   polyfill: false,
-    // },
     minify: "oxc",
     cssMinify: "lightningcss",
     target: "esnext",
-    rollupOptions: {
-      // experimental: {
-      // strictExecutionOrder: false,
-      // },
-      // output: {
-      //   target: "esnext",
-      //   // advancedChunks: {},
-      // },
-    },
     assetsInlineLimit: 0,
     reportCompressedSize: false,
   },
   experimental: {
-    enableNativePlugin: "resolver",
+    enableNativePlugin: true,
     // skipSsrTransform: true,
     // importGlobRestoreExtension: true,
   },
@@ -348,5 +313,3 @@ export default {
     allowedHosts: ["raissa.hash.moe"],
   },
 };
-
-// const css = toClass.getCSS();
