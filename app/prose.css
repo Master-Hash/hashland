@@ -15,7 +15,12 @@ body {
   /* 能用采样，我为什么要生造滤镜！ */
   /* background-image: url(./resources/faux-papier.avif); */
   /* background-image: url(./resources/ep_naturalwhite.png); */
-  background-image: url(./resources/palace-museum.avif);
+  /* Vite false warn https://github.com/vitejs/vite/issues/19304 */
+  background-image: image-set(
+    url(./resources/palace-museum.jxl) type("image/jxl"),
+    url(./resources/palace-museum.avif) type("image/avif"),
+    url(./resources/palace-museum.jpg) type("image/jpeg")
+  );
   /* @apply bg-center; */
   @apply bg-blend-luminosity dark:bg-blend-multiply;
   /* @apply bg-no-repeat; */
@@ -35,13 +40,41 @@ body {
   }
 }
 
+@font-face {
+  font-family: Playfair;
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2-variations");
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2") tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+}
+
+@font-face {
+  font-family: Playfair;
+  src: url(./resources/Playfair-Italic-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2-variations");
+  src: url(./resources/Playfair-Italic-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2") tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Arial;
+  src: local("Arial");
+  size-adjust: 108%;
+}
+
 /* 目前只适配了 Windows, Android
    Linux 和 MacOS 用户得先忍一忍
 */
 @theme {
   --font-zh:
-    "Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Noto Sans SC", "SEC CJK SC", "PingFang SC", ui-sans-serif, system-ui,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
 
   --font-ja:
     "Yu Gothic", "SEC CJK JP", ui-sans-serif, system-ui, sans-serif,
@@ -70,6 +103,7 @@ body {
 *[lang^="fr"]:not(code):not(pre),
 *[lang^="it"]:not(code):not(pre) {
   @apply font-eu;
+  /* @apply text-[1.08em]; */
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
@@ -190,7 +224,7 @@ hr::after {
   @apply visible block text-2xl;
   /* @apply relative -top-3 print:top-0; */
   @apply my-8;
-  @apply font-[Times_New_Roman,serif];
+  @apply font-[Times_New_Roman,Playfair,serif];
   content: "* * *";
 }
 
