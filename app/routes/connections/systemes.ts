@@ -52,7 +52,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(1);
+    .setRestitution(0.35);
   const wallLeftCollider = world.createCollider(wallLeftColliderDesc);
   const wallRightColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
@@ -60,7 +60,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width - PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(1);
+    .setRestitution(0.35);
   const wallRightCollider = world.createCollider(wallRightColliderDesc);
   const wallTopColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
@@ -68,7 +68,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width / 2, PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(1);
+    .setRestitution(0.35);
   const wallTopCollider = world.createCollider(wallTopColliderDesc);
   const wallBottomColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
@@ -76,7 +76,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width / 2, app.screen.height - PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(1);
+    .setRestitution(0.35);
   const wallBottomCollider = world.createCollider(wallBottomColliderDesc);
   const pointerRigidBodyDesc = RigidBodyDesc.kinematicPositionBased();
   const pointerRigidBody = world.createRigidBody(pointerRigidBodyDesc);
@@ -258,7 +258,7 @@ export function setup(ctx: Context) {
         align: "center",
         fontSize: 13,
         fontFamily:
-          '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
+          '"Noto Sans SC", "SEC CJK SC", "PingFang SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         fill: isDark ? 0x85c1dc : 0x209fb5, // Sapphire
       },
     });
@@ -345,7 +345,7 @@ export function setup(ctx: Context) {
         // 非常无奈，Noto Emoji 并不在我的系统可用
         // 不常见本地字体可以用来指纹识别，所以被 Firefox 禁用了
         fontFamily:
-          '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
+          '"Noto Sans SC", "SEC CJK SC", "PingFang SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
         align: "center",
       },
     });
@@ -373,7 +373,7 @@ export function setup(ctx: Context) {
           fill: isDark ? 0xbabbf1 : 0x7287fd, // Lavender
           fontSize: 13,
           fontFamily:
-            '"Noto Sans SC", "SEC CJK SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
+            '"Noto Sans SC", "SEC CJK SC", "PingFang SC", ui-sans-serif, system-ui, sans-serif, "Noto Emoji"',
           align: "center",
         },
       });
@@ -530,9 +530,7 @@ export function setup(ctx: Context) {
             { x: (force * dx) / distance, y: (force * dy) / distance },
             true,
           );
-          // 不符合牛顿第三定律？
-          // 我不符合的东西还多了呢，不差你
-          // 主要是 bug 修不来了OwO
+          // 牛顿第三定律
           zodiacRigidBody.addForceAtPoint(
             { x: (-force * dx) / distance, y: (-force * dy) / distance },
             { x: ex, y: ey },
