@@ -1,17 +1,12 @@
 import { HrefToLink } from "../utils/components.tsx";
 import type { Route } from "./+types/_post.$.ts";
 
-const m = import.meta.glob(
-  [
-    "/post-test/人/*.md",
-    "/post-test/事/*.md",
-    "/post-test/物/*.md",
-    "/post-test/情思/*.md",
-  ],
-  {
-    import: "default",
-  },
-);
+const m = import.meta.glob([
+  "/post-test/人/*.md",
+  "/post-test/事/*.md",
+  "/post-test/物/*.md",
+  "/post-test/情思/*.md",
+]);
 
 // const ls = new Map<string, string>();
 
@@ -65,7 +60,13 @@ export default async function Post({ loaderData }: Route.ComponentProps) {
   return (
     <main className="prose mx-auto">
       <title>{t}</title>
-      <Markdown
+      <meta name="description" content={Markdown.frontmatter.description} />
+      <meta property="og:title" content={t} />
+      <meta
+        property="og:description"
+        content={Markdown.frontmatter.description}
+      />
+      <Markdown.default
         components={{
           a: HrefToLink,
         }}

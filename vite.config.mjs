@@ -15,6 +15,7 @@ import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-oxc";
 import rsc from "@vitejs/plugin-rsc";
+import { toString } from "mdast-util-to-string";
 import process from "node:process";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -30,6 +31,7 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
+import { SKIP, visit } from "unist-util-visit";
 import { envOnlyMacros } from "vite-env-only";
 import inspect from "vite-plugin-inspect";
 import virtual from "vite-plugin-virtual";
@@ -127,6 +129,29 @@ export default {
           format: "md",
           remarkPlugins: [
             remarkFrontmatter,
+            () => {
+              return (tree) => {
+                /**
+                 * @type {string | undefined} firstParagraph
+                 */
+                let firstParagraph;
+
+                visit(tree, "paragraph", (node) => {
+                  if (!firstParagraph) {
+                    firstParagraph = toString(node);
+                  }
+                  return SKIP;
+                });
+                visit(tree, "yaml", (node) => {
+                  if (node.value) {
+                    if (!node.value.includes("description:")) {
+                      node.value += `\ndescription: ${firstParagraph}`;
+                    }
+                  }
+                  return SKIP;
+                });
+              };
+            },
             remarkMdxFrontmatter,
             smartypants,
             remarkGfm,
