@@ -7,9 +7,11 @@ import { clientOnly$ } from "vite-env-only/macros";
 import { loadTexture, unloadTexture } from "./loadtexture.js";
 // import { reserveMemory } from "./rapier2d/exports.js";
 import { World } from "./rapier2d/pipeline/world.js";
-import init, { version } from "./rapier2d/rapier_wasm2d.js";
+import init, { initThreadPool, version } from "./rapier2d/rapier_wasm2d.js";
 // import { init, version, World } from "@dimforge/rapier2d-simd-compat";
 import { setup } from "./systemes.js";
+
+let _inited_thread_pool = false;
 
 export function Pixi() {
   const [searchParams] = useSearchParams();
@@ -90,7 +92,22 @@ export function Pixi() {
       if (searchParams.get("legacy") === null) {
         // Promise.all([promise, loadTexture(), init()])
         // Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
-        Promise.all([promise, loadTexture(), init()])
+        Promise.all([
+          promise,
+          loadTexture(),
+          _inited_thread_pool || searchParams.get("thread") === "0"
+            ? init()
+            : init().then((wasm) =>
+                initThreadPool(
+                  searchParams.get("thread")
+                    ? parseInt(searchParams.get("thread")!)
+                    : navigator.hardwareConcurrency,
+                ).then(() => {
+                  _inited_thread_pool = true;
+                  return wasm;
+                }),
+              ),
+        ])
           // .then(([app, texture, _RAPIER]) => {
           .then(([app, texture, _wasm]) => {
             console.log(version());
