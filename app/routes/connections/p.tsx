@@ -61,8 +61,7 @@ export function Pixi() {
       //   gameLoop();
       // });
       const controller = new AbortController();
-      const canvasContainer = ref.current;
-      // const c = canvasContainer!.transferControlToOffscreen();
+      // const c = ref.current!.transferControlToOffscreen();
       const app = new Application();
       const { promise, resolve, reject } = Promise.withResolvers<Application>();
       let world: World;
@@ -75,8 +74,11 @@ export function Pixi() {
           autoDensity: true,
           resolution: window.devicePixelRatio,
           preference: "webgpu",
-          canvas: canvasContainer!,
-          resizeTo: refContainer.current!,
+          canvas: ref.current!,
+          // canvas: canvasContainer!,
+          // resizeTo: refContainer.current!,
+          width: refContainer.current!.clientWidth,
+          height: refContainer.current!.clientHeight,
         })
         .then(() => resolve(app));
       function handler() {
@@ -163,7 +165,7 @@ export function Pixi() {
 
   return (
     <section className="h-52" ref={refContainer}>
-      <canvas ref={ref} className="h-full w-full" />
+      <canvas ref={ref} />
     </section>
   );
 }
