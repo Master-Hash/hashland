@@ -1,27 +1,26 @@
 // import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { Assets } from "pixi.js";
 import chars from "virtual:partial-chars";
+import { EMOJI_REGEX } from "../../utils/constant.ts";
 import chronicles from "./chronicles.json" with { type: "json" };
 
-export async function loadTexture() {
+export async function loadTexture(noto: boolean = true) {
   if (Assets.resolver.resolve("zodiac").src !== "/zodiac-white.png") {
     Assets.add({
-      src: "/zodiac-white.png",
+      src: noto ? "/zodiac-noto.png" : "/zodiac-white.png",
       alias: "zodiac",
     });
     chronicles.forEach((chronicle) => {
-      if (chronicle.emoji.match(/[\p{RGI_Emoji}\u26f0]/v)) {
+      if (chronicle.emoji.match(EMOJI_REGEX)) {
         const codePoint = [...chronicle.emoji]
           .map((char) => char.codePointAt(0)?.toString(16))
           .join("-");
-        // console.log(codePoint);
-        const emojiName = chars[codePoint];
         console.log(codePoint);
+        const codePointDecimal = chronicle.emoji.codePointAt(0);
         Assets.add({
-          src:
-            "/fluent-emoji-high-contrast/fluent-emoji-high-contrast_" +
-            emojiName +
-            ".png",
+          src: noto
+            ? `/Noto_Emoji/${codePointDecimal}.png`
+            : `/fluent-emoji-high-contrast/fluent-emoji-high-contrast_${chars[codePoint]}.png`,
           alias: chronicle.emoji,
         });
       } else {

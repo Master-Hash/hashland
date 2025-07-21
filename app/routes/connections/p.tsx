@@ -94,8 +94,10 @@ export function Pixi() {
         // Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
         Promise.all([
           promise,
-          loadTexture(),
-          _inited_thread_pool || searchParams.get("thread") === "0"
+          loadTexture(searchParams.get("noto") !== "0"),
+          _inited_thread_pool ||
+          searchParams.get("thread") === "0" ||
+          import.meta.env.DEV
             ? init()
             : init().then((wasm) =>
                 initThreadPool(
@@ -133,7 +135,11 @@ export function Pixi() {
             console.log("Abort reason:", error);
           });
       } else {
-        Promise.all([promise, loadTexture(), import("./pixi.ts")])
+        Promise.all([
+          promise,
+          loadTexture(searchParams.get("noto") !== "0"),
+          import("./pixi.ts"),
+        ])
           .then(([app, texture, p]) => {
             // if (import.meta.env.DEV) {
             // @ts-expect-error for debug

@@ -36,6 +36,7 @@ import { envOnlyMacros } from "vite-env-only";
 import inspect from "vite-plugin-inspect";
 import virtual from "vite-plugin-virtual";
 import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
+import { EMOJI_REGEX } from "./app/utils/constant.ts";
 // import { reactRouter } from "./framework/plugin.ts";
 // import sonda from "sonda/vite";
 // import babel from "vite-plugin-babel";
@@ -53,7 +54,7 @@ import chronicles from "./app/routes/connections/chronicles.json" with { type: "
 enableDeprecationWarnings(true, true);
 
 const partialChars = chronicles.map((chronicle) => {
-  if (chronicle.emoji.match(/[\p{RGI_Emoji}\u26f0]/v)) {
+  if (chronicle.emoji.match(EMOJI_REGEX)) {
     const codePoint = [...chronicle.emoji]
       .map((char) => char.codePointAt(0)?.toString(16))
       .join("-");
@@ -303,6 +304,9 @@ export default {
     target: "esnext",
     assetsInlineLimit: 0,
     reportCompressedSize: false,
+  },
+  worker: {
+    format: "es",
   },
   experimental: {
     enableNativePlugin: true,
