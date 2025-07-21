@@ -16,6 +16,7 @@
 @import "tailwindcss";
 @import "./catppuccin.css";
 @import "@shikijs/twoslash/style-rich.css";
+@import "./fonte.css";
 @import "./prose.css";
 @import "./shiki.css";
 @import "./slide-enter.css";
