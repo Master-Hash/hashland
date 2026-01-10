@@ -7,6 +7,7 @@ import xss from "xss";
 
 import { HAN_REGEX } from "../../utils/constant.ts";
 import { dateFormat } from "../../utils/dateFormat.js";
+import { unstable_notFound } from "waku/router/server";
 
 export default async function DisplayMailbox({
   msgid,
@@ -21,11 +22,11 @@ export default async function DisplayMailbox({
 
   const { R2, REAL_NAME } = env;
   const r2url =
-    (isPrivate ? "private/" : "Discuss/") + msgid?.slice(1, -1) + ".eml";
+    (isPrivate ? "private/" : "Discuss/") + decodeURI(msgid)?.slice(1, -1) + ".eml";
   // console.log(r2url);
-  let msg = await R2.get(r2url);
+  const msg = await R2.get(r2url);
   if (msg === null) {
-    throw new Response("Not Found", { status: 404, statusText: "Not Found" });
+    unstable_notFound();
   } else {
     const email = await PostalMime.parse(msg.body);
     if (isPrivate) {
