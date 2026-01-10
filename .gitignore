@@ -143,51 +143,18 @@ dist
 .react-router
 
 # Hash custom
-/public/assets/*
-/public/fluent-emoji-high-contrast/
-/public/Noto_Emoji/
-/public/game-icons/
-/public/fluent/
-/public/tabler/
-/public/zodiac-white.png
+/land/public/assets/*
+/land/public/fluent-emoji-high-contrast/
+/land/public/Noto_Emoji/
+/land/public/game-icons/
+/land/public/fluent/
+/land/public/tabler/
+/land/public/zodiac-white.png
+/land/public/
 
-# Storybook bootstrap
-/stories/Page.tsx
-/stories/Page.stories.ts
-/stories/page.css
-/stories/Header.tsx
-/stories/Header.stories.ts
-/stories/header.css
-/stories/Configure.mdx
-/stories/Button.tsx
-/stories/Button.stories.ts
-/stories/button.css
-/stories/assets/youtube.svg
-/stories/assets/tutorials.svg
-/stories/assets/theming.png
-/stories/assets/testing.png
-/stories/assets/styling.png
-/stories/assets/share.png
-/stories/assets/github.svg
-/stories/assets/figma-plugin.png
-/stories/assets/docs.png
-/stories/assets/discord.svg
-/stories/assets/context.png
-/stories/assets/avif-test-image.avif
-/stories/assets/assets.png
-/stories/assets/addon-library.png
-/stories/assets/accessibility.svg
-/stories/assets/accessibility.png
-localtest.sql
-/app/routes/connections/rapier2d/
-/app/routes/connections-rs/*.js
-/app/routes/connections-rs/*.wasm
-/app/routes/connections-rs/*.d.ts
-/app/routes/bevy-logical-resolution/*.js
-/app/routes/bevy-logical-resolution/*.wasm
-/app/routes/bevy-logical-resolution/*.d.ts
-app/routes/count8/data.json
-/app/resources/*
+resources
+
+rapier2d/
 
 # Workers
 worker-configuration.d.ts

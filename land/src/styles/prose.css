@@ -1,0 +1,184 @@
+:root {
+  @apply scroll-smooth;
+  color-scheme: light dark;
+  text-autospace: normal;
+  /* text-autospace: punctuation replace; */
+
+  /* @apply scheme-light dark:scheme-dark; */
+
+  /* It's prevented by Firefox for preventing fingerprinting */
+  /* font-family: "霞鹜文楷 GB", ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji"; */
+}
+
+body {
+  /* https://unsplash.com/photos/black-and-white-abstract-painting-cqhXfrRHCPo */
+  /* 能用采样，我为什么要生造滤镜！ */
+  /* background-image: url(./resources/faux-papier.avif); */
+  /* background-image: url(./resources/ep_naturalwhite.png); */
+  /* Vite false warn https://github.com/vitejs/vite/issues/19304 */
+  background-image: image-set(url(../resources/palace-museum.jxl) type("image/jxl"),
+      url(../resources/palace-museum.avif) type("image/avif"),
+      url(../resources/palace-museum.jpg) type("image/jpeg"));
+  /* @apply bg-center; */
+  @apply bg-blend-luminosity dark:bg-blend-multiply;
+  /* @apply bg-no-repeat; */
+  /* @apply bg-contain; */
+  /* @apply bg-auto; */
+  /* @apply bg-cover; */
+  @apply bg-[50%_auto];
+}
+
+/* https://stackoverflow.com/questions/16348489/is-there-a-way-to-apply-styles-to-safari-only */
+/* https://browserstrangeness.github.io/css_hacks.html#safari */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-touch-callout */
+
+@supports (-webkit-touch-callout: none) {
+  body {
+    @apply bg-none;
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  :root {
+    @apply scroll-auto;
+  }
+}
+
+.main,
+nav {
+
+  & *,
+  & ::before,
+  & ::after {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
+
+::selection {
+  @apply bg-cat-surface2;
+  --tw-bg-opacity: 0.6;
+
+  /* @apply bg-cat-surface2 opacity-60; */
+}
+
+/* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
+@media print {
+  a::after {
+    content: "(" attr(href) ")";
+  }
+}
+
+img[src*="cdn-telegram.org/"],
+video[src*="cdn-telegram.org/"],
+a[href*="?q=%23"] {
+  @apply hidden;
+}
+
+.prose {
+
+  :where(blockquote p:first-of-type):not( :where([class~="not-prose"] *))::before,
+  :where(blockquote p:last-of-type):not(:where([class~="not-prose"] *))::after {
+    content: none;
+  }
+
+  :where(code):not( :where([class~="not-prose"], [class~="not-prose"] *))::before {
+    content: none;
+  }
+
+  :where(code):not( :where([class~="not-prose"], [class~="not-prose"] *))::after {
+    content: none;
+  }
+
+  /* code {
+      @apply text-base;
+    } */
+
+  h1 {
+    @apply text-balance;
+  }
+
+  blockquote,
+  cite {
+    @apply not-italic;
+  }
+
+  /* Apply on prose basis */
+  /* a {
+      @apply break-all;
+    } */
+
+  /* li {
+      @apply my-[0.1em];
+      text-indent: 0.375em hanging;
+    } */
+
+  & {
+    @apply w-[calc(100%-3rem)];
+    @apply max-w-[38ic];
+    @apply dark:prose-invert;
+    @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
+    /* @apply font-serif; */
+    /* @apply prose-p:leading-[1.625] */
+    /* @apply prose-p:leading-[1.75] */
+    /* @apply prose-p:leading-[2] */
+  }
+
+  table {
+    /* revert & */
+    @apply w-full;
+  }
+
+  pre {
+    @apply bg-inherit;
+  }
+
+  --tw-prose-pre-code: unset;
+  --tw-prose-pre-bg: unset;
+
+  /* figure {
+      @apply mx-auto;
+    } */
+}
+
+/* https://css-tricks.com/examples/hrs/ */
+hr {
+  @apply overflow-visible text-center;
+  /* @apply invisible; */
+  @apply contents;
+  /* content: "* * *"; */
+}
+
+hr::after {
+  @apply visible block text-2xl;
+  /* @apply relative -top-3 print:top-0; */
+  @apply my-8;
+  @apply font-[Times_New_Roman,Playfair,serif];
+  content: "* * *";
+}
+
+/* Why Chrome doesn't load my web font? What the fuck? */
+/* https://chatgpt.com/share/688ca989-a49c-8006-8143-01ec9b2209ef */
+/* Chrome on Android use Droid Serif and pretend it has Times New Roman */
+/* and Linux use Liberation Serif */
+@supports (not (-webkit-hyphens: none)) and (not (-moz-appearance: none)) and (list-style-type: "*") {
+  hr::after {
+    @apply font-[Playfair,serif];
+  }
+}
+
+summary {
+  @apply font-semibold;
+  /* @apply text-center; */
+}
+
+/* 我认为更恰当的做法是，内容用 <blockquote>，来表达边界 */
+/* details > *:nth-child(1)::after, */
+/* details:not(:has(pre))::before,
+  details[open]:not(:has(pre))::after {
+    @apply overflow-visible text-center;
+    @apply visible block text-2xl;
+    @apply my-8;
+    content: "* * *";
+  } */

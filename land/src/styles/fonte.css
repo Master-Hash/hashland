@@ -1,0 +1,187 @@
+/*
+我的字体政策：
+1. 挑选
+* 使用和 Phosphor 配合的字体。换句话说，黑体而不是宋体/衬线体。
+* 可以使用网络字体，但禁用后本地字体也需要优化。
+2. 规范使用
+* 根据 lang 使用正确的标点符号，例如引号。
+* 汉语部分的拉丁字体，应与外语部分的拉丁字体相同。
+*/
+/* https://zh.wikipedia.org/wiki/Unicode%E5%8D%80%E6%AE%B5 */
+
+/* @font-face {
+  font-family: Playfair;
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2-variations");
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2") tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+} */
+
+/* @font-face {
+  font-family: Playfair;
+  src:
+    url(./resources/Playfair-Italic-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2-variations"),
+    url(./resources/Playfair-Italic-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2") tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+  font-style: italic;
+} */
+
+/* @font-face {
+  font-family: Nunito;
+  src:
+    url(./resources/Nunito-VariableFont_wght.woff2) format("woff2-variations"),
+    url(./resources/Nunito-VariableFont_wght.woff2) format("woff2")
+      tech("variations");
+  font-weight: 200 1000;
+}
+
+@font-face {
+  font-family: Nunito;
+  src:
+    url(./resources/Nunito-Italic-VariableFont_wght.woff2)
+      format("woff2-variations"),
+    url(./resources/Nunito-Italic-VariableFont_wght.woff2) format("woff2")
+      tech("variations");
+  font-weight: 200 1000;
+  font-style: italic;
+} */
+
+@font-face {
+  font-family: Playfair;
+  /* src:
+    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2-variations"),
+    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2") tech("variations"); */
+  src: url(../resources/Playfair-asterisk.woff2) format("woff2-variations");
+  src: url(../resources/Playfair-asterisk.woff2) format("woff2")
+    tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+  unicode-range: U+20, U+2A;
+  size-adjust: 116%;
+}
+
+@font-face {
+  font-family: "Noto Emoji";
+  src: url(../resources/NotoEmoji-VariableFont_wght-webring.woff2)
+    format("woff2-variations");
+  src: url(../resources/NotoEmoji-VariableFont_wght-webring.woff2)
+    format("woff2") tech("variations");
+  unicode-range: U+1f578, U+1f48d;
+}
+
+@font-face {
+  font-family: Arial;
+  src: local("Arial");
+  size-adjust: 108%;
+}
+
+/* 字间距小了点 */
+/* 但是这玩意不支持可变宽度，等一等 */
+@font-face {
+  font-family: "Source Sans 3";
+  src:
+    url(../resources/SourceSans3VF-Upright.ttf.woff2) format("woff2-variations"),
+    url(../resources/SourceSans3VF-Upright.ttf.woff2) format("woff2")
+      tech("variations");
+  font-weight: 200 900;
+  size-adjust: 108%;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src:
+    url(../resources/SourceSans3VF-Italic.ttf.woff2) format("woff2-variations"),
+    url(../resources/SourceSans3VF-Italic.ttf.woff2) format("woff2")
+      tech("variations");
+  font-weight: 200 900;
+  size-adjust: 108%;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3 ASCII LGC";
+  src:
+    url(../resources/SourceSans3VF-Upright.ttf.woff2) format("woff2-variations"),
+    url(../resources/SourceSans3VF-Upright.ttf.woff2) format("woff2")
+      tech("variations");
+  font-weight: 200 900;
+  size-adjust: 108%;
+  unicode-range:
+    /* 0-9 */
+    /* U+0030-0039, */
+    /* A-Z */
+    /* U+0041-005A, */
+    /* a-z */
+    /* U+0061-007A, */
+    U+0021-007E, U+0080-052F, U+1E00-1FFF;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Source Sans 3 ASCII LGC";
+  src: url(../resources/SourceSans3VF-Italic.ttf.woff2)
+    format("woff2-variations") url(../resources/SourceSans3VF-Italic.ttf.woff2)
+    format("woff2") tech("variations");
+  font-weight: 200 900;
+  size-adjust: 108%;
+  font-style: italic;
+  unicode-range:
+    /* 0-9 */
+    /* U+0030-0039, */
+    /* A-Z */
+    /* U+0041-005A, */
+    /* a-z */
+    /* U+0061-007A, */
+    U+0021-007E, U+0080-052F, U+1E00-1FFF;
+  font-display: swap;
+}
+
+/* @font-face {
+  font-family: Emoji fallback;
+  src:
+    local("Apple Color Emoji"), local("Segoe UI Emoji"),
+    local("Noto Color Emoji");
+} */
+
+@theme {
+  --font-zh:
+    "Source Sans 3 ASCII LGC", "Noto Sans SC", "SEC CJK SC", "PingFang SC",
+    ui-sans-serif, system-ui, sans-serif, emoji;
+
+  --font-ja:
+    "Source Sans 3 ASCII LGC", "Yu Gothic", "SEC CJK JP", ui-sans-serif,
+    system-ui, sans-serif, emoji;
+
+  --font-eu:
+    "Source Sans 3", "Arial", "Roboto", "SF Pro", ui-sans-serif, system-ui,
+    sans-serif, emoji;
+
+  --font-mono:
+    Consolas, "SF Mono", "Droid Sans Mono", "Liberation Mono", ui-monospace,
+    ui-sans-serif, system-ui, sans-serif, emoji;
+}
+
+*[lang^="zh"]:not(code):not(pre) {
+  @apply font-zh;
+}
+
+*[lang^="ja"]:not(code):not(pre) {
+  @apply font-ja;
+}
+
+*[lang^="en"]:not(code):not(pre),
+*[lang^="de"]:not(code):not(pre),
+*[lang^="fr"]:not(code):not(pre),
+*[lang^="it"]:not(code):not(pre) {
+  @apply font-eu;
+  /* @apply text-[1.08em]; */
+}

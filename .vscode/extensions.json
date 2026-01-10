@@ -1,9 +1,8 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "csstools.postcss",
-    "arcanis.vscode-zipfs",
-    "esbenp.prettier-vscode"
+    "oxc.oxc-vscode",
+    "editorconfig.editorconfig",
+    "blazejkustra.react-compiler-marker"
   ]
 }

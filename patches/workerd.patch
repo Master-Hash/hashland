@@ -1,0 +1,42 @@
+diff --git a/bin/workerd b/bin/workerd
+index d1642a971d6d9eec2af535cb7c77f2f74ec7c723..a1e333b22cd6929d1c6ddc7ca9681c8338fde61e 100644
+--- a/bin/workerd
++++ b/bin/workerd
+@@ -31,7 +31,8 @@ var knownPackages = {
+   "darwin x64 LE": "@cloudflare/workerd-darwin-64",
+   "linux arm64 LE": "@cloudflare/workerd-linux-arm64",
+   "linux x64 LE": "@cloudflare/workerd-linux-64",
+-  "win32 x64 LE": "@cloudflare/workerd-windows-64"
++  "win32 x64 LE": "@cloudflare/workerd-windows-64",
++  "win32 arm64 LE": "@cloudflare/workerd-windows-64"
+ };
+ var maybeExeExtension = process.platform === "win32" ? ".exe" : "";
+ function pkgAndSubpathForCurrentPlatform() {
+diff --git a/install.js b/install.js
+index b170d9cdacfb0e0a73eaae40ff0ce4818ddf7ce0..ba6d7f6c02bd86671f79dd40f5b71daa2c77dd66 100644
+--- a/install.js
++++ b/install.js
+@@ -29,7 +29,8 @@ var knownPackages = {
+   "darwin x64 LE": "@cloudflare/workerd-darwin-64",
+   "linux arm64 LE": "@cloudflare/workerd-linux-arm64",
+   "linux x64 LE": "@cloudflare/workerd-linux-64",
+-  "win32 x64 LE": "@cloudflare/workerd-windows-64"
++  "win32 x64 LE": "@cloudflare/workerd-windows-64",
++  "win32 arm64 LE": "@cloudflare/workerd-windows-64"
+ };
+ var maybeExeExtension = process.platform === "win32" ? ".exe" : "";
+ function pkgAndSubpathForCurrentPlatform() {
+diff --git a/lib/main.js b/lib/main.js
+index 3c9eef8e515877ce0ba1d0e91c7c3e023ea1c992..ca678876b9d5849d3199cd66562d0a823961ba42 100644
+--- a/lib/main.js
++++ b/lib/main.js
+@@ -45,7 +45,8 @@ var knownPackages = {
+   "darwin x64 LE": "@cloudflare/workerd-darwin-64",
+   "linux arm64 LE": "@cloudflare/workerd-linux-arm64",
+   "linux x64 LE": "@cloudflare/workerd-linux-64",
+-  "win32 x64 LE": "@cloudflare/workerd-windows-64"
++  "win32 x64 LE": "@cloudflare/workerd-windows-64",
++  "win32 arm64 LE": "@cloudflare/workerd-windows-64"
+ };
+ var maybeExeExtension = process.platform === "win32" ? ".exe" : "";
+ function pkgAndSubpathForCurrentPlatform() {

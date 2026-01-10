@@ -1,0 +1,37 @@
+#:schema node_modules/wrangler/config-schema.json
+
+name = "land"
+main = "./dist/server/serve-cloudflare.js"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_als"]
+workers_dev = false
+send_metrics = false
+assets = { directory = "./dist/public", binding = "ASSETS" }
+no_bundle = true
+rules = [{ type = "ESModule", globs = ["**/*.js", "**/*.mjs"] }]
+routes = [{ pattern = "land.hash.moe", custom_domain = true }]
+
+[observability]
+enabled = true
+logs.enabled = true
+logs.invocation_logs = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "local"
+database_id = "24f36833-9890-493d-ab34-7549fc414340"
+
+# [[d1_databases]]
+# binding = "TG"
+# database_id = "7eaf0096-2c09-4fe4-86e6-bf22305eda18"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "assets"
+
+# [[kv_namespaces]]
+# binding = "DAILY_VIEWER"
+# id = "20b4ba20e13442acba779202a1df67fb"
+
+# [triggers]
+# crons = ["0 20 * * *"]  # 原神惯例，凌晨4点

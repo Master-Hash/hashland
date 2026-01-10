@@ -1,0 +1,14 @@
+/* @import "heti/umd/heti.min.css"; */
+
+@import "tailwindcss";
+/* @import "@shikijs/twoslash/style-rich.css"; */
+@import "./styles/catppuccin.css";
+@import "./styles/fonte.css";
+@import "./styles/prose.css";
+@import "./styles/shiki.css";
+@import "./styles/slide-enter.css";
+@import "./styles/colore.css";
+@import "./styles/flower.css";
+
+@plugin "@tailwindcss/typography";
+@plugin "@iconify/tailwind4";

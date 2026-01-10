@@ -1,21 +1,14 @@
 {
-  "[javascript][typescript][typescriptreact]": {
+  "[javascript][typescript][javascriptreact][typescriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[json]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  // "editor.codeActionsOnSave": {
-  //   "source.organizeImports": "explicit"
-  // },
-  // "eslint.useFlatConfig": true,
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
   },
   "typescript.experimental.useTsgo": true,
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  // "eslint.nodePath": ".yarn/sdks",
-  // "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "chat.disableAIFeatures": false
 }

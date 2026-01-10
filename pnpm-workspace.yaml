@@ -1,0 +1,6 @@
+patchedDependencies:
+  waku: patches/waku.patch
+  workerd: patches/workerd.patch
+  cytoscape: patches/cytoscape.patch
+packages:
+  - land

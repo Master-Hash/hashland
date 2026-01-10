@@ -1,0 +1,30 @@
+{
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "waku.config.ts",
+    "worker-configuration.d.ts",
+    "env.d.ts"
+  ],
+  "exclude": ["dist/**/*.js", "node_modules"],
+  "compilerOptions": {
+    "strict": true,
+    "target": "esnext",
+    "noEmit": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": true,
+    "types": ["./worker-configuration.d.ts"],
+    "jsx": "react-jsx",
+    "useDefineForClassFields": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true
+  }
+}

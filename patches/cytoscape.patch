@@ -1,0 +1,11 @@
+diff --git a/package.json b/package.json
+index 4424a709c53edd7b0576b247bb47fa4c8f4b6f0b..1c005c36e0bd96884443b7e3c9ce2f6d388b8597 100644
+--- a/package.json
++++ b/package.json
+@@ -1,5 +1,6 @@
+ {
+   "name": "cytoscape",
++  "sideEffects": false,
+   "version": "3.33.1",
+   "license": "MIT",
+   "description": "Graph theory (a.k.a. network) library for analysis and visualisation",
