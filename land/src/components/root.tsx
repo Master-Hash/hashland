@@ -412,13 +412,6 @@ export const Root: FC<{
         /> */}
         {/* <!-- End Cloudflare Web Analytics --> */}
         <script
-          data-goatcounter="/count"
-          data-goatcounter-settings='{"no_onload": true}'
-          src={c}
-          integrity="sha384-iHVIwTpVBF7d5D17p+85C6pV1+nQhdZ/wedywT12Rw/1sXmrPz2mkbGQBH4t1DNm"
-          suppressHydrationWarning
-        />
-        <script
           // src={ry}
           // src="https://app.rybbit.io/api/script.js"
           src="/api/script.js"
