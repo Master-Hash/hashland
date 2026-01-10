@@ -1,15 +1,23 @@
+import type { LoaderFunctionArgs } from "react-router";
+
 import { HrefToLink } from "../../utils/components.js";
 import P from "./connections.md";
-import { NoSafari } from "./nosafari.tsx";
 import { Pixi } from "./p.tsx";
 
-export default function PixiServer() {
+// export async function loader({ request }: LoaderFunctionArgs) {
+//   const ua = request.headers.get("user-agent") || "";
+//   return { isSafari: /^((?!chrome|android).)*safari/i.test(ua) };
+// }
+
+export default function PixiServer({ loaderData }) {
+  // console.log(loaderData);
   return (
     <main className="prose prose-a:whitespace-nowrap relative mx-auto select-none">
       <title>故人 « 故人故事故纸堆</title>
+      <meta property="og:title" content="故人 « 故人故事故纸堆" />
       {/* <MyComponent /> */}
       <Pixi />
-      <NoSafari />
+      {/* <NoSafari isSafari={loaderData.isSafari} /> */}
       <P
         components={{
           a: HrefToLink,

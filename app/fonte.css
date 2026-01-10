@@ -9,18 +9,17 @@
 */
 /* https://zh.wikipedia.org/wiki/Unicode%E5%8D%80%E6%AE%B5 */
 
-@font-face {
+/* @font-face {
   font-family: Playfair;
-  src:
-    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
-      format("woff2-variations"),
-    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
-      format("woff2") tech("variations");
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2-variations");
+  src: url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+    format("woff2") tech("variations");
   font-weight: 300 900;
   font-stretch: 87.5% 112.5%;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: Playfair;
   src:
     url(./resources/Playfair-Italic-VariableFont_opsz\,wdth\,wght.woff2)
@@ -30,7 +29,7 @@
   font-weight: 300 900;
   font-stretch: 87.5% 112.5%;
   font-style: italic;
-}
+} */
 
 /* @font-face {
   font-family: Nunito;
@@ -53,6 +52,31 @@
 } */
 
 @font-face {
+  font-family: Playfair;
+  /* src:
+    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2-variations"),
+    url(./resources/Playfair-VariableFont_opsz\,wdth\,wght.woff2)
+      format("woff2") tech("variations"); */
+  src: url(./resources/Playfair-asterisk.woff2) format("woff2-variations");
+  src: url(./resources/Playfair-asterisk.woff2) format("woff2")
+    tech("variations");
+  font-weight: 300 900;
+  font-stretch: 87.5% 112.5%;
+  unicode-range: U+20, U+2A;
+  size-adjust: 116%;
+}
+
+@font-face {
+  font-family: "Noto Emoji";
+  src: url(./resources/NotoEmoji-VariableFont_wght-webring.woff2)
+    format("woff2-variations");
+  src: url(./resources/NotoEmoji-VariableFont_wght-webring.woff2)
+    format("woff2") tech("variations");
+  unicode-range: U+1f578, U+1f48d;
+}
+
+@font-face {
   font-family: Arial;
   src: local("Arial");
   size-adjust: 108%;
@@ -63,8 +87,7 @@
 @font-face {
   font-family: "Source Sans 3";
   src:
-    url(./resources/SourceSans3VF-Upright.ttf.woff2)
-      format("woff2-variations"),
+    url(./resources/SourceSans3VF-Upright.ttf.woff2) format("woff2-variations"),
     url(./resources/SourceSans3VF-Upright.ttf.woff2) format("woff2")
       tech("variations");
   font-weight: 200 900;
@@ -75,8 +98,7 @@
 @font-face {
   font-family: "Source Sans 3";
   src:
-    url(./resources/SourceSans3VF-Italic.ttf.woff2)
-      format("woff2-variations"),
+    url(./resources/SourceSans3VF-Italic.ttf.woff2) format("woff2-variations"),
     url(./resources/SourceSans3VF-Italic.ttf.woff2) format("woff2")
       tech("variations");
   font-weight: 200 900;
@@ -88,8 +110,7 @@
 @font-face {
   font-family: "Source Sans 3 ASCII LGC";
   src:
-    url(./resources/SourceSans3VF-Upright.ttf.woff2)
-      format("woff2-variations"),
+    url(./resources/SourceSans3VF-Upright.ttf.woff2) format("woff2-variations"),
     url(./resources/SourceSans3VF-Upright.ttf.woff2) format("woff2")
       tech("variations");
   font-weight: 200 900;
@@ -102,15 +123,14 @@
     /* a-z */
     /* U+0061-007A, */
     U+0021-007E, U+0080-052F, U+1E00-1FFF;
-    font-display: swap;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Source Sans 3 ASCII LGC";
   src: url(./resources/SourceSans3VF-Italic.ttf.woff2)
-    format("woff2-variations")
-    url(./resources/SourceSans3VF-Italic.ttf.woff2) format("woff2")
-    tech("variations");
+    format("woff2-variations") url(./resources/SourceSans3VF-Italic.ttf.woff2)
+    format("woff2") tech("variations");
   font-weight: 200 900;
   size-adjust: 108%;
   font-style: italic;
@@ -122,7 +142,7 @@
     /* a-z */
     /* U+0061-007A, */
     U+0021-007E, U+0080-052F, U+1E00-1FFF;
-    font-display: swap;
+  font-display: swap;
 }
 
 /* @font-face {
@@ -134,12 +154,12 @@
 
 @theme {
   --font-zh:
-    "Source Sans 3 ASCII LGC", "Noto Sans SC",
-    "SEC CJK SC", "PingFang SC", ui-sans-serif, system-ui, sans-serif, emoji;
+    "Source Sans 3 ASCII LGC", "Noto Sans SC", "SEC CJK SC", "PingFang SC",
+    ui-sans-serif, system-ui, sans-serif, emoji;
 
   --font-ja:
-    "Source Sans 3 ASCII LGC", "Yu Gothic",
-    "SEC CJK JP", ui-sans-serif, system-ui, sans-serif, emoji;
+    "Source Sans 3 ASCII LGC", "Yu Gothic", "SEC CJK JP", ui-sans-serif,
+    system-ui, sans-serif, emoji;
 
   --font-eu:
     "Source Sans 3", "Arial", "Roboto", "SF Pro", ui-sans-serif, system-ui,

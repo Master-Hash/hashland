@@ -1,5 +1,6 @@
 import type { Application, Container, Texture } from "pixi.js";
 import type { NavigateFunction } from "react-router";
+
 import type {
   Collider,
   ImpulseJoint,

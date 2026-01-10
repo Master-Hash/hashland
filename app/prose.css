@@ -1,6 +1,8 @@
 :root {
   @apply scroll-smooth;
   color-scheme: light dark;
+  text-autospace: normal;
+  /* text-autospace: punctuation replace; */
 
   /* @apply scheme-light dark:scheme-dark; */
 
@@ -120,7 +122,7 @@ a[href*="?q=%23"] {
 
   & {
     @apply w-[calc(100%-3rem)];
-    @apply max-w-[72.5ch];
+    @apply max-w-[38ic];
     @apply dark:prose-invert;
     @apply prose-p:text-gray-800 dark:prose-p:text-gray-200;
     /* @apply font-serif; */
@@ -160,6 +162,17 @@ hr::after {
   @apply my-8;
   @apply font-[Times_New_Roman,Playfair,serif];
   content: "* * *";
+}
+
+/* Why Chrome doesn't load my web font? What the fuck? */
+/* https://chatgpt.com/share/688ca989-a49c-8006-8143-01ec9b2209ef */
+/* Chrome on Android use Droid Serif and pretend it has Times New Roman */
+/* and Linux use Liberation Serif */
+@supports (not (-webkit-hyphens: none)) and (not (-moz-appearance: none)) and
+  (list-style-type: "*") {
+  hr::after {
+    @apply font-[Playfair,serif];
+  }
 }
 
 summary {

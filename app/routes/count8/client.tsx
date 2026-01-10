@@ -1,22 +1,28 @@
 "use client";
 
-import cytoscape from "cytoscape";
+import cytoscape from "cytoscape?client";
+// import { isMobile } from "pixi.js";
 import { useEffect, useRef } from "react";
-import { clientOnly$ } from "vite-env-only/macros";
+// import { useSearchParams } from "react-router";
+// import { clientOnly$ } from "vite-env-only/macros";
 
 export function Count8Client({
   data,
 }: {
   data: cytoscape.ElementDefinition[];
 }) {
+  "use memo";
+  // const [searchParams] = useSearchParams();
   const ref = useRef<HTMLDivElement>(null);
-  clientOnly$(
+  if (!import.meta.env.SSR) {
     useEffect(() => {
       const cy = cytoscape({
         container: ref.current,
         elements: data,
         pixelRatio: "auto",
-        webgl: true,
+        // 这玩意整坏了移动端交互
+        // webgl: !isMobile.any,
+        webgl: false,
         layout: {
           name: "breadthfirst",
           directed: true,
@@ -132,6 +138,7 @@ export function Count8Client({
       root.removeClass("faded");
 
       cy.on("tap", "node", (evt) => {
+        console.log(evt);
         const node = evt.target;
         const outgoers = node.outgoers().union(node);
 
@@ -147,7 +154,7 @@ export function Count8Client({
       return () => {
         cy.destroy();
       };
-    }, []),
-  );
+    }, [data]);
+  }
   return <section className="h-96" ref={ref}></section>;
 }

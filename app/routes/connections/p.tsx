@@ -1,31 +1,39 @@
 "use client";
 
-import { Application } from "pixi.js";
+import { Application } from "pixi.js?client";
 import { useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router";
-import { clientOnly$ } from "vite-env-only/macros";
-import { loadTexture, unloadTexture } from "./loadtexture.js";
-// import { reserveMemory } from "./rapier2d/exports.js";
-import { World } from "./rapier2d/pipeline/world.js";
-import init, { initThreadPool, version } from "./rapier2d/rapier_wasm2d.js";
-// import { init, version, World } from "@dimforge/rapier2d-simd-compat";
-import { setup } from "./systemes.js";
+import { useNavigate, useSearchParams } from "react-router?client";
+
+import { loadTexture, unloadTexture } from "./loadtexture.js?client";
+import { World } from "./rapier2d/pipeline/world.js?client";
+import init, {
+  initThreadPool,
+  version,
+} from "./rapier2d/rapier_wasm2d.js?client";
+import { setup } from "./systemes.js?client";
+
+function isSafari(): boolean {
+  const ua = navigator.userAgent;
+  return /^((?!chrome|android).)*safari/i.test(ua);
+}
 
 let _inited_thread_pool = false;
 
 export function Pixi() {
-  const [searchParams] = useSearchParams();
+  "use memo";
   const ref = useRef<HTMLCanvasElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
-  const isDark = useRef(false);
-  const navigate = useNavigate();
-  useEffect(() => {
-    isDark.current =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }, []);
 
-  clientOnly$(
+  if (!import.meta.env.SSR) {
+    const [searchParams] = useSearchParams();
+    const isDark = useRef(false);
+    const navigate = useNavigate();
+    useEffect(() => {
+      isDark.current =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }, []);
+
     useEffect(() => {
       // void import("@dimforge/rapier2d").then((RAPIER) => {
       //   // Use the RAPIER module here.
@@ -89,7 +97,7 @@ export function Pixi() {
       }
       controller.signal.addEventListener("abort", handler);
       // if (import.meta.env.DEV) {
-      if (searchParams.get("legacy") === null) {
+      if (true || searchParams.get("legacy") === null) {
         // Promise.all([promise, loadTexture(), init()])
         // Promise.all([promise, loadTexture(), import("@dimforge/rapier2d")])
         Promise.all([
@@ -97,13 +105,15 @@ export function Pixi() {
           loadTexture(searchParams.get("noto") !== "0"),
           _inited_thread_pool ||
           searchParams.get("thread") === "0" ||
-          import.meta.env.DEV
+          import.meta.env.DEV ||
+          // https://github.com/RReverser/wasm-bindgen-rayon/issues/32
+          (isSafari && searchParams.get("thread") === null)
             ? init()
             : init().then((wasm) =>
                 initThreadPool(
                   searchParams.get("thread")
                     ? parseInt(searchParams.get("thread")!)
-                    : navigator.hardwareConcurrency,
+                    : Math.min(navigator.hardwareConcurrency, 2),
                 ).then(() => {
                   _inited_thread_pool = true;
                   return wasm;
@@ -134,23 +144,24 @@ export function Pixi() {
           .catch((error) => {
             console.log("Abort reason:", error);
           });
-      } else {
-        Promise.all([
-          promise,
-          loadTexture(searchParams.get("noto") !== "0"),
-          import("./pixi.ts"),
-        ])
-          .then(([app, texture, p]) => {
-            // if (import.meta.env.DEV) {
-            // @ts-expect-error for debug
-            globalThis.__PIXI_APP__ = app;
-            // }
-            return p.pixiApp(app, isDark.current, navigate, texture);
-          })
-          .catch((error) => {
-            console.log("Abort reason:", error);
-          });
       }
+      //  else {
+      //   Promise.all([
+      //     promise,
+      //     loadTexture(searchParams.get("noto") !== "0"),
+      //     import("./pixi.ts"),
+      //   ])
+      //     .then(([app, texture, p]) => {
+      //       // if (import.meta.env.DEV) {
+      //       // @ts-expect-error for debug
+      //       globalThis.__PIXI_APP__ = app;
+      //       // }
+      //       return p.pixiApp(app, isDark.current, navigate, texture);
+      //     })
+      //     .catch((error) => {
+      //       console.log("Abort reason:", error);
+      //     });
+      // }
       // void pixiApp(app, ref, isDark, navigate);
       return () => {
         controller.abort("The component is unmounted");
@@ -183,8 +194,8 @@ export function Pixi() {
           delete globalThis.__PIXI_APP__;
         }
       };
-    }, [navigate, searchParams]),
-  );
+    }, [navigate, searchParams]);
+  }
 
   return (
     <section className="h-52" ref={refContainer}>

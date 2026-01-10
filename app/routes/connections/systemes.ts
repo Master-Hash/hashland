@@ -1,13 +1,17 @@
-import Color from "colorjs.io";
 import type { FederatedPointerEvent } from "pixi.js";
+
 import { Container, Graphics, Sprite, Text } from "pixi.js";
+import DARK from "virtual:dark";
+import LIGHT from "virtual:light";
+
+import type { Context, DragTag } from "./schemata.ts";
+
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
 import { colors } from "./colors.ts";
-import { JointData } from "./rapier2d/dynamics/impulse_joint.js";
-import { RigidBodyDesc } from "./rapier2d/dynamics/rigid_body.js";
-import { ColliderDesc } from "./rapier2d/geometry/collider.js";
-import type { Context, DragTag } from "./schemata.ts";
+import { JointData } from "./rapier2d/dynamics/impulse_joint.js?client";
+import { RigidBodyDesc } from "./rapier2d/dynamics/rigid_body.js?client";
+import { ColliderDesc } from "./rapier2d/geometry/collider.js?client";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
@@ -210,9 +214,9 @@ export function setup(ctx: Context) {
         SECOND_IN_TROPIC_YEAR) *
       2 *
       Math.PI;
-    const color = isDark
-      ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
-      : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
+    // const color = isDark
+    //   ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
+    //   : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
 
     const emojiColliderDesc = ColliderDesc.ball(14)
       .setDensity(0)
@@ -238,10 +242,7 @@ export function setup(ctx: Context) {
     eventContainer.rotation = -radian + Math.PI / 2 + Math.random() - 0.5;
     emojiSprite.anchor.set(0.5);
     emojiSprite.scale.set(0.1);
-    emojiSprite.tint = parseInt(
-      color.to("srgb").toString({ format: "hex" }).slice(1),
-      16,
-    );
+    emojiSprite.tint = isDark ? DARK[c.date] : LIGHT[c.date];
 
     eventContainer.eventMode = "static";
     eventContainer.cursor = "pointer";
@@ -290,7 +291,7 @@ export function setup(ctx: Context) {
       } else {
         const t = "alt" in c ? c.alt : `/事/${c.date}_${c.title}.md`;
         console.log("fuck", t);
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.metaKey || e.button === 1) {
           window.open(t, "_blank", "noopener,noreferrer")?.focus();
         } else {
           void navigate(t!);
@@ -355,7 +356,7 @@ export function setup(ctx: Context) {
     nameText.eventMode = "static";
     nameText.cursor = "pointer";
     nameText.on("pointerdown", (e) => {
-      if (e.ctrlKey) {
+      if (e.ctrlKey || e.metaKey || e.button === 1) {
         window
           .open(`/人/${b.name}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
@@ -496,7 +497,7 @@ export function setup(ctx: Context) {
       floatBubbles.forEach((b) => {
         const x = Math.random() * (app.screen.width - PADDING * 2) + PADDING,
           y = Math.random() * (app.screen.height - PADDING * 2) + PADDING;
-        const { x: bx, y: by } = b.rigid.translation();
+        const { x: bx, y: by } = b.conteneur.position;
         // 如果在屏幕外，就有小概率传送回来
         if (
           (bx > app.screen.width ||
@@ -520,22 +521,18 @@ export function setup(ctx: Context) {
       floatBubbles.forEach((b) => {
         b.rigid.resetForces(true);
         b.attractedBy.forEach((e) => {
-          const { x: ex, y: ey } = e.conteneur.getGlobalPosition();
-          const dx = ex - b.rigid.translation().x;
-          const dy = ey - b.rigid.translation().y;
+          const o = e.conteneur.getGlobalPosition();
+          const t = b.conteneur.position;
+          const dx = o.x - t.x;
+          const dy = o.y - t.y;
           const distanceSquared = dx * dx + dy * dy;
           const distance = Math.sqrt(distanceSquared);
-          const force = (GRAVITY * b.rigid.mass() * 1) / distanceSquared;
-          b.rigid.addForce(
-            { x: (force * dx) / distance, y: (force * dy) / distance },
-            true,
-          );
+          const force = (GRAVITY * b.rigid.mass() * 1) / distanceSquared,
+            fx = (force * dx) / distance,
+            fy = (force * dy) / distance;
+          b.rigid.addForce({ x: fx, y: fy }, true);
           // 牛顿第三定律
-          zodiacRigidBody.addForceAtPoint(
-            { x: (-force * dx) / distance, y: (-force * dy) / distance },
-            { x: ex, y: ey },
-            true,
-          );
+          zodiacRigidBody.addForceAtPoint({ x: -fx, y: -fy }, o, true);
         });
       });
     },
@@ -560,8 +557,7 @@ export function setup(ctx: Context) {
         // if (dx * dx + dy * dy < 0.5) {
         //   return;
         // }
-        b.conteneur.x = b.rigid.translation().x;
-        b.conteneur.y = b.rigid.translation().y;
+        b.rigid.translation(b.conteneur);
       });
       // console.log(pointerRigidBody.translation(), zodiac.joint);
     },

@@ -145,6 +145,7 @@ dist
 # Hash custom
 /public/assets/*
 /public/fluent-emoji-high-contrast/
+/public/Noto_Emoji/
 /public/game-icons/
 /public/fluent/
 /public/tabler/
@@ -201,3 +202,4 @@ worker-configuration.d.ts
 # sonda
 sonda-report.html
 .vite-inspect/
+.sonda/*

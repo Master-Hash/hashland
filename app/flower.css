@@ -1,0 +1,11 @@
+@keyframes move {
+  to {
+    stroke-dashoffset: 1100;
+  }
+}
+
+@keyframes scale {
+  to {
+    r: 0;
+  }
+}

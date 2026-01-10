@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { Mailbox } from "../../../stories/Mailbox.tsx";
 import { HrefToLink } from "../../utils/components.tsx";
 import { useTime } from "../../utils/hooks.ts";
@@ -9,6 +10,7 @@ import P2 from "./p2.md";
 import P3 from "./p3.md";
 
 export function EmailClient({ loaderData }) {
+  "use memo";
   // return "fuck";
   const { inbox, sent, threads, earistThreadTime } = loaderData;
   const time = Math.floor(useTime().valueOf() / 1000);
@@ -26,6 +28,7 @@ export function EmailClient({ loaderData }) {
   return (
     <main className="prose relative mx-auto">
       <title>电子邮件 « 故人故事故纸堆</title>
+      <meta property="og:title" content="电子邮件 « 故人故事故纸堆" />
       {/* <aside className="absolute bottom-0 right-0 text-6xl text-cat-text md:-right-12 md:top-0 lg:-right-24">
         <div className="icon-[fluent-emoji-high-contrast--postbox] -rotate-[9deg]" />
       </aside> */}

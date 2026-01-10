@@ -1,14 +1,16 @@
-import { Fragment } from "react";
 import type { LoaderFunctionArgs } from "react-router";
+
+import { env } from "cloudflare:workers";
+import { Fragment } from "react";
 import { Link } from "react-router";
+
 import type { Route } from "./+types/d1-lantency.$testid.ts";
 
 export const loader = async ({
   context,
   params,
 }: Route.LoaderArgs & LoaderFunctionArgs) => {
-  // const { DB } = context.cloudflare.env as Env;
-  const { DB } = globalThis.__hash_env__ as Env;
+  const { DB } = env;
   const workerdStartTime = new Date().valueOf() / 1000;
   const statement = DB.prepare("SELECT unixepoch('subsec')");
   // const statement2 = DB.prepare("SELECT unixepoch()");
@@ -98,6 +100,10 @@ export default function DisplayMailbox({
   return (
     <main className="prose mx-auto">
       <title>D1延迟测试${params.testid} « 故人故事故纸堆</title>
+      <meta
+        name="og:title"
+        content={`D1延迟测试${params.testid} « 故人故事故纸堆`}
+      />
       <h1>D1延迟测试{params.testid}</h1>
       <ul>
         <li>{loaderData.workerdStartTime}：WorkerD 开始时间</li>

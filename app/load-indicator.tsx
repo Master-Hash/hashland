@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "react-router";
 
 export function GlobalLoading() {
+  "use memo";
   const transition = useNavigation();
   const active = transition.state !== "idle";
 

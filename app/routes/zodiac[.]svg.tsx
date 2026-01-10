@@ -1,6 +1,7 @@
 import type { SVGProps } from "react";
+
 import { renderToReadableStream } from "react-dom/server";
-import type { LoaderFunction } from "react-router";
+import { type LoaderFunction } from "react-router";
 
 // calendrier républicain
 // 节气
@@ -18,6 +19,23 @@ const _mapping = {
   11: "🍃",
   12: "❄️",
 };
+
+const _noto_mapping = {
+  1: "🧊",
+  2: "🧨", // 🎀
+  3: "🌱",
+  4: "🐣", //🌸🍒
+  5: "🌳",
+  6: "🍉",
+  7: "🌞",
+  8: "⛈",
+  9: "🌾", // 💧
+  10: "🍂", // 🌫️
+  11: "🍃",
+  12: "❄", // ⛄
+};
+
+const USE_NOTO = true;
 
 const mapping = [
   "ice",
@@ -248,6 +266,17 @@ export function FluentEmojiHighContrastSnowflake(
   );
 }
 
+export function NotoEmoji(
+  props: SVGProps<SVGImageElement> & { noto: string | number },
+) {
+  if (typeof props.noto === "number") {
+    return <image href={`Noto_Emoji/${props.noto}.png`} {...props} />;
+  } else if (typeof props.noto === "string") {
+    const u = props.noto.codePointAt(0);
+    return <image href={`Noto_Emoji/${u}.png`} {...props} />;
+  }
+}
+
 const components = [
   FluentEmojiHighContrastIce,
   FluentEmojiHighContrastFirecracker,
@@ -270,6 +299,7 @@ function YearOrbit() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
       width="1600"
       height="1600"
       viewBox="0 0 400 400"
@@ -383,35 +413,54 @@ function YearOrbit() {
             r="180"
             stroke="currentColor"
             fill="transparent"
+            strokeWidth={USE_NOTO ? 0.6 : 1}
           />
         </g>
-        {components.map((Symbol, index) => {
-          const xCenter =
-            180 * Math.cos((-index * 2 * Math.PI) / mapping.length) + 200;
-          const yCenter =
-            180 * Math.sin((-index * 2 * Math.PI) / mapping.length) + 200;
-          return (
-            // <use
-            //   key={index}
-            //   href={`#fluent-emoji-high-contrast-${symbol}`}
-            //   x={xCenter - W / 2}
-            //   y={yCenter - H / 2}
-            //   transform={`rotate(${(index * 360) / mapping.length + 90} ${xCenter} ${yCenter})`}
-            //   width={W}
-            //   height={H}
-            //   strokeWidth={0.2}
-            // />
-            <Symbol
-              key={index}
-              x={xCenter - W / 2}
-              y={yCenter - H / 2}
-              transform={`rotate(${(-index * 360) / mapping.length + 90} ${xCenter} ${yCenter})`}
-              width={W}
-              height={H}
-              strokeWidth={0.2}
-            />
-          );
-        })}
+        {!USE_NOTO
+          ? components.map((Symbol, index) => {
+              const xCenter =
+                180 * Math.cos((-index * 2 * Math.PI) / mapping.length) + 200;
+              const yCenter =
+                180 * Math.sin((-index * 2 * Math.PI) / mapping.length) + 200;
+              return (
+                // <use
+                //   key={index}
+                //   href={`#fluent-emoji-high-contrast-${symbol}`}
+                //   x={xCenter - W / 2}
+                //   y={yCenter - H / 2}
+                //   transform={`rotate(${(index * 360) / mapping.length + 90} ${xCenter} ${yCenter})`}
+                //   width={W}
+                //   height={H}
+                //   strokeWidth={0.2}
+                // />
+                <Symbol
+                  key={index}
+                  x={xCenter - W / 2}
+                  y={yCenter - H / 2}
+                  transform={`rotate(${(-index * 360) / mapping.length + 90} ${xCenter} ${yCenter})`}
+                  width={W}
+                  height={H}
+                  strokeWidth={0.2}
+                />
+              );
+            })
+          : Array.from({ length: 12 }).map((_, index) => {
+              const symbol = _noto_mapping[index + 1];
+              // console.log(symbol.codePointAt(0));
+              const xCenter = 180 * Math.cos((-index * 2 * Math.PI) / 12) + 200;
+              const yCenter = 180 * Math.sin((-index * 2 * Math.PI) / 12) + 200;
+              return (
+                <NotoEmoji
+                  key={index}
+                  x={xCenter - W / 2}
+                  y={yCenter - H / 2}
+                  transform={`rotate(${(-index * 360) / 12 + 90} ${xCenter} ${yCenter})`}
+                  width={W}
+                  height={H}
+                  noto={symbol}
+                />
+              );
+            })}
       </g>
     </svg>
   );

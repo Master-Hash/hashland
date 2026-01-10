@@ -1,5 +1,6 @@
-import { HrefToLink } from "../utils/components.tsx";
 import type { Route } from "./+types/_post.$.ts";
+
+import { HrefToLink } from "../utils/components.tsx";
 
 const m = import.meta.glob([
   "/post-test/人/*.md",

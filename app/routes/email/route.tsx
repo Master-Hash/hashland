@@ -1,13 +1,15 @@
-// import { useLoaderData } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
+
+// import { useLoaderData } from "react-router";
+import { env } from "cloudflare:workers";
+
 import type { Message } from "../../../stories/Mailbox.tsx";
 import type { Route } from "./+types/route.ts";
+
 import { EmailClient } from "./c.tsx";
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  // const { DB } = context.cloudflare.env as Env;
-  // console.log(globalThis.__hash_env__);
-  const { DB } = globalThis.__hash_env__ as Env;
+  const { DB } = env;
   const session = DB.withSession("first-unconstrained");
   const statementInbox = session.prepare(
     // It suppose each Epoch is unique. Any more elegant way?

@@ -4,9 +4,9 @@
 
 很多重要的部分没有提交，因此本地运行会有困难，也正因此本项目没有 CI。未提交内容主要是二进制文件和其他项目的编译产物，为此我将其列举如下：
 
-* `react-router` 包：我为测试版 RSC 添加了 nonce 功能，用 `babel-plugin-react-compiler` 编译，并使用新的 jsx 转换。[源码见此](https://github.com/Master-Hash/react-router/tree/rsc/packages/react-router)。
-* 需要注意，应用本身暂时与 `babel-plugin-react-compiler` 不兼容。
-* 需要注意，我不再使用 `@react-router/dev` 包。
+- `react-router` 包：我为测试版 RSC 添加了 nonce 功能，用 `babel-plugin-react-compiler` 编译，并使用新的 jsx 转换。[源码见此](https://github.com/Master-Hash/react-router/tree/rsc/packages/react-router)。
+- 需要注意，应用本身暂时与 `babel-plugin-react-compiler` 不兼容。
+- 需要注意，我不再使用 `@react-router/dev` 包。
 
 React Router 组件相当解耦，版本不一致一般没问题，但新功能中可能导致神秘的行为。
 
@@ -20,9 +20,11 @@ React Router 组件相当解耦，版本不一致一般没问题，但新功能�
 
 `/app/resources/shiwake.html`：[gzip 炸弹](https://idiallo.com/blog/zipbomb-protection)。`dd if=/dev/zero bs=1G count=10 | gzip -c > 10GB.gz` 应当配合服务端妙妙配置使用。目的是整蛊爬虫，爬虫技术陈旧，所以没整 zstd 炸弹。此外，我发现[错误编码的 JPEG](https://www.ty-penguin.org.uk/~auj/blog/2025/03/25/fake-jpeg/) 也很好玩。
 
-`/app/resources/*.woff2`：从 Google Fonts 下载 Playfair，将其中可变字体转换为 woff2：`woff2_compress ./*.ttf`。感觉为了一个标点打包整个字体很亏，但算了。
+`/app/resources/*.woff2`：从 Google Fonts 下载 Playfair，将其中可变字体转换为 woff2：`woff2_compress ./*.ttf`。
 
-`/public/{game-icons,fluent-emoji-high-contrast,...}`：在 [icônes](https://icones.js.org/) 下载图标包，手动把宽高调整至 256x256，颜色调为白色，再用 `rsvg-convert` 生成 PNG 图像。
+`/public/Noto_Emoji/`: 从 Google Fonts 下载 Noto Emoji（单色的），从压缩包提取 Regular 字重文件。`fc-query.exe NotoEmoji-Regular.ttf --format='%{charset}\n'` 可以获取字体范围；用各种方法转化成每排一个、左边填充0的8位16进制数后，`while read -r unicode; do char=$(printf $'\U'$unicode); i=$(printf "%d" "0x$unicode"); echo $i $char; magick convert -font ./NotoEmoji-Regular.ttf -pointsize 216 -size 256x256 -gravity center -fill white -background transparent label:"$char" "$i".png; done < input.txt`。文件名为代码位的十进制版本。这样会遗漏字符簇，但是我暂时用不上，就不管了。（TODO：用16进制文件名代替10进制的）
+
+`/public/{game-icons,fluent-emoji-high-contrast,...}/`：在 [icônes](https://icones.js.org/) 下载图标包，手动把宽高调整至 256x256，颜色调为白色，再用 `rsvg-convert` 生成 PNG 图像。
 
 `/public/assets/`：文章配图，不会影响前端编译。[文章仓库](https://github.com/Master-Hash/post-test/)有相关说明。
 

@@ -1,6 +1,10 @@
+import BabelPresetTypescript from "@babel/preset-typescript";
 /**
  * @import { UserConfig } from "vite";
- */
+// import { reactRouter } from "./framework/plugin.ts";
+// import sonda from "sonda/vite";
+// import babel from "vite-plugin-babel";
+*/
 import { cloudflare } from "@cloudflare/vite-plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
@@ -13,8 +17,10 @@ import {
 } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react-oxc";
+import react from "@vitejs/plugin-react";
 import rsc from "@vitejs/plugin-rsc";
+import BabelPluginReactCompiler from "babel-plugin-react-compiler";
+import Color from "colorjs.io";
 import { toString } from "mdast-util-to-string";
 import process from "node:process";
 import rehypeKatex from "rehype-katex";
@@ -32,16 +38,12 @@ import {
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
 import { SKIP, visit } from "unist-util-visit";
-import { envOnlyMacros } from "vite-env-only";
 import inspect from "vite-plugin-inspect";
+import { isoImport } from "vite-plugin-iso-import";
 import virtual from "vite-plugin-virtual";
+
 import chronicles from "./app/routes/connections/chronicles.json" with { type: "json" };
 import { EMOJI_REGEX } from "./app/utils/constant.ts";
-// import { reactRouter } from "./framework/plugin.ts";
-// import sonda from "sonda/vite";
-// import babel from "vite-plugin-babel";
-// import BabelPresetTypescript from "@babel/preset-typescript";
-// import BabelPluginReactCompiler from "babel-plugin-react-compiler";
 
 // babel({
 //   filter: /\.[jt]sx?$/,
@@ -53,7 +55,7 @@ import { EMOJI_REGEX } from "./app/utils/constant.ts";
 
 enableDeprecationWarnings(true, true);
 
-const partialChars = chronicles.map((chronicle) => {
+const _partialChars = chronicles.map((chronicle) => {
   if (chronicle.emoji.match(EMOJI_REGEX)) {
     const codePoint = [...chronicle.emoji]
       .map((char) => char.codePointAt(0)?.toString(16))
@@ -63,6 +65,49 @@ const partialChars = chronicles.map((chronicle) => {
     return null;
   }
 });
+
+const partialChars = Object.fromEntries(
+  Object.entries(chars).filter(([key]) => {
+    // console.log(key);
+    return _partialChars.includes(key);
+  }),
+);
+
+const SECOND_IN_TROPIC_YEAR = 31556926;
+
+/**
+ *
+ * @param {string} color
+ * @returns {number}
+ */
+function rgb(color) {
+  return parseInt(
+    new Color(color).to("srgb").toString({ format: "hex" }).slice(1),
+    16,
+  );
+}
+
+/**
+ * @type {Record<string, number>}
+ */
+const dark = {};
+/**
+ * @type {Record<string, number>}
+ */
+const light = {};
+
+chronicles.forEach((c) => {
+  const date = new Date(c.date);
+  const radian =
+    ((date.valueOf() / 1000 - new Date("2024-01-01").valueOf() / 1000) /
+      SECOND_IN_TROPIC_YEAR) *
+    2 *
+    Math.PI;
+  dark[c.date] = rgb(`oklch(69% 0.1 ${4 - radian}rad)`);
+  light[c.date] = rgb(`oklch(42% 0.1 ${4 - radian}rad)`);
+});
+
+// console.log(tmp);
 
 const toClass = transformerStyleToClass({
   classPrefix: "__shiki_",
@@ -88,6 +133,8 @@ const highlighter = await getSingletonHighlighterCore({
   engine: createOnigurumaEngine(getWasm),
 });
 
+// let cnt = 0;
+
 const isStorybook = process.argv[1]?.includes("storybook");
 const isTypegen = process.argv[2]?.includes("typegen");
 const isBuild =
@@ -96,6 +143,9 @@ const isBuild =
 
 /** @type {UserConfig} */
 export default {
+  // define: {
+  //   BUILD_DATE: new Date().toISOString(), // todo: use temporal
+  // },
   // define: isBuild
   //   ? {
   //       "process.env.NODE_ENV": JSON.stringify(
@@ -107,6 +157,20 @@ export default {
     client: {
       optimizeDeps: {
         include: ["react-router", "react-router/internal/react-server-client"],
+      },
+      build: {
+        rolldownOptions: {
+          output: {
+            advancedChunks: {
+              groups: [
+                { name: "v--router", test: /\/react-router/ },
+                { name: "v--react", test: /\/react(?:-dom)?(?!-router)/ },
+                { name: "v--pixi", test: /\/pixi/ },
+                { name: "v--cytoscape", test: /\/cytoscape/ },
+              ],
+            },
+          },
+        },
       },
     },
     ssr: {
@@ -124,7 +188,8 @@ export default {
         exclude: ["react-router"],
       },
       build: {
-        rollupOptions: {
+        rolldownOptions: {
+          // external: ["pixi.js"],
           platform: "neutral",
         },
       },
@@ -135,7 +200,7 @@ export default {
         exclude: ["react-router"],
       },
       build: {
-        rollupOptions: {
+        rolldownOptions: {
           // @ts-ignore rolldown
           platform: "neutral",
         },
@@ -143,6 +208,7 @@ export default {
     },
   },
   plugins: [
+    isBuild &&     isoImport(),
     !isTypegen && tailwindcss(),
     !isStorybook &&
       !isTypegen && {
@@ -240,11 +306,14 @@ export default {
     !isStorybook &&
       !isTypegen &&
       react({
-        include: /\.(md|mdx|js|jsx|ts|tsx)$/,
-        // babel: {
-        //   // presets: [BabelPresetTypescript], // if you use TypeScript
-        //   plugins: [[BabelPluginReactCompiler, {}]],
-        // },
+        include: /\.(md|tsx)$/,
+        // exclude: /react-router/,
+        babel: {
+          presets: [BabelPresetTypescript], // if you use TypeScript
+          plugins: [
+            [BabelPluginReactCompiler, { compilationMode: "annotation" }],
+          ],
+        },
       }),
     !isStorybook &&
       !isTypegen &&
@@ -255,18 +324,26 @@ export default {
           rsc: "./app/entry.rsc.tsx",
         },
         serverHandler: false,
+        useBuildAppHook: true,
       }),
     // isTypegen && reactRouter(),
     !isStorybook &&
       !isTypegen &&
       virtual({
-        "virtual:partial-chars": Object.fromEntries(
-          Object.entries(chars).filter(([key]) => {
-            return partialChars.includes(key);
-          }),
-        ),
+        "virtual:partial-chars": partialChars,
+        "virtual:dark": dark,
+        "virtual:light": light,
       }),
-    envOnlyMacros(),
+    // Macros({
+    //   // include: [/comptime\.[cm]?[jt]sx?$/],
+    //   exclude: [
+    //     /node_modules/,
+    //     /\.d\.[cm]?ts$/,
+    //     /connections-rs\.js/,
+    //     /rapier_wasm2d\.js/,
+    //   ],
+    // }),
+    // envOnlyMacros(),
     // arraybuffer(),
     inspect({
       // buggy on wasm
@@ -276,7 +353,7 @@ export default {
       // 我担心，这玩意在开发环境下不会运行
       // 但是 rolldown 全打包开发就要出来了
       // 这马上就不是问题了，应该
-      name: "shiki-append-class-css",
+      name: "hash:shiki-append-class-css",
       generateBundle(_, bundle) {
         const css = toClass.getCSS();
         for (const fileName in bundle) {
@@ -304,6 +381,9 @@ export default {
     target: "esnext",
     assetsInlineLimit: 0,
     reportCompressedSize: false,
+    modulePreload: {
+      polyfill: false,
+    },
   },
   worker: {
     format: "es",
@@ -313,7 +393,14 @@ export default {
     // skipSsrTransform: true,
     // importGlobRestoreExtension: true,
   },
+  resolve: {
+    alias: {
+      "react-dom/server.browser": "react-dom/server.edge",
+    },
+  },
   server: {
     allowedHosts: ["raissa.hash.moe"],
   },
 };
+
+// console.log(cnt);

@@ -1,3 +1,8 @@
+import type {
+  DataRouter,
+  unstable_RSCPayload as RSCPayload,
+} from "react-router";
+
 import {
   createFromReadableStream,
   createTemporaryReferenceSet,
@@ -6,7 +11,6 @@ import {
 } from "@vitejs/plugin-rsc/browser";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import type { unstable_RSCPayload as RSCPayload } from "react-router";
 import {
   unstable_createCallServer as createCallServer,
   unstable_getRSCStream as getRSCStream,
@@ -36,3 +40,12 @@ createFromReadableStream<RSCPayload>(getRSCStream()).then(
     });
   },
 );
+
+/**
+ * @see https://github.com/vitejs/vite-plugin-react/pull/763/files
+ */
+if (import.meta.hot) {
+  import.meta.hot.on("rsc:update", () => {
+    (window as unknown as { __router: DataRouter }).__router.revalidate();
+  });
+}

@@ -1,7 +1,7 @@
 #:schema node_modules/wrangler/config-schema.json
 
 name = "land"
-compatibility_date = "2025-05-14"
+compatibility_date = "2025-10-01"
 # main = "./build/worker/index.js"
 # main = "./functions/worker.ts"
 # main = "./build/server/index.js"
@@ -13,7 +13,6 @@ workers_dev = false
 # route = { pattern = "land.hash.moe", custom_domain = true }
 routes = [
   { pattern = "land.hash.moe", custom_domain = true },
-  { pattern = "land.hash.memorial", custom_domain = true },
 ]
 send_metrics = false
 # no_bundle = true
@@ -26,7 +25,7 @@ binding = "DAILY_VIEWER"
 id = "20b4ba20e13442acba779202a1df67fb"
 
 [triggers]
-crons = ["32 4 * * *"]
+crons = ["0 20 * * *"]  # 原神惯例，凌晨4点
 
 [observability]
 enabled = true

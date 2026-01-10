@@ -1,6 +1,7 @@
 import type { Sprite } from "pixi.js";
-import { Container, Graphics, Text } from "pixi.js";
 import type { useNavigate } from "react-router";
+
+import { Container, Graphics, Text } from "pixi.js";
 
 const mockData = {
   Ayu: "https://ayu.land/",

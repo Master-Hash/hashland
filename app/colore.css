@@ -1,53 +1,50 @@
 @media not print {
-  a[href^="https"],
+  a[href^="https://"],
   a[href^="tg://"],
   a[href^="mailto:"] {
     @apply text-cat-lavender;
   }
 
-  a[href^="https"],
-  a[href^="tg://"]
-  {
+  a[href^="https://"],
+  a[href^="tg://"] {
     @apply inline-block;
   }
 
-  a[href^="https"]::after,
-  a[href^="tg://"]::after
-  {
-    @apply icon-[ph--planet];
-    content: "";
-  }
+  :not(a[href^="https://xn--sr8hvo.ws"]) {
+    &:is(a[href^="https://"])::after,
+    &:is(a[href^="tg://"])::after {
+      @apply icon-[ph--planet];
+      content: "";
+    }
 
-  a[href^="mailto:"]::after {
-    @apply icon-[ph--envelope];
-    content: "";
-  }
+    a[href^="mailto:"]::after {
+      @apply icon-[ph--envelope];
+      content: "";
+    }
 
-  /* a[href^="https://assets.hash.moe/"]::after
+    /* a[href^="https://assets.hash.moe/"]::after
     {
       @apply icon-[ph--database];
       content: "";
     } */
 
-  a[href^="https://github.com/Master-Hash/post-test"]::after,
-  a[href^="https://assets.hash.moe/private"]::after
-  {
-    @apply icon-[ph--lock];
-  }
+    a[href^="https://github.com/Master-Hash/post-test"]::after,
+    a[href^="https://assets.hash.moe/private"]::after {
+      @apply icon-[ph--lock];
+    }
 
-  a[href="https://www.travellings.cn/go.html"]::after
-  {
-    @apply icon-[ph--train-light];
-  }
+    a[href="https://www.travellings.cn/go.html"]::after {
+      @apply icon-[ph--train-light];
+    }
 
-  /* a[href^="https://github.com/Master-Hash/"]::after, */
-  a[href^="https://gist.github.com/Master-Hash/"]::after,
-  a[href^="https://t.me/hash_elbeszelese/"]::after,
-  a[href="https://blog.junyu33.me/2025/01/16/%E6%BC%AB%E8%AF%9D%E9%AA%97%E5%AD%90%E7%9A%84%E6%95%85%E4%BA%8B.html"]::after,
-  a[href="https://blog.junyu33.me/2021/12/19/%E3%80%8A%E8%8C%B8%E9%9B%AA%E3%80%8B%E8%AE%B2%E7%A8%BF"]::after,
-  a[href="https://blog.junyu33.me/2023/11/28/beijing"]::after
-  {
-    @apply icon-[ri--quill-pen-line];
+    /* a[href^="https://github.com/Master-Hash/"]::after, */
+    a[href^="https://gist.github.com/Master-Hash/"]::after,
+    a[href^="https://t.me/hash_elbeszelese/"]::after,
+    a[href="https://blog.junyu33.me/2025/01/16/%E6%BC%AB%E8%AF%9D%E9%AA%97%E5%AD%90%E7%9A%84%E6%95%85%E4%BA%8B.html"]::after,
+    a[href="https://blog.junyu33.me/2021/12/19/%E3%80%8A%E8%8C%B8%E9%9B%AA%E3%80%8B%E8%AE%B2%E7%A8%BF"]::after,
+    a[href="https://blog.junyu33.me/2023/11/28/beijing"]::after {
+      @apply icon-[ri--quill-pen-line];
+    }
   }
 
   /* 维基百科可以单独给图标……知乎就算了？ */
@@ -58,9 +55,9 @@
   } */
 
   :not(nav) {
-    & > a[href="/connections"],
-    & > a[href="/experiences"],
-    & > a[href="/kami"] {
+    & > a[href*="/connections"],
+    & > a[href*="/experiences"],
+    & > a[href*="/kami"] {
       @apply text-cat-green;
     }
     & > a[href^="/now"] {
@@ -78,16 +75,16 @@
   a[href*="事/"],
   a[href*="%E4%BA%8B/"],
   /* a[href^="/narrative"], */
-  a[href^="/narrative"] {
+  a[href*="/narrative"] {
     @apply text-cat-sapphire;
   }
 
   a[href*="物/"],
   a[href*="%E7%89%A9/"],
-  a[href^="/email"],
-  a[href^="/mailbox"],
-  a[href^="/count8"],
-  a[href^="/lists"] {
+  a[href*="/email"],
+  a[href*="/mailbox"],
+  a[href*="/count8"],
+  a[href*="/lists"] {
     @apply text-cat-pink;
   }
 
@@ -96,7 +93,7 @@
     @apply text-cat-green;
   }
 
-  a[href*="user-content-fn"] {
+  body a[href*="user-content-fn"] {
     @apply text-cat-subtext1;
     /* @apply opacity-80; */
   }

@@ -2,7 +2,6 @@ import eslintReact from "@eslint-react/eslint-plugin";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import compat from "eslint-plugin-compat";
-import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
 import storybook from "eslint-plugin-storybook";
 import globals from "globals";
@@ -52,8 +51,7 @@ export default [
   //   },
   //   rules: reactHooks.configs.recommended.rules,
   // },
-  reactHooks.configs["recommended-latest"],
-  reactCompiler.configs.recommended,
+  reactHooks.configs.recommended,
   // ...fixupConfigRules(
   //   compat.extends(
   //     "plugin:react/recommended",

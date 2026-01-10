@@ -92,5 +92,18 @@
     "emoji": "⏳",
     "people": ["ada"],
     "alt": "/人/ada.md#幻想的交换生活"
+  },
+  {
+    "title": "接待",
+    "date": "2025-06-18",
+    "emoji": "\uD83D\uDECB",
+    "people": ["ada", "Ajax"],
+    "alt": "https://aajax.top/2025/06/24/TravelToSichuan/"
+  },
+  {
+    "title": "泰国手术之旅",
+    "date": "2025-08-18",
+    "emoji": "✂",
+    "people": []
   }
 ]

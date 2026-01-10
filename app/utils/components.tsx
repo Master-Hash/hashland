@@ -1,22 +1,24 @@
 "use client";
 
 import type { FC } from "react";
+
 import { Link } from "react-router";
 
 // https://github.com/zloirock/core-js/blob/master/packages/core-js/modules/web.url.parse.js
 // Below is temporary polyfill
-function parse(url: string): URL | null {
-  try {
-    return new URL(url);
-  } catch (e) {
-    return null;
-  }
-}
+// function parse(url: string): URL | null {
+//   try {
+//     return new URL(url);
+//   } catch (e) {
+//     return null;
+//   }
+// }
 
 export const ImageCloudflareTransform: FC<{
   src: string;
   props: Record<string, unknown>;
 }> = ({ src, ...props }) => {
+  "use memo";
   return import.meta.env.DEV ? (
     <img src={src} {...props} />
   ) : (
@@ -29,7 +31,8 @@ export const HrefToLink: FC<{
   children: string;
   props: Record<string, unknown>;
 }> = ({ href, children, ...props }) => {
-  const u = "parse" in URL ? URL.parse(href) : parse(href);
+  "use memo";
+  const u = URL.parse(href);
   if (u)
     return u.hostname === new URL(import.meta.env.VITE_SITEURL).hostname ? (
       <Link

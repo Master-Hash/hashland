@@ -3,7 +3,7 @@
 name = "land-server"
 main = "./app/entry.rsc.tsx"
 # main = "./dist/rsc/index.js"
-compatibility_date = "2025-05-14"
+compatibility_date = "2025-10-01"
 compatibility_flags = ["nodejs_als"]
 workers_dev = false
 send_metrics = false
@@ -15,7 +15,6 @@ send_metrics = false
 enabled = true
 logs.enabled = true
 logs.invocation_logs = true
-
 
 [[d1_databases]]
 binding = "DB"

@@ -1,3 +1,5 @@
+import type { unstable_RSCRouteConfigEntry } from "react-router";
+
 import {
   createTemporaryReferenceSet,
   decodeAction,
@@ -25,11 +27,16 @@ const routes = [
         index: true,
         lazy: () => import("./routes/_index/route.tsx"),
       },
-      {
-        id: "bevy-logical-resolution",
-        path: "bevy-logical-resolution",
-        lazy: () => import("./routes/bevy-logical-resolution/route.tsx"),
-      },
+      // {
+      //   id: "bevy-logical-resolution",
+      //   path: "bevy-logical-resolution",
+      //   lazy: () => import("./routes/bevy-logical-resolution/route.tsx"),
+      // },
+      // {
+      //   id: "workers-playground",
+      //   path: "workers-playground",
+      //   lazy: () => import("./routes/workers-playground/route.tsx"),
+      // },
       {
         id: "connections",
         path: "connections",
@@ -77,9 +84,10 @@ const routes = [
       },
     ],
   },
-];
+] as unstable_RSCRouteConfigEntry[];
 
 export async function callServer(request: Request) {
+  // const isPost = request.url.includes(".md");
   return await matchRSCServerRequest({
     createTemporaryReferenceSet,
     decodeReply,
@@ -88,6 +96,9 @@ export async function callServer(request: Request) {
     request,
     routes,
     generateResponse(match, options) {
+      // if (isPost) {
+      //   match.headers.set("Cache-Control", "public, max-age=604800");
+      // }
       return new Response(renderToReadableStream(match.payload, options), {
         status: match.statusCode,
         headers: match.headers,
@@ -97,8 +108,7 @@ export async function callServer(request: Request) {
 }
 
 export default {
-  fetch(request, env) {
-    globalThis.__hash_env__ = env;
+  fetch(request) {
     return callServer(request);
   },
 } satisfies ExportedHandler<Env>;

@@ -1,7 +1,10 @@
-import Color from "colorjs.io";
 import type { Application, FederatedPointerEvent, Texture } from "pixi.js";
-import { Container, Point, Sprite, Text } from "pixi.js";
 import type { useNavigate } from "react-router";
+
+import { Container, Point, Sprite, Text } from "pixi.js";
+import DARK from "virtual:dark";
+import LIGHT from "virtual:light";
+
 import chronicles from "./chronicle.js";
 import { colors } from "./colors.js";
 import { addBubble, floatBubbles } from "./floating.js";
@@ -104,9 +107,9 @@ export function pixiApp(
         secondInTropicYear) *
       2 *
       Math.PI;
-    const color = isDark
-      ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
-      : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
+    // const color = isDark
+    //   ? new Color(`oklch(69% 0.1 ${4 - radian}rad)`)
+    //   : new Color(`oklch(42% 0.1 ${4 - radian}rad)`);
     const eventContainer = new Container();
     const event = Sprite.from(texture[c.emoji]);
     event.anchor.set(0.5);
@@ -115,10 +118,7 @@ export function pixiApp(
     eventContainer.y = r * Math.sin(-radian);
     eventContainer.rotation = -radian + Math.PI / 2 + Math.random() - 0.5;
     // event.tint = isDark ? 0x85c1dc : 0x209fb5; // Sapphire
-    event.tint = parseInt(
-      color.to("srgb").toString({ format: "hex" }).slice(1),
-      16,
-    );
+    event.tint = isDark ? DARK[c.date] : LIGHT[c.date];
 
     // label
     const lable = new Text({
