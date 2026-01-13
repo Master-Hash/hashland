@@ -203,6 +203,15 @@ const hashMDXPlugin = {
 //#region waku
 export default defineConfig({
   vite: {
+    environments: {
+      ssr: {
+        build: {
+          rollupOptions: {
+            input: { "zodiac-module": "src/components/zodiac.tsx" },
+          },
+        },
+      },
+    },
     build: {
       // sourcemap: true,
       // minify: "oxc",
