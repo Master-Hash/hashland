@@ -18,9 +18,11 @@ body {
   /* background-image: url(./resources/faux-papier.avif); */
   /* background-image: url(./resources/ep_naturalwhite.png); */
   /* Vite false warn https://github.com/vitejs/vite/issues/19304 */
-  background-image: image-set(url(../resources/palace-museum.jxl) type("image/jxl"),
-      url(../resources/palace-museum.avif) type("image/avif"),
-      url(../resources/palace-museum.jpg) type("image/jpeg"));
+  background-image: image-set(
+    url(../resources/palace-museum.jxl) type("image/jxl"),
+    url(../resources/palace-museum.avif) type("image/avif"),
+    url(../resources/palace-museum.jpg) type("image/jpeg")
+  );
   /* @apply bg-center; */
   @apply bg-blend-luminosity dark:bg-blend-multiply;
   /* @apply bg-no-repeat; */
@@ -48,7 +50,6 @@ body {
 
 .main,
 nav {
-
   & *,
   & ::before,
   & ::after {
@@ -77,17 +78,22 @@ a[href*="?q=%23"] {
 }
 
 .prose {
-
-  :where(blockquote p:first-of-type):not( :where([class~="not-prose"] *))::before,
+  :where(blockquote p:first-of-type):not(
+      :where([class~="not-prose"] *)
+    )::before,
   :where(blockquote p:last-of-type):not(:where([class~="not-prose"] *))::after {
     content: none;
   }
 
-  :where(code):not( :where([class~="not-prose"], [class~="not-prose"] *))::before {
+  :where(code):not(
+      :where([class~="not-prose"], [class~="not-prose"] *)
+    )::before {
     content: none;
   }
 
-  :where(code):not( :where([class~="not-prose"], [class~="not-prose"] *))::after {
+  :where(code):not(
+      :where([class~="not-prose"], [class~="not-prose"] *)
+    )::after {
     content: none;
   }
 
@@ -162,7 +168,8 @@ hr::after {
 /* https://chatgpt.com/share/688ca989-a49c-8006-8143-01ec9b2209ef */
 /* Chrome on Android use Droid Serif and pretend it has Times New Roman */
 /* and Linux use Liberation Serif */
-@supports (not (-webkit-hyphens: none)) and (not (-moz-appearance: none)) and (list-style-type: "*") {
+@supports (not (-webkit-hyphens: none)) and (not (-moz-appearance: none)) and
+  (list-style-type: "*") {
   hr::after {
     @apply font-[Playfair,serif];
   }

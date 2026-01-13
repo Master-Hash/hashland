@@ -27,9 +27,10 @@ export function HeaderComponent() {
           <img
             alt="站点标识，为一立方体的三点透视图"
             src="/favicon.ico"
-            className={
-              "size-12" + (isRoot ? "" : " opacity-80 hover:opacity-100")
-            }
+            className={cx(
+              "size-12",
+              isRoot ? "" : "opacity-80 hover:opacity-100",
+            )}
           />
         </Link>
 
@@ -37,12 +38,12 @@ export function HeaderComponent() {
           <Fragment key={pathname}>
             <Link
               to={pathname}
-              className={
-                (path.startsWith(pathname)
-                  ? "text-cat-text font-semibold"
-                  : "text-cat-text font-normal opacity-80 hover:opacity-100") +
-                " rounded px-1 py-2 text-base"
-              }
+              className={cx(
+                "rounded px-1 py-2 text-base",
+                path.startsWith(pathname)
+                  ? "font-semibold text-cat-text"
+                  : "font-normal text-cat-text opacity-80 hover:opacity-100",
+              )}
             >
               {text}
             </Link>
@@ -68,7 +69,7 @@ export function HeaderComponent() {
 
 export function FooterComponent() {
   return (
-    <footer className="text-cat-subtext1 relative mx-auto p-4 pt-12 text-center print:hidden">
+    <footer className="relative mx-auto p-4 pt-12 text-center text-cat-subtext1 print:hidden">
       <div>
         <small>
           <a href="https://github.com/Master-Hash/hashland">前端仓库</a>
@@ -158,7 +159,7 @@ function Flower() {
       xmlns="http://www.w3.org/2000/svg"
       // viewBox="0 0 10 10.1"
       className={cx(
-        "stroke-cat-subtext1 absolute -right-30 bottom-0 hidden h-27.5 w-27.5 stroke-[1.1] md:inline dark:stroke-[.66]",
+        "absolute -right-30 bottom-0 hidden h-27.5 w-27.5 stroke-cat-subtext1 stroke-[1.1] md:inline dark:stroke-[.66]",
         isInView ? "" : "md:invisible",
       )}
       strokeDasharray="1100"
@@ -348,7 +349,7 @@ class HashError extends Component<{ children: ReactNode }, { error?: Error }> {
   render() {
     if (this.state?.error) {
       return (
-        <main className="prose prose-a:wrap-break-word relative mx-auto">
+        <main className="relative mx-auto prose prose-a:wrap-break-word">
           <h1>未知错误</h1>
           <p>为保护当事人隐私，本篇暂不公开。熟识的读者可以私下戳我预览！</p>
           <p>本错误页面亦可能由网络连接不佳，以及服务器故障引起。</p>
@@ -401,7 +402,7 @@ export const Root: FC<{
         {/* <Links /> */}
         {/* <Resources /> */}
       </head>
-      <body className="bg-cat-base text-cat-text grid min-h-screen grid-rows-[auto_1fr_auto] print:block">
+      <body className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text print:block">
         {children}
         {/* <!-- Cloudflare Web Analytics --> */}
         {/* <script

@@ -164,7 +164,7 @@ async function SlowEmail() {
 
 export default function Email() {
   return (
-    <main className="prose relative mx-auto">
+    <main className="relative mx-auto prose">
       <title>电子邮件 « 故人故事故纸堆</title>
       <meta property="og:title" content="电子邮件 « 故人故事故纸堆" />
       <section>

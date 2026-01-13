@@ -21,7 +21,7 @@ export type Message = {
 // 方便调试
 export function Mailbox({ messages }: { messages: Message[] }) {
   return (
-    <table className="cat-latte prose text-cat-text dark:cat-frappe prose-headings:text-cat-text">
+    <table className="cat-latte dark:cat-frappe prose text-cat-text prose-headings:text-cat-text">
       <thead>
         {messages[0].subject === undefined ? (
           <tr>

@@ -7,7 +7,7 @@ const allTests = [1, 2, 3, 4, 5];
 export default function D1Layout({ children }: { children: ReactNode }) {
   const { path } = useRouter();
   return (
-    <main className="prose prose-a:whitespace-nowrap relative mx-auto">
+    <main className="relative mx-auto prose prose-a:whitespace-nowrap">
       {children}
       <p>娱乐测试，仅供参考。</p>
       <p>

@@ -5,11 +5,11 @@ import { Pixi } from "../components/connections/p.tsx";
 
 export default function PixiServer() {
   return (
-    <main className="prose prose-a:whitespace-nowrap relative mx-auto select-none">
+    <main className="relative mx-auto prose select-none prose-a:whitespace-nowrap">
       <title>故人 « 故人故事故纸堆</title>
       <meta property="og:title" content="故人 « 故人故事故纸堆" />
       <Suspense
-        fallback={<p className="h-52 grid place-items-center">正在加载……</p>}
+        fallback={<p className="grid h-52 place-items-center">正在加载……</p>}
       >
         <Pixi />
       </Suspense>

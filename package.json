@@ -13,11 +13,11 @@
     "lint": "oxlint --type-aware"
   },
   "devDependencies": {
-    "@types/node": "^25.0.6",
+    "@types/node": "^25.0.7",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
-    "oxfmt": "^0.23.0",
-    "oxlint": "^1.38.0",
+    "oxfmt": "^0.24.0",
+    "oxlint": "^1.39.0",
     "oxlint-tsgolint": "^0.11.0",
     "typescript": "^5.9.3"
   },

@@ -2,7 +2,7 @@ import P from "../docs/homepage.md";
 
 export default function HomePage() {
   return (
-    <main className="prose prose-a:whitespace-nowrap relative mx-auto">
+    <main className="relative mx-auto prose prose-a:whitespace-nowrap">
       <title>~ « 故人故事故纸堆</title>
       <meta property="og:title" content="~ « 故人故事故纸堆" />
       <P />

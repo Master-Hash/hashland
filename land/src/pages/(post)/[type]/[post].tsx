@@ -1,7 +1,5 @@
 import type { PageProps } from "waku/router";
 
-import { Link } from "waku";
-
 import { HrefToLink } from "../../../utils/components.tsx";
 
 const m = import.meta.glob([
@@ -31,7 +29,7 @@ export default async function Post({
 
   const t = `${title} « 故人故事故纸堆`;
   return (
-    <main className="prose mx-auto">
+    <main className="mx-auto prose">
       <title>{t}</title>
       <meta name="description" content={Markdown.frontmatter.description} />
       <meta property="og:title" content={t} />

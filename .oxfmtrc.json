@@ -1,9 +1,9 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "printWidth": 80,
-  "experimentalSortImports": { },
-  // "experimentalTailwindcss": {
-  // "config": "./src/main.css",
-  // "functions": [ "cx" ]
-  // }
+  "experimentalSortImports": {},
+  "experimentalTailwindcss": {
+    "config": "./land/src/main.css",
+    "functions": ["cx"]
+  }
 }

@@ -2,12 +2,12 @@ import type { PageProps } from "waku/router";
 
 import { env } from "cloudflare:workers";
 import PostalMime from "postal-mime";
+import { unstable_notFound } from "waku/router/server";
 import { unstable_getContext } from "waku/server";
 import xss from "xss";
 
 import { HAN_REGEX } from "../../utils/constant.ts";
 import { dateFormat } from "../../utils/dateFormat.js";
-import { unstable_notFound } from "waku/router/server";
 
 export default async function DisplayMailbox({
   msgid,
@@ -22,7 +22,9 @@ export default async function DisplayMailbox({
 
   const { R2, REAL_NAME } = env;
   const r2url =
-    (isPrivate ? "private/" : "Discuss/") + decodeURI(msgid)?.slice(1, -1) + ".eml";
+    (isPrivate ? "private/" : "Discuss/") +
+    decodeURI(msgid)?.slice(1, -1) +
+    ".eml";
   // console.log(r2url);
   const msg = await R2.get(r2url);
   if (msg === null) {
@@ -42,7 +44,7 @@ export default async function DisplayMailbox({
     const humanDate = dateFormat.format(new Date(email.date!));
     const t = `${email.subject} « 故人故事故纸堆`;
     return (
-      <main className="prose mx-auto">
+      <main className="mx-auto prose">
         <title>{t}</title>
 
         <meta property="og:title" content={t} />

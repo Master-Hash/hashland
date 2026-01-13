@@ -5,13 +5,13 @@ import { Count8Client } from "../components/count8.client.tsx";
 
 export default function Count8() {
   return (
-    <main className="prose mx-auto">
+    <main className="mx-auto prose">
       <title>凑8图论演示 « 故人故事故纸堆</title>
       <meta property="og:title" content="凑8图论演示 « 故人故事故纸堆" />
       <h1>凑8图论演示</h1>
       <Suspense
         fallback={
-          <p className="h-96 grid place-items-center">正在加载游戏数据……</p>
+          <p className="grid h-96 place-items-center">正在加载游戏数据……</p>
         }
       >
         <Count8Client />
@@ -41,9 +41,9 @@ export default function Count8() {
   );
 }
 
-// export const getConfig = () => {
-//   return {
-//     render: "static",
-//     // render: "dynamic",
-//   } as const;
-// };
+export const getConfig = () => {
+  return {
+    render: "static",
+    // render: "dynamic",
+  } as const;
+};
