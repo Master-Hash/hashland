@@ -10,7 +10,9 @@
     @apply inline-block;
   }
 
-  :not(a[href^="https://xn--sr8hvo.ws"]) {
+  :not(a[href^="https://xn--sr8hvo.ws"]):not(
+    a[href^="https://creativecommons.org/"]
+  ) {
     &:is(a[href^="https://"])::after,
     &:is(a[href^="tg://"])::after {
       @apply icon-[ph--planet];
@@ -28,9 +30,13 @@
       content: "";
     } */
 
+    a[href^="https://github.com/Master-Hash/"]::after {
+      @apply icon-[ri--git-repository-line];
+    }
+
     a[href^="https://github.com/Master-Hash/post-test"]::after,
     a[href^="https://assets.hash.moe/private"]::after {
-      @apply icon-[ph--lock];
+      @apply icon-[ri--git-repository-private-line];
     }
 
     a[href="https://www.travellings.cn/go.html"]::after {

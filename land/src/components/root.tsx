@@ -8,7 +8,6 @@ import { Component, Fragment, useRef, useState } from "react";
 import { Link, useRouter } from "waku";
 
 import style from "../main.css?url";
-import c from "../resources/count.v5.js?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
 
@@ -69,10 +68,14 @@ export function HeaderComponent() {
 
 export function FooterComponent() {
   return (
-    <footer className="relative mx-auto p-4 pt-12 text-center text-cat-subtext1 print:hidden">
+    <>
       <div>
         <small>
-          <a href="https://github.com/Master-Hash/hashland">前端仓库</a>
+          <a href="/email" className="after:icon-[ph--at]">
+            邮箱
+          </a>
+          {"・"}
+          <a href="https://github.com/Master-Hash/hashland">源码</a>
           {/**
            * 间隔号
            * @see https://www.zhihu.com/question/20271115 */}
@@ -99,14 +102,15 @@ export function FooterComponent() {
           >
             →
           </a>
-        </small>
-      </div>
-      <div>
-        <small>
-          <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh">
-            CC0
-          </a>{" "}
-          © 公共领域
+          {"・"}
+          <a
+            className="align-middle"
+            href="https://creativecommons.org/licenses/by/4.0/legalcode.zh-hans"
+            title="自由转载改编，须保留署名。"
+          >
+            <span className="icon-[ri--creative-commons-line]" />
+            <span className="icon-[ri--creative-commons-by-line]" />
+          </a>
         </small>
       </div>
       <div className="hidden">
@@ -125,14 +129,8 @@ export function FooterComponent() {
           </a>
         </small>
       </div>
-      <div>
-        <small className="before:content-[' ']">
-          文章内容可能涉及隐私，若希望修改或隐藏，请
-          <Link to="/email">来信</Link>联系。
-        </small>
-      </div>
       <Flower />
-    </footer>
+    </>
   );
 }
 
@@ -159,7 +157,7 @@ function Flower() {
       xmlns="http://www.w3.org/2000/svg"
       // viewBox="0 0 10 10.1"
       className={cx(
-        "absolute -right-30 bottom-0 hidden h-27.5 w-27.5 stroke-cat-subtext1 stroke-[1.1] md:inline dark:stroke-[.66]",
+        "absolute bottom-0 hidden h-27.5 w-27.5 stroke-cat-subtext1 stroke-[1.1] md:-right-20 md:inline dark:stroke-[.66]",
         isInView ? "" : "md:invisible",
       )}
       strokeDasharray="1100"
@@ -342,7 +340,10 @@ function Flower() {
 //   }
 // }
 
-class HashError extends Component<{ children: ReactNode }, { error?: Error }> {
+export class HashError extends Component<
+  { children: ReactNode },
+  { error?: Error }
+> {
   static getDerivedStateFromError(error: Error) {
     return { error };
   }
@@ -359,18 +360,6 @@ class HashError extends Component<{ children: ReactNode }, { error?: Error }> {
     return this.props.children;
   }
 }
-
-export const Layout: FC<{
-  children: ReactElement;
-}> = ({ children }) => {
-  return (
-    <>
-      <HeaderComponent />
-      <HashError>{children}</HashError>
-      <FooterComponent />
-    </>
-  );
-};
 
 export const Root: FC<{
   children: ReactElement;
