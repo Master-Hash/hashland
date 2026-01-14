@@ -14,7 +14,7 @@
   "dependencies": {
     "@react-email/render": "^2.0.2",
     "classix": "^2.2.6",
-    "hono": "^4.11.3",
+    "hono": "^4.11.4",
     "postal-mime": "^2.7.3",
     "react": "~19.2.3",
     "react-dom": "~19.2.3",

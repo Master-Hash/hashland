@@ -53,8 +53,8 @@ importers:
         specifier: ^2.2.6
         version: 2.2.6
       hono:
-        specifier: ^4.11.3
-        version: 4.11.3
+        specifier: ^4.11.4
+        version: 4.11.4
       postal-mime:
         specifier: ^2.7.3
         version: 2.7.3
@@ -1994,8 +1994,8 @@ packages:
   hastscript@9.0.1:
     resolution: {integrity: sha512-g7df9rMFX/SPi34tyGCyUBREQoKkapwdY/T04Qn9TDWfHhAYt4/I0gMVirzK5wEzeUqIjEB+LXC/ypb7Aqno5w==}
 
-  hono@4.11.3:
-    resolution: {integrity: sha512-PmQi306+M/ct/m5s66Hrg+adPnkD5jiO6IjA7WhWw0gSBSo1EcRegwuI1deZ+wd5pzCGynCcn2DprnE4/yEV4w==}
+  hono@4.11.4:
+    resolution: {integrity: sha512-U7tt8JsyrxSRKspfhtLET79pU8K+tInj5QZXs1jSugO1Vq5dFj3kmZsRldo29mTBfcjDRVRXrEZ6LS63Cog9ZA==}
     engines: {node: '>=16.9.0'}
 
   html-to-text@9.0.5:
@@ -3496,9 +3496,9 @@ snapshots:
       miniflare: 4.20260107.0
       vite: 7.3.1(@types/node@25.0.7)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2)
 
-  '@hono/node-server@1.19.8(hono@4.11.3)':
+  '@hono/node-server@1.19.8(hono@4.11.4)':
     dependencies:
-      hono: 4.11.3
+      hono: 4.11.4
 
   '@iconify-json/fluent-emoji-high-contrast@1.2.5':
     dependencies:
@@ -4763,7 +4763,7 @@ snapshots:
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
 
-  hono@4.11.3: {}
+  hono@4.11.4: {}
 
   html-to-text@9.0.5:
     dependencies:
@@ -6182,11 +6182,11 @@ snapshots:
 
   waku@1.0.0-alpha.1(patch_hash=ffdcc3048bddbffec899e161cc3608c6e19e7dbc9b95b757d6b4a3ef432e1f49)(@types/node@25.0.7)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.3(react@19.2.3))(react-server-dom-webpack@19.2.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(webpack@5.104.1))(react@19.2.3)(terser@5.44.1)(yaml@2.8.2):
     dependencies:
-      '@hono/node-server': 1.19.8(hono@4.11.3)
+      '@hono/node-server': 1.19.8(hono@4.11.4)
       '@vitejs/plugin-react': 5.1.2(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))
       '@vitejs/plugin-rsc': 0.5.11(react-dom@19.2.3(react@19.2.3))(react-server-dom-webpack@19.2.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(webpack@5.104.1))(react@19.2.3)(vite@7.3.1(@types/node@25.0.7)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))
       dotenv: 17.2.3
-      hono: 4.11.3
+      hono: 4.11.4
       magic-string: 0.30.21
       picocolors: 1.1.1
       react: 19.2.3
