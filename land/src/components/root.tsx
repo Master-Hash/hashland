@@ -103,11 +103,7 @@ export function FooterComponent() {
             →
           </a>
           {"・"}
-          <a
-            className="align-middle"
-            href="https://creativecommons.org/licenses/by/4.0/legalcode.zh-hans"
-            title="自由转载改编，须保留署名。"
-          >
+          <a className="align-middle" href="/colophon">
             <span className="icon-[ri--creative-commons-line]" />
             <span className="icon-[ri--creative-commons-by-line]" />
           </a>
