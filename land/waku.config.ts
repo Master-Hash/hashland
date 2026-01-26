@@ -207,7 +207,6 @@ export default defineConfig({
       ssr: {
         build: {
           rollupOptions: {
-            input: { "zodiac-module": "src/components/zodiac.tsx" },
           },
         },
       },
