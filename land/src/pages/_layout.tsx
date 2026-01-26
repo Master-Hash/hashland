@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 
 import { Slice } from "waku";
-import { unstable_getContext } from "waku/server";
 
 import {
   FooterComponent,
@@ -14,7 +13,6 @@ export default function LayoutWithTips({
 }: {
   children: ReactElement;
 }) {
-  const { req } = unstable_getContext();
   return (
     <>
       <HeaderComponent />
