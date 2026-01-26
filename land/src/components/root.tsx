@@ -6,6 +6,7 @@ import { cx } from "classix";
 import { motion, useInView } from "motion/react";
 import { Component, Fragment, useRef, useState } from "react";
 import { Link, useRouter } from "waku";
+import { useRefetch } from "waku/minimal/client";
 
 import style from "../main.css?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
@@ -67,13 +68,14 @@ export function HeaderComponent() {
 }
 
 export function FooterComponent() {
+  const refetch = useRefetch();
   return (
     <>
       <div>
         <small>
-          <a href="/email" className="after:icon-[ph--at]">
+          <Link to="/email" className="after:icon-[ph--at]">
             邮箱
-          </a>
+          </Link>
           {"・"}
           <a href="https://github.com/Master-Hash/hashland">源码</a>
           {/**
@@ -107,9 +109,13 @@ export function FooterComponent() {
             <span className="icon-[ri--creative-commons-line]" />
             <span className="icon-[ri--creative-commons-by-line]" />
           </a>
+          {"・"}
+          <button className="cursor-pointer" onClick={() => refetch("S/tip")}>
+            再来一签
+          </button>
         </small>
       </div>
-      <div className="hidden">
+      <div hidden>
         <small>
           <a rel="nofollow" href={shiwake}>
             彩弹

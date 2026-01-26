@@ -36,6 +36,7 @@ export const getConfig = () => {
 // 否则随机抽取一个提示
 // 有没有 URL 对应的呢？好难猜啊
 
+// TODO: 权重系统
 // TODO: 搞 O1 复杂度的索引，不要每次都遍历
 const tips = [
   // 庆生
@@ -92,8 +93,11 @@ const tips = [
   {
     data: (
       <p>
-        你知道吗？写程序的朋友之中，我和海豚是会用 Linux 但主动选择用 Windows
-        的唯二的人。
+        写程序的朋友之中，我和
+        <a href="/%E4%BA%8B/2025-10-16_%E5%A4%A9%E7%A9%BA%E5%B7%A5%E5%9C%BA%E7%BA%AA%E4%BA%8B.md#%E5%8F%B6%E8%80%81%E6%9D%BF">
+          海豚
+        </a>
+        是会用 Linux 而主动选择 Windows 的唯二的人。
       </p>
     ),
   },
@@ -116,7 +120,8 @@ const tips = [
   {
     data: (
       <p>
-        本站是最新网页技术的试验田，只兼容2026年之后最新的浏览器。要求的最新 API
+        本站是最新网页技术的试验田，只兼容2026年之后最新的浏览器。
+        {/* 要求的最新 API
         是{" "}
         <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigation_API">
           Navigation API
@@ -125,7 +130,7 @@ const tips = [
         <a href="https://chromestatus.com/feature/5134734612496384">
           Chrome 141
         </a>{" "}
-        和 Firefox 147。
+        和 Firefox 147。 */}
       </p>
     ),
   },
@@ -141,4 +146,24 @@ const tips = [
       </p>
     ),
   },
+  {
+    data: (
+      <p>
+        我的文章的要求是：要素齐全、详略得当、特征鲜明、语言流畅、真情实感。
+        {/* 大声朗读和删节对润色有好处吗？ */}
+      </p>
+    ),
+  },
 ];
+
+tips.push({
+  data: (
+    <p>
+      抽签盒里一共有{tips.length + 1}条提示，可在源代码里找到
+      <a href="https://github.com/Master-Hash/hashland/blob/vite/land/src/pages/_slices/tip.tsx">
+        全部签条
+      </a>
+      。
+    </p>
+  ),
+});
