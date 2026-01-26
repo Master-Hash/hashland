@@ -402,13 +402,10 @@ export const Root: FC<{
         /> */}
         {/* <!-- End Cloudflare Web Analytics --> */}
         <script
-          // src={ry}
-          // src="https://app.rybbit.io/api/script.js"
-          src="/api/script.js"
-          integrity="sha384-WBOXiLIdaDPw2OyWdJ3V1edwjFBzabY9ehQD/rIkG2aD2FNwteLp+Ptr8Ep6znLq"
+          src="https://app.rybbit.io/api/script.js"
           data-site-id="35522e41c288"
           defer
-          suppressHydrationWarning
+          crossOrigin="anonymous"
         />
       </body>
     </html>

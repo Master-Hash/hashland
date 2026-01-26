@@ -78,7 +78,7 @@ export const nonceExtractor = () =>
 
     c.res.headers.set(
       "content-security-policy",
-      `default-src 'self'; script-src 'self' 'unsafe-eval'; script-src-elem 'self' 'nonce-${nonce}'; worker-src 'self' blob:; img-src 'self' data:` +
+      `default-src 'self'; script-src 'self' 'unsafe-eval'; script-src-attr 'none'; script-src-elem 'self' 'nonce-${nonce}'${import.meta.env.DEV ? "" : " https://app.rybbit.io/"}; worker-src 'self' blob:; img-src 'self' data:` +
         (import.meta.env.DEV
           ? ""
           : "; connect-src 'self' https://app.rybbit.io/"),
