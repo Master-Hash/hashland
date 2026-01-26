@@ -29,8 +29,6 @@ import {
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
 import { SKIP, visit } from "unist-util-visit";
-import inspect from "vite-plugin-inspect";
-import { isoImport } from "vite-plugin-iso-import";
 import virtual from "vite-plugin-virtual";
 import { defineConfig, type VitePlugin } from "waku/config";
 
@@ -207,14 +205,22 @@ export default defineConfig({
       ssr: {
         build: {
           rollupOptions: {
+            platform: "neutral",
+          },
+        },
+      },
+      rsc: {
+        build: {
+          rollupOptions: {
+            platform: "neutral",
           },
         },
       },
     },
     build: {
       // sourcemap: true,
-      // minify: "oxc",
-      minify: "esbuild",
+      minify: "oxc",
+      // minify: "esbuild",
       cssMinify: "lightningcss",
       target: "esnext",
       assetsInlineLimit: 0,
@@ -222,12 +228,15 @@ export default defineConfig({
       modulePreload: {
         polyfill: false,
       },
+      // rolldownOptions: {
+      //   devtools: {},
+      // },
     },
     worker: {
       format: "es",
     },
     experimental: {
-      // enableNativePlugin: true,
+      enableNativePlugin: true,
       // skipSsrTransform: true,
       // importGlobRestoreExtension: true,
     },
@@ -246,6 +255,7 @@ export default defineConfig({
       ],
     },
     plugins: [
+      // DevTools(),
       // isBuild && isoImport(),
       tailwindcss(),
       hashMDXPlugin,
@@ -270,10 +280,6 @@ export default defineConfig({
         "virtual:dark": dark,
         "virtual:light": light,
       }),
-      // inspect({
-      //   // buggy on wasm
-      //   build: true,
-      // }),
       hashShikiPlugin,
     ],
   },
