@@ -30,6 +30,12 @@ export const nonceMiddleware = (): MiddlewareHandler => {
   });
 
   return createMiddleware(async (c, next) => {
+    // run only for HTML responses
+    const contentType = c.req.raw.headers.get("Accept") || "";
+    if (import.meta.env.PROD && !contentType.includes("text/html")) {
+      await next();
+      return;
+    }
     await secure(c, async () => {
       const nonce = c.get("secureHeadersNonce");
       if (nonce) {
