@@ -1,8 +1,7 @@
 import { fsRouter } from "waku";
 import adapter from "waku/adapters/cloudflare";
 
-import nonceExtractor from "./middleware/csp.ts";
-// import renderSVG from "./middleware/svg.ts";
+import { nonceMiddleware } from "./middleware/csp.ts";
 
 export default adapter(
   fsRouter(import.meta.glob("./**/*.{tsx,ts}", { base: "./pages" })),
@@ -20,7 +19,7 @@ export default adapter(
       //   }
       // },
     } satisfies ExportedHandler<Env>,
-    middlewareFns: [nonceExtractor],
+    middlewareFns: [nonceMiddleware],
     // middlewareModules: import.meta.glob("./middleware/*.ts"),
   },
 );
