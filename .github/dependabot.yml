@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directories:
+      - "/"
+    groups:
+      minor:
+        update-types:
+          - minor
+          - patch
+      major:
+        update-types:
+          - major
+    allow:
+      - dependency-type: all
+    schedule:
+      interval: cron
+      cronjob: "0 20 * * 0"
+      timezone: Etc/UTC
+    open-pull-requests-limit: 10
