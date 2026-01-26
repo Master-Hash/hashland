@@ -6,5 +6,5 @@
     "config": "./land/src/main.css",
     "functions": ["cx"]
   },
-  "ignorePatterns": ["land/post/**"]
+  "ignorePatterns": ["land/post/**", "**/*.md"]
 }
