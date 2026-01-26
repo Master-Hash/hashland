@@ -13,18 +13,19 @@
     "lint": "oxlint --type-aware"
   },
   "devDependencies": {
-    "@types/node": "^25.0.7",
-    "@types/react": "^19.2.8",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
-    "oxfmt": "^0.24.0",
-    "oxlint": "^1.39.0",
-    "oxlint-tsgolint": "^0.11.0",
+    "oxfmt": "^0.26.0",
+    "oxlint": "^1.41.0",
+    "oxlint-tsgolint": "^0.11.1",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.24.0",
+  "packageManager": "pnpm@10.28.0",
   "pnpm": {
     "overrides": {
-      "safe-buffer": "npm:@nolyfill/safe-buffer@^1"
+      "safe-buffer": "npm:@nolyfill/safe-buffer@^1",
+      "vite": "8.0.0-beta.10"
     }
   }
 }
