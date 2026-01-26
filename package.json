@@ -18,7 +18,7 @@
     "@types/react-dom": "^19.2.3",
     "oxfmt": "^0.26.0",
     "oxlint": "^1.41.0",
-    "oxlint-tsgolint": "^0.11.1",
+    "oxlint-tsgolint": "^0.11.2",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.28.0",
