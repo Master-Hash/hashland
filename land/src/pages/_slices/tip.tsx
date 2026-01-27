@@ -101,6 +101,18 @@ const tips = [
       </p>
     ),
   },
+  {
+    data: (
+      <p>
+        我喜欢做客，我家也常招待朋友。Ajax 和 ada 来访后留下
+        <a href="https://aajax.top/2025/06/24/TravelToSichuan/">一篇游记</a>，
+        <a href="https://land.hash.moe/%E4%BA%8B/2026-01-24_%E6%9D%A5%E5%B7%A5%E4%BD%9C%E7%9A%84%E5%AE%A2%E4%BA%BA.md">
+          蛋包饭的假日
+        </a>
+        与打工无异。
+      </p>
+    ),
+  },
   // 网站设计
   {
     data: (
