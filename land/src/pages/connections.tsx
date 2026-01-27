@@ -13,7 +13,7 @@ export default function PixiServer() {
       >
         <Pixi />
       </Suspense>
-      <P />
+      <P key="connections" />
     </main>
   );
 }

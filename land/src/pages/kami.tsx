@@ -5,7 +5,7 @@ export default function Now() {
     <main className="relative mx-auto prose">
       <title>故纸堆 « 故人故事故纸堆</title>
       <meta property="og:title" content="故纸堆 « 故人故事故纸堆" />
-      <P />
+      <P key="kami" />
     </main>
   );
 }

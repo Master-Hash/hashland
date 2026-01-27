@@ -5,7 +5,7 @@ export default function HomePage() {
     <main className="relative mx-auto prose prose-a:whitespace-nowrap">
       <title>~ « 故人故事故纸堆</title>
       <meta property="og:title" content="~ « 故人故事故纸堆" />
-      <P />
+      <P key="homepage" />
       <strong className="text-cat-subtext1">
         ‼ 如你所见，站点尚未完工，正文尤其有待补档。请耐心等待，谢谢！q(≧▽≦q)
       </strong>

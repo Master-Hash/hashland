@@ -44,37 +44,39 @@ export default async function DisplayMailbox({
     const humanDate = dateFormat.format(new Date(email.date!));
     const t = `${email.subject} « 故人故事故纸堆`;
     return (
-      <main className="mx-auto prose">
-        <title>{t}</title>
+      <div className="mx-auto prose">
+        <main key={msgid}>
+          <title>{t}</title>
 
-        <meta property="og:title" content={t} />
-        {/* h1 应当是唯一的 */}
-        {/* <h1>邮件存档</h1> */}
-        <h2>{email.subject}</h2>
-        <p>
-          <small>
-            {humanDate}，
-            <a href={"mailto:" + email.from.address}>{email.from.name}</a>：
-          </small>
-          <br />
-        </p>
-        <details className="-mt-4 print:hidden">
-          <summary>
-            <small>详情</small>
-          </summary>
-          <small>
-            <code>Message-ID: {email.messageId}</code>
+          <meta property="og:title" content={t} />
+          {/* h1 应当是唯一的 */}
+          {/* <h1>邮件存档</h1> */}
+          <h2>{email.subject}</h2>
+          <p>
+            <small>
+              {humanDate}，
+              <a href={"mailto:" + email.from.address}>{email.from.name}</a>：
+            </small>
             <br />
-            <a
-              href={import.meta.env.VITE_ASSETSURL + "/" + r2url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              下载原始消息
-            </a>
-          </small>
-        </details>
-        <DisplayMail email={email} />
+          </p>
+          <details className="-mt-4 print:hidden">
+            <summary>
+              <small>详情</small>
+            </summary>
+            <small>
+              <code>Message-ID: {email.messageId}</code>
+              <br />
+              <a
+                href={import.meta.env.VITE_ASSETSURL + "/" + r2url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                下载原始消息
+              </a>
+            </small>
+          </details>
+          <DisplayMail email={email} />
+        </main>
         <hr className="print:hidden" />
         <p className="text-cat-text print:hidden">
           <a
@@ -94,7 +96,7 @@ export default async function DisplayMailbox({
           </a>
           供有需要和兴趣的读者参阅。
         </p>
-      </main>
+      </div>
     );
   }
 }

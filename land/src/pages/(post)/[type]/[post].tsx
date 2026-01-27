@@ -22,7 +22,8 @@ export default async function Post({
 }: PageProps<"/[type]/[post]">) {
   // console.log(m, entries);
   // console.log("Rendering post:", _t, _p);
-  const Markdown = await m[`/post/${_t}/${_p}`]();
+  const tp = `/post/${_t}/${_p}`;
+  const Markdown = await m[tp]();
 
   const tSansExtension = _p.replace(/\.md$/, "");
   const title = tSansExtension.split("_").at(-1);
@@ -41,6 +42,7 @@ export default async function Post({
         components={{
           a: HrefToLink,
         }}
+        key={tp}
       />
     </main>
   );
