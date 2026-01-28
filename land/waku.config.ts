@@ -28,6 +28,7 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
+import { highlightHast, Language } from "tree-sitter-highlight";
 import { SKIP, visit } from "unist-util-visit";
 import virtual from "vite-plugin-virtual";
 import { defineConfig, type VitePlugin } from "waku/config";
@@ -53,11 +54,12 @@ const highlighter = await getSingletonHighlighterCore({
   ],
   langs: [
     import("shiki/langs/apache.mjs"),
-    import("shiki/langs/python.mjs"),
-    import("shiki/langs/haskell.mjs"),
-    import("shiki/langs/shellscript.mjs"),
+    // import("shiki/langs/rust.mjs"),
+    // import("shiki/langs/python.mjs"),
+    // import("shiki/langs/haskell.mjs"),
+    // import("shiki/langs/shellscript.mjs"),
     import("shiki/langs/typescript.mjs"),
-    import("shiki/langs/json.mjs"),
+    // import("shiki/langs/json.mjs"),
     import("shiki/langs/tsx.mjs"),
   ],
   engine: createOnigurumaEngine(getWasm),
@@ -80,6 +82,57 @@ const hashShikiPlugin = {
     }
   },
 } as VitePlugin;
+//#endregion
+
+//#region tree-sitter
+function rehypeTreeSitter() {
+  return (tree) => {
+    visit(
+      tree,
+      (n) => {
+        return (
+          n.type === "element" &&
+          n.tagName === "pre" &&
+          // has shiki -> skip
+          // no class property -> no skip
+          // has class property but no shiki -> no skip
+          !n.properties?.class?.includes("shiki")
+        );
+      },
+      (rootNode) => {
+        visit(
+          tree,
+          (n) => {
+            return (
+              n.type === "element" &&
+              n.tagName === "code" &&
+              n.properties?.className?.some((cls: string) =>
+                cls.startsWith("language-"),
+              )
+            );
+          },
+          (node) => {
+            const lang = node.properties.className
+              .find((cls: string) => cls.startsWith("language-"))
+              .replace("language-", "") as string;
+
+            if (lang === "rs") {
+              const highlighted = highlightHast(
+                node.children[0].value,
+                // @ts-ignore
+                Language.Rust,
+              );
+              rootNode.properties.class = "tree-sitter shiki compat";
+              node.children = highlighted.children;
+            }
+
+            return "skip";
+          },
+        );
+      },
+    );
+  };
+}
 //#endregion
 
 //#region comptime
@@ -192,6 +245,7 @@ const hashMDXPlugin = {
           ],
         },
       ],
+      rehypeTreeSitter,
     ],
   }),
   enforce: "pre",

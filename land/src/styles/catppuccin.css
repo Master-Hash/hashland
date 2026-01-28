@@ -159,6 +159,314 @@
   --color-cat-frappe-crust: 35, 38, 52;
 }
 
+/* https://github.com/catppuccin/zed/blob/main/themes/catppuccin-no-italics-mauve.json */
+/* Converted by Claude */
+.tree-sitter {
+  .variable {
+    @apply text-cat-text;
+  }
+  .variable.builtin {
+    @apply text-cat-red;
+  }
+  .variable.parameter {
+    @apply text-cat-maroon;
+  }
+  .variable.member {
+    @apply text-cat-blue;
+  }
+  .variable.special {
+    @apply text-cat-red;
+  }
+  .constant {
+    @apply text-cat-peach;
+  }
+  .constant.builtin {
+    @apply text-cat-peach;
+  }
+  .constant.macro {
+    @apply text-cat-mauve;
+  }
+  .module {
+    @apply text-cat-yellow;
+  }
+  .label {
+    @apply text-cat-sapphire;
+  }
+  .string {
+    @apply text-cat-green;
+  }
+  .string.documentation {
+    @apply text-cat-teal;
+  }
+  .string.regexp {
+    @apply text-cat-peach;
+  }
+  .string.escape {
+    @apply text-cat-pink;
+  }
+  .string.special {
+    @apply text-cat-pink;
+  }
+  .string.special.path {
+    @apply text-cat-pink;
+  }
+  .string.special.symbol {
+    @apply text-cat-flamingo;
+  }
+  .string.special.url {
+    @apply text-cat-rosewater;
+  }
+  .character {
+    @apply text-cat-teal;
+  }
+  .character.special {
+    @apply text-cat-pink;
+  }
+  .boolean {
+    @apply text-cat-peach;
+  }
+  .number {
+    @apply text-cat-peach;
+  }
+  .number.float {
+    @apply text-cat-peach;
+  }
+  .tag {
+    @apply text-cat-blue;
+  }
+  .tag.attribute {
+    @apply text-cat-yellow;
+  }
+  .tag.delimiter {
+    @apply text-cat-teal;
+  }
+  .type {
+    @apply text-cat-yellow;
+  }
+  .type.builtin {
+    @apply text-cat-mauve;
+  }
+  .type.definition {
+    @apply text-cat-yellow;
+  }
+  .type.interface {
+    @apply text-cat-yellow;
+  }
+  .type.super {
+    @apply text-cat-yellow;
+  }
+  .attribute {
+    @apply text-cat-peach;
+  }
+  .property {
+    @apply text-cat-blue;
+  }
+  .function {
+    @apply text-cat-blue;
+  }
+  .function.builtin {
+    @apply text-cat-peach;
+  }
+  .function.call {
+    @apply text-cat-blue;
+  }
+  .function.macro {
+    @apply text-cat-teal;
+  }
+  .function.method {
+    @apply text-cat-blue;
+  }
+  .function.method.call {
+    @apply text-cat-blue;
+  }
+  .constructor {
+    @apply text-cat-flamingo;
+  }
+  .operator {
+    @apply text-cat-sky;
+  }
+  .keyword {
+    @apply text-cat-mauve;
+  }
+  .keyword.modifier {
+    @apply text-cat-mauve;
+  }
+  .keyword.type {
+    @apply text-cat-mauve;
+  }
+  .keyword.coroutine {
+    @apply text-cat-mauve;
+  }
+  .keyword.function {
+    @apply text-cat-mauve;
+  }
+  .keyword.operator {
+    @apply text-cat-mauve;
+  }
+  .keyword.import {
+    @apply text-cat-mauve;
+  }
+  .keyword.repeat {
+    @apply text-cat-mauve;
+  }
+  .keyword.return {
+    @apply text-cat-mauve;
+  }
+  .keyword.debug {
+    @apply text-cat-mauve;
+  }
+  .keyword.exception {
+    @apply text-cat-mauve;
+  }
+  .keyword.conditional {
+    @apply text-cat-mauve;
+  }
+  .keyword.conditional.ternary {
+    @apply text-cat-mauve;
+  }
+  .keyword.directive {
+    @apply text-cat-pink;
+  }
+  .keyword.directive.define {
+    @apply text-cat-pink;
+  }
+  .keyword.export {
+    @apply text-cat-sky;
+  }
+  .punctuation {
+    @apply text-cat-overlay2;
+  }
+  .punctuation.delimiter {
+    @apply text-cat-overlay2;
+  }
+  .punctuation.bracket {
+    @apply text-cat-overlay2;
+  }
+  .punctuation.special {
+    @apply text-cat-pink;
+  }
+  .punctuation.special.symbol {
+    @apply text-cat-flamingo;
+  }
+  .punctuation.list_marker {
+    @apply text-cat-teal;
+  }
+  .comment {
+    @apply text-cat-overlay2;
+  }
+  .comment.doc {
+    @apply text-cat-overlay2;
+  }
+  .comment.documentation {
+    @apply text-cat-overlay2;
+  }
+  .comment.info {
+    @apply text-cat-teal;
+  }
+  .comment.error {
+    @apply text-cat-red;
+  }
+  .comment.warning {
+    @apply text-cat-yellow;
+  }
+  .comment.warn {
+    @apply text-cat-yellow;
+  }
+  .comment.hint {
+    @apply text-cat-blue;
+  }
+  .comment.todo {
+    @apply text-cat-flamingo;
+  }
+  .comment.note {
+    @apply text-cat-rosewater;
+  }
+  .diff.plus {
+    @apply text-cat-green;
+  }
+  .diff.minus {
+    @apply text-cat-red;
+  }
+  .parameter {
+    @apply text-cat-maroon;
+  }
+  .field {
+    @apply text-cat-lavender;
+  }
+  .namespace {
+    @apply text-cat-yellow;
+  }
+  .float {
+    @apply text-cat-peach;
+  }
+  .symbol {
+    @apply text-cat-pink;
+  }
+  .string.regex {
+    @apply text-cat-peach;
+  }
+  .text {
+    @apply text-cat-text;
+  }
+  .emphasis.strong {
+    @apply text-cat-maroon;
+  }
+  .emphasis {
+    @apply text-cat-maroon;
+  }
+  .embedded {
+    @apply text-cat-maroon;
+  }
+  .text.literal {
+    @apply text-cat-green;
+  }
+  .concept {
+    @apply text-cat-sapphire;
+  }
+  .enum {
+    @apply text-cat-teal;
+  }
+  .function.decorator {
+    @apply text-cat-peach;
+  }
+  .type.class.definition {
+    @apply text-cat-yellow;
+  }
+  .hint {
+    @apply text-cat-overlay1;
+  }
+  .link_text {
+    @apply text-cat-lavender;
+  }
+  .link_uri {
+    @apply text-cat-blue;
+  }
+  .parent {
+    @apply text-cat-peach;
+  }
+  .predictive {
+    @apply text-cat-overlay0;
+  }
+  .predoc {
+    @apply text-cat-red;
+  }
+  .primary {
+    @apply text-cat-maroon;
+  }
+  .tag.doctype {
+    @apply text-cat-mauve;
+  }
+  .string.doc {
+    @apply text-cat-teal;
+  }
+  .title {
+    @apply text-cat-text;
+  }
+  .variant {
+    @apply text-cat-red;
+  }
+}
+
 /* extract from my former */
 /* @layer theme {
 

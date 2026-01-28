@@ -4,3 +4,4 @@ patchedDependencies:
   cytoscape: patches/cytoscape.patch
 packages:
   - land
+  - packages/tree-sitter-highlight
