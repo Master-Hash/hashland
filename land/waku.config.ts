@@ -122,11 +122,15 @@ function rehypeTreeSitter() {
                 // @ts-ignore
                 Language.Rust,
               );
-              rootNode.properties.class = "tree-sitter shiki compat";
+              rootNode.properties.class = [
+                "tree-sitter",
+                "shiki",
+                "shiki-compat",
+              ];
               node.children = highlighted.children;
             }
 
-            return "skip";
+            return SKIP;
           },
         );
       },
