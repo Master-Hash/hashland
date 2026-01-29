@@ -1,3 +1,6 @@
 [submodule "land/post"]
 	path = land/post
 	url = git@github.com:Master-Hash/post-test.git
+[submodule "packages/tree-sitter-highlight"]
+	path = packages/tree-sitter-highlight
+	url = git@github.com:Master-Hash/tree-sitter-highlight.git
