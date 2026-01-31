@@ -12,12 +12,12 @@ export const HrefToLink: FC<{
   "use memo";
   const { path } = useRouter();
 
-  if (href.includes(".md") && !href.includes("/")) {
-    const o = path.split("/").slice(0, -1).join("/");
-    // FIXME
-    const newHref = (import.meta.env.SSR ? encodeURI(o) : o) + "/" + href;
+  if (href.match(/\.md(?=#|$)/) && !href.startsWith("/")) {
+    // 虽然 path 的 encoding 有问题，但 new URL 会按需编码
+    const u = new URL(path, import.meta.env.VITE_SITEURL);
+    const a = new URL(href, u).pathname;
     return (
-      <a href={newHref} {...props}>
+      <a href={a} {...props}>
         {children}
       </a>
     );
