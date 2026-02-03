@@ -13,7 +13,7 @@ const entries: Array<[string, string]> = Object.keys(m).map((path) => {
   const match = path.match(/\/post\/([^/]+)\/([^/]+)$/);
   if (!match) throw new Error(`Invalid path: ${path}`);
   const [_, type, post] = match;
-  return [type, post];
+  return [encodeURI(type), encodeURI(post)];
 });
 
 export default async function Post({
@@ -21,14 +21,13 @@ export default async function Post({
   post: _p,
 }: PageProps<"/[type]/[post]">) {
   // console.log(m, entries);
-  // console.log("Rendering post:", _t, _p);
   const tp = `/post/${_t}/${_p}`;
-  const Markdown = await m[tp]();
+  const Markdown = await m[decodeURI(tp)]();
 
   const tSansExtension = _p.replace(/\.md$/, "");
   const title = tSansExtension.split("_").at(-1);
 
-  const t = `${title} « 故人故事故纸堆`;
+  const t = `${decodeURI(title)} « 故人故事故纸堆`;
   return (
     <main className="mx-auto prose">
       <title>{t}</title>
