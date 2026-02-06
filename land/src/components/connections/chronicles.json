@@ -6,7 +6,7 @@
     "people": ["Xecades", "junyu33"]
   },
   {
-    "title": "日常裙装",
+    "title": "买新裙子的一天",
     "date": "2024-04-17",
     "emoji": "👗",
     "people": [],
@@ -53,7 +53,7 @@
   },
   {
     "title": "学 CSAPP",
-    "date": "2024-11-9",
+    "date": "2024-11-09",
     "emoji": "fluent:memory-16-regular",
     "people": ["Kevin Liu"],
     "alt": "https://t.me/hash_elbeszelese/159"
@@ -116,6 +116,12 @@
     "title": "来工作的客人",
     "date": "2026-01-24",
     "emoji": "📚",
-    "people": []
+    "people": ["蛋包饭"]
+  },
+  {
+    "title": "初次求职",
+    "date": "2026-02-04",
+    "emoji": "💼",
+    "people": ["蛋包饭", "曾小乱"]
   }
 ]

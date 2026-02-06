@@ -298,7 +298,7 @@ export function setup(ctx: Context) {
         if (e.ctrlKey || e.metaKey || e.button === 1) {
           window.open(t, "_blank", "noopener,noreferrer")?.focus();
         } else {
-          void navigate(t!);
+          navigate(t!);
         }
       }
     });
@@ -365,7 +365,7 @@ export function setup(ctx: Context) {
           .open(`/人/${b.name}.md`, "_blank", "noopener,noreferrer")
           ?.focus();
       } else {
-        void navigate(`/人/${b.name}.md`);
+        navigate(`/人/${b.name}.md`);
       }
     });
 

@@ -1,7 +1,7 @@
 /* @import "heti/umd/heti.min.css"; */
 
 @import "tailwindcss";
-/* @import "@shikijs/twoslash/style-rich.css"; */
+@import "@shikijs/twoslash/style-rich.css";
 @import "./styles/catppuccin.css";
 @import "./styles/fonte.css";
 @import "./styles/prose.css";

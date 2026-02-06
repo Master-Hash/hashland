@@ -138,6 +138,7 @@ a[href*="?q=%23"] {
 
   pre {
     @apply bg-inherit;
+    /* @apply overflow-x-hidden; */
   }
 
   --tw-prose-pre-code: unset;
