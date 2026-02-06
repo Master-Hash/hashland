@@ -2,9 +2,14 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "printWidth": 80,
   "experimentalSortImports": {},
+  "experimentalSortPackageJson": {},
   "experimentalTailwindcss": {
-    "config": "./land/src/main.css",
+    "stylesheet": "./land/src/main.css",
     "functions": ["cx"]
   },
-  "ignorePatterns": ["land/post/**", "**/*.md"]
+  "ignorePatterns": [
+    "land/post/**",
+    "**/*.md",
+    "packages/tree-sitter-highlight/**"
+  ]
 }
