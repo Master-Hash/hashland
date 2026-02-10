@@ -58,3 +58,7 @@
   counter-increment: step;
   color: var(--color-cat-overlay1);
 }
+
+.twoslash .twoslash-popup-container {
+  transform: translateY(1.5em);
+}
