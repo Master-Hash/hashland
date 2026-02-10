@@ -9,6 +9,9 @@ overrides:
   vite: 8.0.0-beta.12
 
 patchedDependencies:
+  '@shikijs/core':
+    hash: ca291cdd0d187825677f52b2c10f8f1b7c27f3e35de9e23caf2d1c4e6e8f521c
+    path: patches/@shikijs__core.patch
   cytoscape:
     hash: 5b79f5e6b7c932358bd16b32992616b843bf02853fd839e0bb3607c539865ab3
     path: patches/cytoscape.patch
@@ -102,6 +105,9 @@ importers:
       '@iconify/tailwind4':
         specifier: ^1.2.1
         version: 1.2.1(tailwindcss@4.1.18)
+      '@master-hash/tree-sitter-highlight':
+        specifier: workspace:^
+        version: link:../packages/tree-sitter-highlight
       '@mdx-js/mdx':
         specifier: ^3.1.1
         version: 3.1.1
@@ -192,9 +198,6 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
-      tree-sitter-highlight:
-        specifier: workspace:^
-        version: link:../packages/tree-sitter-highlight
       unist-util-visit:
         specifier: ^5.1.0
         version: 5.1.0
@@ -5217,7 +5220,7 @@ snapshots:
     dependencies:
       shiki: 3.22.0
 
-  '@shikijs/core@3.22.0':
+  '@shikijs/core@3.22.0(patch_hash=ca291cdd0d187825677f52b2c10f8f1b7c27f3e35de9e23caf2d1c4e6e8f521c)':
     dependencies:
       '@shikijs/types': 3.22.0
       '@shikijs/vscode-textmate': 10.0.2
@@ -5254,12 +5257,12 @@ snapshots:
 
   '@shikijs/transformers@3.22.0':
     dependencies:
-      '@shikijs/core': 3.22.0
+      '@shikijs/core': 3.22.0(patch_hash=ca291cdd0d187825677f52b2c10f8f1b7c27f3e35de9e23caf2d1c4e6e8f521c)
       '@shikijs/types': 3.22.0
 
   '@shikijs/twoslash@3.22.0(typescript@5.9.3)':
     dependencies:
-      '@shikijs/core': 3.22.0
+      '@shikijs/core': 3.22.0(patch_hash=ca291cdd0d187825677f52b2c10f8f1b7c27f3e35de9e23caf2d1c4e6e8f521c)
       '@shikijs/types': 3.22.0
       twoslash: 0.3.6(typescript@5.9.3)
       typescript: 5.9.3
@@ -7370,7 +7373,7 @@ snapshots:
 
   shiki@3.22.0:
     dependencies:
-      '@shikijs/core': 3.22.0
+      '@shikijs/core': 3.22.0(patch_hash=ca291cdd0d187825677f52b2c10f8f1b7c27f3e35de9e23caf2d1c4e6e8f521c)
       '@shikijs/engine-javascript': 3.22.0
       '@shikijs/engine-oniguruma': 3.22.0
       '@shikijs/langs': 3.22.0

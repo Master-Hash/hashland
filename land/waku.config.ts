@@ -1,3 +1,5 @@
+import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
+
 import nodeLoaderCloudflare from "@hiogawa/node-loader-cloudflare/vite";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
@@ -28,7 +30,6 @@ import {
 } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
-import { highlightHast, Language } from "tree-sitter-highlight";
 import { SKIP, visit } from "unist-util-visit";
 import virtual from "vite-plugin-virtual";
 import { defineConfig, type VitePlugin } from "waku/config";
@@ -82,61 +83,6 @@ const hashShikiPlugin = {
     }
   },
 } as VitePlugin;
-//#endregion
-
-//#region tree-sitter
-function rehypeTreeSitter() {
-  return (tree) => {
-    visit(
-      tree,
-      (n) => {
-        return (
-          n.type === "element" &&
-          n.tagName === "pre" &&
-          // has shiki -> skip
-          // no class property -> no skip
-          // has class property but no shiki -> no skip
-          !n.properties?.class?.includes("shiki")
-        );
-      },
-      (rootNode) => {
-        visit(
-          tree,
-          (n) => {
-            return (
-              n.type === "element" &&
-              n.tagName === "code" &&
-              n.properties?.className?.some((cls: string) =>
-                cls.startsWith("language-"),
-              )
-            );
-          },
-          (node) => {
-            const lang = node.properties.className
-              .find((cls: string) => cls.startsWith("language-"))
-              .replace("language-", "") as string;
-
-            if (lang === "rs") {
-              const highlighted = highlightHast(
-                node.children[0].value,
-                // @ts-ignore
-                Language.Rust,
-              );
-              rootNode.properties.class = [
-                "tree-sitter",
-                "shiki",
-                "shiki-compat",
-              ];
-              node.children = highlighted.children;
-            }
-
-            return SKIP;
-          },
-        );
-      },
-    );
-  };
-}
 //#endregion
 
 //#region comptime
@@ -244,12 +190,11 @@ const hashMDXPlugin = {
           transformers: [
             transformerTwoslash(),
             transformerColorizedBrackets(),
-            transformerRenderWhitespace(),
+            // transformerRenderWhitespace(),
             toClass,
           ],
-        },
+        } as RehypeShikiCoreOptions,
       ],
-      rehypeTreeSitter,
     ],
   }),
   enforce: "pre",

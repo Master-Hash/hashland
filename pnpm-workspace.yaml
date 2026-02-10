@@ -2,6 +2,7 @@ patchedDependencies:
   waku: patches/waku.patch
   workerd: patches/workerd.patch
   cytoscape: patches/cytoscape.patch
+  "@shikijs/core": patches/@shikijs__core.patch
 packages:
   - land
   - packages/tree-sitter-highlight

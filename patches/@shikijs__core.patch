@@ -1,0 +1,50 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index c2e9180503dfd0412c557685e4610165b4e36e7b..86cec47a27cb9dd179c14098fabed20b34b8318b 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -2,6 +2,7 @@ import { ShikiError as ShikiError$1 } from '@shikijs/types';
+ export * from '@shikijs/types';
+ import { FontStyle, INITIAL, EncodedTokenMetadata, Registry as Registry$1, Theme } from '@shikijs/vscode-textmate';
+ import { toHtml } from 'hast-util-to-html';
++import { highlightTokens, fromAlias } from "@master-hash/tree-sitter-highlight";
+ 
+ function resolveColorReplacements(theme, options) {
+   const replacements = typeof theme === "string" ? {} : { ...theme.colorReplacements };
+@@ -897,6 +898,9 @@ function codeToTokensBase(internal, code, options = {}) {
+   const { theme, colorMap } = internal.setTheme(themeName);
+   if (lang === "ansi")
+     return tokenizeAnsiWithTheme(theme, code, options);
++  const _a = fromAlias(lang);
++  // if (_a !== null) { console.log(highlightTokens(code, _a).tokens[0]); }
++  if (_a !== null) { return highlightTokens(code, _a).tokens; }
+   const _grammar = internal.getLanguage(options.lang || "text");
+   if (options.grammarState) {
+     if (options.grammarState.lang !== _grammar.name) {
+@@ -1189,7 +1193,14 @@ function codeToTokens(internal, code, options) {
+   let themeName;
+   let rootStyle;
+   let grammarState;
+-  if ("themes" in options) {
++  if (fromAlias(options.lang) !== null) {
++    tokens = codeToTokensBase(
++      internal,
++      code,
++      options
++    );
++    // console.log(tokens);
++  } else if ("themes" in options) {
+     const {
+       defaultColor = "light",
+       cssVariablePrefix = "--shiki-",
+diff --git a/package.json b/package.json
+index 9a0f98a9827bb00aac31066852bbfee094031a29..aa8662d281c143ff37fa943a721522af901abd00 100644
+--- a/package.json
++++ b/package.json
+@@ -43,6 +43,7 @@
+     "dist"
+   ],
+   "dependencies": {
++    "@master-hash/tree-sitter-highlight": "workspace:^",
+     "@shikijs/vscode-textmate": "^10.0.2",
+     "@types/hast": "^3.0.4",
+     "hast-util-to-html": "^9.0.5",

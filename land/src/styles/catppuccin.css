@@ -161,7 +161,7 @@
 
 /* https://github.com/catppuccin/zed/blob/main/themes/catppuccin-no-italics-mauve.json */
 /* Converted by Claude */
-.tree-sitter {
+.shiki {
   .variable {
     @apply text-cat-text;
   }
