@@ -5,12 +5,15 @@ import type { FC, ReactElement, ReactNode } from "react";
 import { cx } from "classix";
 import { motion, useInView } from "motion/react";
 import { Component, Fragment, useRef, useState } from "react";
+import { preload } from "react-dom";
 import { Link, useRouter } from "waku";
 import { useRefetch } from "waku/minimal/client";
 
 import style from "../main.css?url";
+import noto from "../resources/NotoEmoji-VariableFont_wght-webring.woff2?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
+import font from "../resources/SourceSans3VF-Upright.ttf.woff2?url";
 
 export function HeaderComponent() {
   const { path } = useRouter();
@@ -366,6 +369,12 @@ export class HashError extends Component<
 export const Root: FC<{
   children: ReactElement;
 }> = ({ children }) => {
+  preload(font, {
+    as: "font",
+  });
+  preload(noto, {
+    as: "font",
+  });
   return (
     <html lang="zh-CN">
       <head>
