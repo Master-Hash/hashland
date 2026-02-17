@@ -9,3 +9,8 @@ export const fetchRejectedOnNotOk = (async (input, init?) => {
   if (a.ok) return a;
   else throw new Error();
 }) satisfies typeof fetch;
+
+export function isSafari(): boolean {
+  const ua = navigator.userAgent;
+  return /^((?!chrome|android).)*safari/i.test(ua);
+}
