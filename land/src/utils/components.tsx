@@ -11,8 +11,12 @@ export const HrefToLink: FC<{
 }> = ({ href, children, ...props }) => {
   "use memo";
   const { path } = useRouter();
-
-  if (href.match(/\.md(?=#|$)/) && !href.startsWith("/")) {
+  // https://github.com/microsoft/typescript-go/blob/main/CHANGES.md#scanner
+  if (
+    href.match(/\.md(?=#|$)/) &&
+    !href.startsWith("/") &&
+    !href.startsWith("https")
+  ) {
     // 虽然 path 的 encoding 有问题，但 new URL 会按需编码
     const u = new URL(path, import.meta.env.VITE_SITEURL);
     const a = new URL(href, u).pathname;
