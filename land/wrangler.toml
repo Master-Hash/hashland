@@ -1,15 +1,13 @@
 #:schema node_modules/wrangler/config-schema.json
 
 name = "land"
-main = "./dist/server/serve-cloudflare.js"
-compatibility_date = "2026-01-01"
+main = "./src/waku.server.tsx"
+compatibility_date = "2026-02-01"
 compatibility_flags = ["nodejs_als"]
 workers_dev = false
 send_metrics = false
 assets = { directory = "./dist/public", binding = "ASSETS" }
 no_bundle = true
-rules = [{ type = "ESModule", globs = ["**/*.js", "**/*.mjs"] }]
-routes = [{ pattern = "land.hash.moe", custom_domain = true }]
 
 [observability]
 enabled = true

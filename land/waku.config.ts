@@ -1,6 +1,6 @@
 import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
 
-import nodeLoaderCloudflare from "@hiogawa/node-loader-cloudflare/vite";
+import { cloudflare } from "@cloudflare/vite-plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
@@ -62,6 +62,9 @@ const highlighter = await getSingletonHighlighterCore({
     import("shiki/langs/typescript.mjs"),
     // import("shiki/langs/json.mjs"),
     import("shiki/langs/tsx.mjs"),
+    import("shiki/langs/css.mjs"),
+    import("shiki/langs/rust.mjs"),
+    import("shiki/langs/diff.mjs"),
   ],
   engine: createOnigurumaEngine(getWasm),
 });
@@ -206,6 +209,9 @@ export default defineConfig({
   vite: {
     environments: {
       ssr: {
+        optimizeDeps: {
+          include: ["waku > rsc-html-stream/server"],
+        },
         build: {
           rollupOptions: {
             platform: "neutral",
@@ -213,6 +219,9 @@ export default defineConfig({
         },
       },
       rsc: {
+        optimizeDeps: {
+          include: ["hono/tiny"],
+        },
         build: {
           rollupOptions: {
             platform: "neutral",
@@ -268,15 +277,9 @@ export default defineConfig({
           plugins: ["babel-plugin-react-compiler"],
         },
       }),
-      nodeLoaderCloudflare({
-        environments: ["rsc"],
-        build: true,
-        // https://developers.cloudflare.com/workers/wrangler/api/#getplatformproxy
-        getPlatformProxyOptions: {
-          persist: {
-            path: ".wrangler/state/v3",
-          },
-        },
+      cloudflare({
+        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+        inspectorPort: false,
       }),
       virtual({
         "virtual:partial-chars": partialChars,
