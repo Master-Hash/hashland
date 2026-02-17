@@ -16,7 +16,7 @@ patchedDependencies:
     hash: 5b79f5e6b7c932358bd16b32992616b843bf02853fd839e0bb3607c539865ab3
     path: patches/cytoscape.patch
   waku:
-    hash: c77be1b5f92c2e2f0d6bfd6430ee1e599ad31075a1942215f73ce6b53066496f
+    hash: 14460ff9c80452a66b501bde8a13a062181552e5aa0bcd10d39aa847f34ff391
     path: patches/waku.patch
   workerd:
     hash: 3dc05c556e0690f1c1ee4ea9246cbf03d1141d246190a1d70160cacfea8a43ed
@@ -76,7 +76,7 @@ importers:
         version: 6.9.2(@react-email/render@2.0.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
       waku:
         specifier: 1.0.0-alpha.4
-        version: 1.0.0-alpha.4(patch_hash=c77be1b5f92c2e2f0d6bfd6430ee1e599ad31075a1942215f73ce6b53066496f)(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.104.1(esbuild@0.27.3)))(react@19.2.4)(terser@5.46.0)(yaml@2.8.2)
+        version: 1.0.0-alpha.4(patch_hash=14460ff9c80452a66b501bde8a13a062181552e5aa0bcd10d39aa847f34ff391)(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.104.1(esbuild@0.27.3)))(react@19.2.4)(terser@5.46.0)(yaml@2.8.2)
       xss:
         specifier: ^1.0.15
         version: 1.0.15
@@ -7593,7 +7593,7 @@ snapshots:
     optionalDependencies:
       vite: 8.0.0-beta.12(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2)
 
-  waku@1.0.0-alpha.4(patch_hash=c77be1b5f92c2e2f0d6bfd6430ee1e599ad31075a1942215f73ce6b53066496f)(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.104.1(esbuild@0.27.3)))(react@19.2.4)(terser@5.46.0)(yaml@2.8.2):
+  waku@1.0.0-alpha.4(patch_hash=14460ff9c80452a66b501bde8a13a062181552e5aa0bcd10d39aa847f34ff391)(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(react-dom@19.2.4(react@19.2.4))(react-server-dom-webpack@19.2.4(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(webpack@5.104.1(esbuild@0.27.3)))(react@19.2.4)(terser@5.46.0)(yaml@2.8.2):
     dependencies:
       '@hono/node-server': 1.19.9(hono@4.11.9)
       '@vitejs/plugin-react': 5.1.4(vite@8.0.0-beta.12(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.2))

@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_als"]
 workers_dev = false
 send_metrics = false
 assets = { directory = "./dist/public", binding = "ASSETS" }
-no_bundle = true
+routes = [{ pattern = "land.hash.moe", custom_domain = true }]
 
 [observability]
 enabled = true
