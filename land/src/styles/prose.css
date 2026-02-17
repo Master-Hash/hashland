@@ -138,6 +138,7 @@ a[href*="?q=%23"] {
 
   pre {
     @apply bg-inherit;
+    @apply max-w-dvw;
     /* @apply overflow-x-hidden; */
   }
 
