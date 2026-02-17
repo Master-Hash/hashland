@@ -5,8 +5,10 @@ import type { FC, ReactElement, ReactNode } from "react";
 import { cx } from "classix";
 import { motion, useInView } from "motion/react";
 import { Component, Fragment, useRef, useState } from "react";
+import { useEffect } from "react";
 import { preload } from "react-dom";
 import { Link, useRouter } from "waku";
+import { Slice } from "waku";
 import { useRefetch } from "waku/minimal/client";
 
 import style from "../main.css?url";
@@ -14,6 +16,7 @@ import noto from "../resources/NotoEmoji-VariableFont_wght-webring.woff2?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
 import font from "../resources/SourceSans3VF-Upright.ttf.woff2?url";
+import { isSafari } from "../utils/functions.ts";
 
 export function HeaderComponent() {
   const { path } = useRouter();
@@ -347,11 +350,20 @@ function Flower() {
 
 export class HashError extends Component<
   { children: ReactNode },
-  { error?: Error }
+  { error?: Error | null }
 > {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = {
+      error: null,
+    };
+  }
   static getDerivedStateFromError(error: Error) {
     return { error };
   }
+  reset = () => {
+    this.setState({ error: null });
+  };
   render() {
     if (this.state?.error) {
       return (
@@ -364,6 +376,12 @@ export class HashError extends Component<
     }
     return this.props.children;
   }
+  componentDidMount() {
+    window.navigation.addEventListener("navigate", this.reset);
+  }
+  componentWillUnmount() {
+    window.navigation.removeEventListener("navigate", this.reset);
+  }
 }
 
 export const Root: FC<{
@@ -375,6 +393,13 @@ export const Root: FC<{
   preload(noto, {
     as: "font",
   });
+  useEffect(() => {
+    if (isSafari()) {
+      alert(
+        "本网站与 Safari 有已知的兼容性错误，现已禁用 JavaScript 以保证基本体验。我没有苹果设备，难以调试，在此提前道歉。",
+      );
+    }
+  }, []);
   return (
     <html lang="zh-CN">
       <head>
@@ -403,7 +428,16 @@ export const Root: FC<{
         {/* <Resources /> */}
       </head>
       <body className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text print:block">
-        {children}
+        <HeaderComponent />
+        <HashError>{children}</HashError>
+        <footer className="relative mx-auto w-[calc(100%-3rem)] max-w-[38ic] p-3 pt-12 text-cat-subtext1 print:hidden">
+          <div>
+            <small>
+              <Slice id="tip" lazy fallback={"抽取提示中……"} />
+            </small>
+          </div>
+          <FooterComponent />
+        </footer>
         {/* <!-- Cloudflare Web Analytics --> */}
         {/* <script
           defer

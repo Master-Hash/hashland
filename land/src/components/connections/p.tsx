@@ -4,15 +4,11 @@ import { Application, Assets } from "pixi.js";
 import { use, useEffect, useRef } from "react";
 import { useRouter } from "waku";
 
+import { isSafari } from "../../utils/functions.ts";
 import { NOTO_BUNDLE, FLUENT_BUNDLE, MISC_BUNDLE } from "./loadtexture.js";
 import { World } from "./rapier2d/pipeline/world.js";
 import init, { initThreadPool, version } from "./rapier2d/rapier_wasm2d.js";
 import { setup } from "./systemes.js";
-
-function isSafari(): boolean {
-  const ua = navigator.userAgent;
-  return /^((?!chrome|android).)*safari/i.test(ua);
-}
 
 let _inited_thread_pool = false;
 let _wasm: ReturnType<typeof init>;
