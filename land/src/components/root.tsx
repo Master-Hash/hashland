@@ -1,9 +1,8 @@
 "use client";
 
-import type { FC, ReactElement, ReactNode } from "react";
-
 import { cx } from "classix";
 import { motion, useInView } from "motion/react";
+import type { FC, ReactElement, ReactNode } from "react";
 import { Component, Fragment, useRef, useState } from "react";
 import { useEffect } from "react";
 import { preload } from "react-dom";
@@ -11,12 +10,13 @@ import { Link, useRouter } from "waku";
 import { Slice } from "waku";
 import { useRefetch } from "waku/minimal/client";
 
-import style from "../main.css?url";
 import noto from "../resources/NotoEmoji-VariableFont_wght-webring.woff2?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
 import font from "../resources/SourceSans3VF-Upright.ttf.woff2?url";
 import { isSafari } from "../utils/functions.ts";
+
+import style from "../main.css?url";
 
 export function HeaderComponent() {
   const { path } = useRouter();
@@ -371,6 +371,11 @@ export class HashError extends Component<
           <h1>未知错误</h1>
           <p>为保护当事人隐私，本篇暂不公开。熟识的读者可以私下戳我预览！</p>
           <p>本错误页面亦可能由网络连接不佳，以及服务器故障引起。</p>
+          <p>如果你已经能通过防火墙，刷新即可。</p>
+          <p>错误信息（仅供调试参考）：</p>
+          <p>
+            <code>{String(this.state.error)}</code>
+          </p>
         </main>
       );
     }
