@@ -1,48 +1,48 @@
 diff --git a/dist/index.mjs b/dist/index.mjs
-index c2e9180503dfd0412c557685e4610165b4e36e7b..86cec47a27cb9dd179c14098fabed20b34b8318b 100644
+index 73b2f5e0122430458b6d317d539fbdc9dbf15b68..027316cc2764b2f341eb35388b1f3a8a15c2236f 100644
 --- a/dist/index.mjs
 +++ b/dist/index.mjs
-@@ -2,6 +2,7 @@ import { ShikiError as ShikiError$1 } from '@shikijs/types';
- export * from '@shikijs/types';
- import { FontStyle, INITIAL, EncodedTokenMetadata, Registry as Registry$1, Theme } from '@shikijs/vscode-textmate';
- import { toHtml } from 'hast-util-to-html';
+@@ -2,6 +2,7 @@ import { ShikiError as ShikiError$1 } from "@shikijs/types";
+ import { ShikiError, applyColorReplacements, codeToTokensBase as codeToTokensBase$1, codeToTokensWithThemes, codeToTokensWithThemes as codeToTokensWithThemes$1, createShikiInternal, createShikiInternalSync, createShikiPrimitive, createShikiPrimitive as createShikiPrimitive$1, createShikiPrimitiveAsync, createShikiPrimitiveAsync as createShikiPrimitiveAsync$1, getLastGrammarState, getLastGrammarStateFromMap, isNoneTheme, isPlainLang, isSpecialLang, isSpecialTheme, normalizeGetter, normalizeTheme, resolveColorReplacements, setLastGrammarStateToMap, splitLines, splitLines as splitLines$1, toArray, tokenizeWithTheme } from "@shikijs/primitive";
+ import { FontStyle } from "@shikijs/vscode-textmate";
+ import { toHtml } from "hast-util-to-html";
 +import { highlightTokens, fromAlias } from "@master-hash/tree-sitter-highlight";
  
- function resolveColorReplacements(theme, options) {
-   const replacements = typeof theme === "string" ? {} : { ...theme.colorReplacements };
-@@ -897,6 +898,9 @@ function codeToTokensBase(internal, code, options = {}) {
-   const { theme, colorMap } = internal.setTheme(themeName);
-   if (lang === "ansi")
-     return tokenizeAnsiWithTheme(theme, code, options);
-+  const _a = fromAlias(lang);
-+  // if (_a !== null) { console.log(highlightTokens(code, _a).tokens[0]); }
-+  if (_a !== null) { return highlightTokens(code, _a).tokens; }
-   const _grammar = internal.getLanguage(options.lang || "text");
-   if (options.grammarState) {
-     if (options.grammarState.lang !== _grammar.name) {
-@@ -1189,7 +1193,14 @@ function codeToTokens(internal, code, options) {
-   let themeName;
-   let rootStyle;
-   let grammarState;
--  if ("themes" in options) {
-+  if (fromAlias(options.lang) !== null) {
-+    tokens = codeToTokensBase(
-+      internal,
-+      code,
-+      options
-+    );
-+    // console.log(tokens);
-+  } else if ("themes" in options) {
-     const {
-       defaultColor = "light",
-       cssVariablePrefix = "--shiki-",
+ export * from "@shikijs/types"
+ 
+@@ -699,6 +700,9 @@ function dimColor(color) {
+ * This wraps the tokenizer's implementation to add ANSI support.
+ */
+ function codeToTokensBase(primitive, code, options = {}) {
++	const _a = fromAlias(options.lang);
++	// if (_a !== null) { console.log(highlightTokens(code, _a).tokens[0]); }
++	if (_a !== null) { return highlightTokens(code, _a).tokens; }
+ 	const lang = primitive.resolveLangAlias(options.lang || "text");
+ 	const { theme: themeName = primitive.getLoadedThemes()[0] } = options;
+ 	if (!isPlainLang(lang) && !isNoneTheme(themeName) && lang === "ansi") {
+@@ -722,7 +726,14 @@ function codeToTokens(primitive, code, options) {
+ 	let themeName;
+ 	let rootStyle;
+ 	let grammarState;
+-	if ("themes" in options) {
++	if (fromAlias(options.lang) !== null) {
++		tokens = codeToTokensBase(
++			primitive,
++			code,
++			options
++		);
++		// console.log(tokens);
++	} else if ("themes" in options) {
+ 		const { defaultColor = "light", cssVariablePrefix = "--shiki-", colorsRendering = "css-vars" } = options;
+ 		const themes = Object.entries(options.themes).filter((i) => i[1]).map((i) => ({
+ 			color: i[0],
 diff --git a/package.json b/package.json
-index 9a0f98a9827bb00aac31066852bbfee094031a29..aa8662d281c143ff37fa943a721522af901abd00 100644
+index 3fb27a37ac2415c88dddb4e7b89188bdc09c6c6f..e8be7a89a63384d5f0cffce0b311cbab1f673477 100644
 --- a/package.json
 +++ b/package.json
-@@ -43,6 +43,7 @@
-     "dist"
-   ],
+@@ -46,6 +46,7 @@
+     "node": ">=20"
+   },
    "dependencies": {
 +    "@master-hash/tree-sitter-highlight": "workspace:^",
      "@shikijs/vscode-textmate": "^10.0.2",
