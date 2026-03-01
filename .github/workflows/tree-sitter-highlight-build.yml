@@ -96,7 +96,7 @@ jobs:
         working-directory: packages/tree-sitter-highlight
         shell: bash
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: matrix.settings.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
@@ -104,7 +104,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: matrix.settings.target == 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
