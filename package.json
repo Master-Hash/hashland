@@ -13,7 +13,7 @@
     "lint": "oxlint --type-aware"
   },
   "devDependencies": {
-    "@types/node": "^25.3.2",
+    "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "oxfmt": "^0.35.0",
@@ -25,7 +25,9 @@
   "pnpm": {
     "overrides": {
       "safe-buffer": "npm:@nolyfill/safe-buffer@^1",
-      "vite": "8.0.0-beta.15"
+      "safer-buffer": "npm:@nolyfill/safer-buffer@^1",
+      "vite": "8.0.0-beta.15",
+      "serialize-javascript": "^7.0.3"
     }
   }
 }

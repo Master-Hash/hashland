@@ -19,7 +19,7 @@
     "react": "~19.2.4",
     "react-dom": "~19.2.4",
     "react-server-dom-webpack": "~19.2.4",
-    "resend": "^6.9.2",
+    "resend": "^6.9.3",
     "waku": "1.0.0-alpha.4",
     "xss": "^1.0.15"
   },
