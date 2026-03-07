@@ -26,7 +26,9 @@
     "overrides": {
       "safe-buffer": "npm:@nolyfill/safe-buffer@^1",
       "safer-buffer": "npm:@nolyfill/safer-buffer@^1",
-      "vite": "8.0.0-beta.15"
+      "vite": "8.0.0-beta.16",
+      "@vitejs/plugin-react": "6.0.0-beta.0",
+      "@rolldown/pluginutils": "1.0.0-rc.6"
     }
   }
 }
