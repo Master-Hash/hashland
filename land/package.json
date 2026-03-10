@@ -24,7 +24,7 @@
     "xss": "^1.0.15"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.28.5",
+    "@babel/core": "^7.29.0",
     "@cloudflare/vite-plugin": "1.26.1",
     "@cloudflare/workerd-windows-64": "1.20260307.1",
     "@iconify-json/fluent-emoji-high-contrast": "^1.2.5",

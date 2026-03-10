@@ -1,10 +1,12 @@
-import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
+import process from "node:process";
 
 import { cloudflare } from "@cloudflare/vite-plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
+import babel from "@rolldown/plugin-babel";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
+import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import {
   transformerRenderWhitespace,
@@ -12,10 +14,9 @@ import {
 } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import Color from "colorjs.io";
 import { toString } from "mdast-util-to-string";
-import process from "node:process";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
@@ -24,10 +25,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import smartypants from "remark-smartypants";
-import {
-  enableDeprecationWarnings,
-  getSingletonHighlighterCore,
-} from "shiki/core";
+import { getSingletonHighlighterCore } from "shiki/core";
 import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
 import { SKIP, visit } from "unist-util-visit";
@@ -41,7 +39,6 @@ const isBuild =
   process.argv[1]?.includes("vite") && process.argv[2]?.includes("build");
 
 //#region shiki
-enableDeprecationWarnings(true, true);
 const toClass = transformerStyleToClass({
   classPrefix: "__shiki_",
 });
@@ -213,7 +210,7 @@ export default defineConfig({
           include: ["waku > rsc-html-stream/server"],
         },
         build: {
-          rollupOptions: {
+          rolldownOptions: {
             platform: "neutral",
           },
         },
@@ -223,7 +220,7 @@ export default defineConfig({
           include: ["hono/tiny"],
         },
         build: {
-          rollupOptions: {
+          rolldownOptions: {
             platform: "neutral",
           },
         },
@@ -271,11 +268,10 @@ export default defineConfig({
       // isBuild && isoImport(),
       tailwindcss(),
       hashMDXPlugin,
-      react({
-        babel: {
-          include: /\.(md|tsx?)$/,
-          plugins: ["babel-plugin-react-compiler"],
-        },
+      react(),
+      babel({
+        // include: /\.(md|tsx?)$/,
+        presets: [reactCompilerPreset()],
       }),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },

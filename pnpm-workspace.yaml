@@ -6,3 +6,6 @@ patchedDependencies:
 packages:
   - land
   - packages/tree-sitter-highlight
+
+dedupePeerDependents: true
+autoInstallPeers: false
