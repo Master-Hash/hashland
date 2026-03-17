@@ -26,10 +26,10 @@
     "overrides": {
       "safe-buffer": "npm:@nolyfill/safe-buffer@^1",
       "safer-buffer": "npm:@nolyfill/safer-buffer@^1",
-      "vite": "8.0.0-beta.18",
+      "vite": "8.0.0",
       "lightningcss": "1.32.0",
-      "@vitejs/plugin-react": "6.0.0-beta.0",
-      "@rolldown/pluginutils": "1.0.0-rc.8"
+      "@vitejs/plugin-react": "6.0.0",
+      "@rolldown/pluginutils": "1.0.0-rc.9"
     }
   }
 }
