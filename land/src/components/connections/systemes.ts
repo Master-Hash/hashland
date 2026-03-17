@@ -1,10 +1,7 @@
 import type { FederatedPointerEvent } from "pixi.js";
-
 import { Container, Graphics, Sprite, Text } from "pixi.js";
 import DARK from "virtual:dark";
 import LIGHT from "virtual:light";
-
-import type { Context, DragTag } from "./schemata.ts";
 
 import bubbles from "./bubbles.json" with { type: "json" };
 import chronicles from "./chronicles.json" with { type: "json" };
@@ -12,6 +9,7 @@ import { colors } from "./colors.ts";
 import { JointData } from "./rapier2d/dynamics/impulse_joint.js";
 import { RigidBodyDesc } from "./rapier2d/dynamics/rigid_body.js";
 import { ColliderDesc } from "./rapier2d/geometry/collider.js";
+import type { Context, DragTag } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
@@ -28,6 +26,9 @@ const BUBBLE_STIFFNESS = 60000;
 const BUBBLE_STRING_DAMPING = 2;
 const GRAVITY = 441000;
 const ZODIAC_ANGULAR_INERTIA = 1e8;
+const WALL_RESTITUTION = 0.35;
+const DOLPHIN_WALL_RESTITUTION = 2;
+let DOLPHIN_ENABLED = false;
 
 const COLLIDER_GROUP_1 = 0x00010002;
 const COLLIDER_GROUP_2 = 0x00020003;
@@ -60,7 +61,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(0.35);
+    .setRestitution(WALL_RESTITUTION);
   const wallLeftCollider = world.createCollider(wallLeftColliderDesc);
   const wallRightColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
@@ -68,7 +69,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width - PADDING / 2, app.screen.height / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(0.35);
+    .setRestitution(WALL_RESTITUTION);
   const wallRightCollider = world.createCollider(wallRightColliderDesc);
   const wallTopColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
@@ -76,7 +77,7 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width / 2, PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(0.35);
+    .setRestitution(WALL_RESTITUTION);
   const wallTopCollider = world.createCollider(wallTopColliderDesc);
   const wallBottomColliderDesc = ColliderDesc.cuboid(
     (app.screen.width - PADDING) / 2,
@@ -84,10 +85,26 @@ export function setup(ctx: Context) {
   )
     .setTranslation(app.screen.width / 2, app.screen.height - PADDING / 2)
     .setCollisionGroups(COLLIDER_GROUP_1)
-    .setRestitution(0.35);
+    .setRestitution(WALL_RESTITUTION);
   const wallBottomCollider = world.createCollider(wallBottomColliderDesc);
   const pointerRigidBodyDesc = RigidBodyDesc.kinematicPositionBased();
   const pointerRigidBody = world.createRigidBody(pointerRigidBodyDesc);
+
+  app.stage.on("dolphin", () => {
+    if (!DOLPHIN_ENABLED) {
+      wallLeftCollider.setRestitution(DOLPHIN_WALL_RESTITUTION);
+      wallRightCollider.setRestitution(DOLPHIN_WALL_RESTITUTION);
+      wallTopCollider.setRestitution(DOLPHIN_WALL_RESTITUTION);
+      wallBottomCollider.setRestitution(DOLPHIN_WALL_RESTITUTION);
+      DOLPHIN_ENABLED = true;
+    } else {
+      wallLeftCollider.setRestitution(WALL_RESTITUTION);
+      wallRightCollider.setRestitution(WALL_RESTITUTION);
+      wallTopCollider.setRestitution(WALL_RESTITUTION);
+      wallBottomCollider.setRestitution(WALL_RESTITUTION);
+      DOLPHIN_ENABLED = false;
+    }
+  });
 
   // const texture = (await loadTexture()) as Record<string, Texture>;
   // #endregion

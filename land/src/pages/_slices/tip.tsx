@@ -166,6 +166,14 @@ const tips = [
       </p>
     ),
   },
+  {
+    data: (
+      <p>
+        在小游戏页输入 <code>dolphin</code>
+        ，会有意想不到的效果！（再次输入可以重置）
+      </p>
+    ),
+  },
 ];
 
 tips.push({

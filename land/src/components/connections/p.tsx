@@ -70,6 +70,26 @@ export function Pixi() {
           height: refContainer.current!.clientHeight,
         })
         .then(() => resolve(app));
+
+      // 彩蛋：按键宏
+      const DOLPHIN_CODE = ["d", "o", "l", "p", "h", "i", "n"];
+      let userInput = [] as string[];
+      const callback = (e: KeyboardEvent) => {
+        console.log("fuck");
+
+        userInput.push(e.key);
+
+        // 2. 保持数组长度，只保留最近的 N 个按键（N = 秘籍长度）
+        userInput = userInput.slice(-DOLPHIN_CODE.length);
+        if (
+          userInput.join(",").toLowerCase() ===
+          DOLPHIN_CODE.join(",").toLowerCase()
+        ) {
+          app.stage.emit("dolphin");
+        }
+      };
+      window.addEventListener("keydown", callback);
+
       function handler() {
         // console.log("abort");
         reject(controller.signal.reason);
@@ -116,6 +136,7 @@ export function Pixi() {
 
       return () => {
         controller.abort("The component is unmounted");
+        window.removeEventListener("keydown", callback);
         controller.signal.removeEventListener("abort", handler);
         console.log("Point clean", app, app.renderer);
 
