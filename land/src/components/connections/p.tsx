@@ -75,8 +75,6 @@ export function Pixi() {
       const DOLPHIN_CODE = ["d", "o", "l", "p", "h", "i", "n"];
       let userInput = [] as string[];
       const callback = (e: KeyboardEvent) => {
-        console.log("fuck");
-
         userInput.push(e.key);
 
         // 2. 保持数组长度，只保留最近的 N 个按键（N = 秘籍长度）
