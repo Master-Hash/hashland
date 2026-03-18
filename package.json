@@ -13,12 +13,12 @@
     "lint": "oxlint --type-aware"
   },
   "devDependencies": {
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "oxfmt": "^0.35.0",
-    "oxlint": "^1.50.0",
-    "oxlint-tsgolint": "^0.15.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "oxlint-tsgolint": "^0.17.0",
     "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@10.28.2",
@@ -28,7 +28,7 @@
       "safer-buffer": "npm:@nolyfill/safer-buffer@^1",
       "vite": "8.0.0",
       "lightningcss": "1.32.0",
-      "@vitejs/plugin-react": "6.0.0",
+      "@vitejs/plugin-react": "6.0.1",
       "@rolldown/pluginutils": "1.0.0-rc.9"
     }
   }
