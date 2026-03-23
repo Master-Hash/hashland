@@ -67,7 +67,7 @@ jobs:
       - run: |
           git submodule update --init --recursive packages/tree-sitter-highlight
       - name: setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
       - name: Setup node
         uses: actions/setup-node@v6
         with:
@@ -118,7 +118,7 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v6
   #     - name: setup pnpm
-  #       uses: pnpm/action-setup@v4
+  #       uses: pnpm/action-setup@v5
   #     - name: Setup node
   #       uses: actions/setup-node@v6
   #       with:
