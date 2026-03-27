@@ -35,9 +35,10 @@ pub struct PostItem {
 }
 
 #[napi]
-pub fn generate_rss() -> Result<String> {
+pub fn generate_rss() -> Result<Uint8Array> {
     let items = build_posts()?;
-    build_atom_xml(&items)
+    let s = build_atom_xml(&items);
+    Ok(Uint8Array::from(s.as_bytes()))
 }
 
 #[napi]
@@ -225,7 +226,7 @@ fn commit_time_iso(commit: &gix::Commit<'_>) -> String {
         .unwrap()
 }
 
-fn build_atom_xml(items: &[PostItem]) -> Result<String> {
+fn build_atom_xml(items: &[PostItem]) -> String {
     let mut feed = Feed {
         title: Text::plain(format!("故人故事故纸堆（{}）", SITE)),
         id: SITEURL.to_string(),
@@ -276,5 +277,5 @@ fn build_atom_xml(items: &[PostItem]) -> Result<String> {
         feed.updated = first.updated;
     }
 
-    Ok(feed.to_string())
+    feed.to_string()
 }
