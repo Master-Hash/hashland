@@ -3,7 +3,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use std::collections::HashSet;
 use std::ops::ControlFlow;
-use std::sync::LazyLock;
+use std::sync::{LazyLock, Mutex};
 
 // 查找最近一个含有 pnpm-workspace.yaml 的上级目录
 // POST_PATH 在该目录的 land/post 下
@@ -24,6 +24,7 @@ static SITEURL: &str = "https://land.hash.moe/";
 static SITE: &str = "land.hash.moe";
 
 #[napi(object)]
+#[derive(Clone)]
 pub struct PostItem {
     pub title: String,
     pub description: String,
@@ -49,7 +50,17 @@ struct ChangedFile {
     change_type: String,
 }
 
+static POSTS_CACHE: LazyLock<Mutex<Option<Vec<PostItem>>>> = LazyLock::new(|| Mutex::new(None));
+
 fn build_posts() -> Result<Vec<PostItem>> {
+    if let Some(cached) = POSTS_CACHE
+        .lock()
+        .map_err(|e| Error::from_reason(format!("failed to lock posts cache: {e}")))?
+        .clone()
+    {
+        return Ok(cached);
+    }
+
     let repo = gix::open(POST_PATH.to_string()).unwrap();
 
     let head_id = repo.head_id().unwrap();
@@ -106,6 +117,13 @@ fn build_posts() -> Result<Vec<PostItem>> {
         if items.len() >= 5 {
             break;
         }
+    }
+
+    {
+        let mut cache = POSTS_CACHE
+            .lock()
+            .map_err(|e| Error::from_reason(format!("failed to lock posts cache: {e}")))?;
+        *cache = Some(items.clone());
     }
 
     Ok(items)
