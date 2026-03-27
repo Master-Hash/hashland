@@ -1,0 +1,9 @@
+/RSC/*
+  X-Robots-Tag: noindex
+
+/*
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Opener-Policy: same-origin
+
+/atom.xml
+  Content-Type: application/atom+xml

@@ -150,7 +150,9 @@ dist
 /land/public/fluent/
 /land/public/tabler/
 /land/public/zodiac-white.png
-/land/public/
+/land/public/*
+!/land/public/_headers
+!/land/public/.assetsignore
 
 resources
 

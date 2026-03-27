@@ -15,6 +15,7 @@ import {
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import { generateRss } from "atom";
 import Color from "colorjs.io";
 import { toString } from "mdast-util-to-string";
 import rehypeKatex from "rehype-katex";
@@ -81,6 +82,20 @@ const hashShikiPlugin = {
         }
       }
     }
+  },
+} as VitePlugin;
+//#endregion
+
+//#region atom
+const hashAtomPlugin = {
+  name: "hash:atom",
+  generateBundle() {
+    const rss = generateRss();
+    this.emitFile({
+      type: "asset",
+      fileName: "atom.xml",
+      source: rss,
+    });
   },
 } as VitePlugin;
 //#endregion
@@ -245,7 +260,7 @@ export default defineConfig({
       format: "es",
     },
     experimental: {
-      enableNativePlugin: true,
+      // bundledDev: true,
       // skipSsrTransform: true,
       // importGlobRestoreExtension: true,
     },
@@ -283,6 +298,7 @@ export default defineConfig({
         "virtual:light": light,
       }),
       hashShikiPlugin,
+      hashAtomPlugin,
     ],
   },
 });
