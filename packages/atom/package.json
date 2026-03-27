@@ -1,0 +1,13 @@
+{
+  "name": "atom",
+  "version": "0.1.0",
+  "napi": {
+    "binaryName": "atom"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^3.5.1"
+  },
+  "scripts": {
+    "build": "napi build --platform --release"
+  }
+}

@@ -1,0 +1,23 @@
+[package]
+name = "atom-napi"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+atom_syndication = { version = "0.12.7" }
+gix = { version = "0.81.0", default-features = false, features = [
+  "basic",
+  "sha1",
+] }
+napi = "3"
+napi-derive = "3"
+
+[build-dependencies]
+napi-build = { version = "2" }
+
+[profile.release]
+opt-level = 3
+lto = true
