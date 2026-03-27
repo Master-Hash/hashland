@@ -3,8 +3,21 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use std::collections::HashSet;
 use std::ops::ControlFlow;
+use std::sync::LazyLock;
 
-static POST_PATH: &str = "../../land/post";
+// 查找最近一个含有 pnpm-workspace.yaml 的上级目录
+// POST_PATH 在该目录的 land/post 下
+static POST_PATH: LazyLock<String> = LazyLock::new(|| {
+    let mut path = std::env::current_dir().unwrap();
+    loop {
+        if path.join("pnpm-workspace.yaml").exists() {
+            return path.join("land/post").to_str().unwrap().to_string();
+        }
+        if !path.pop() {
+            panic!("pnpm-workspace.yaml not found in any parent directory");
+        }
+    }
+});
 static SITEURL: &str = "https://land.hash.moe/";
 // todo: https://github.com/rust-lang/rust/issues/143874
 // it should be a slice eventually
@@ -37,7 +50,7 @@ struct ChangedFile {
 }
 
 fn build_posts() -> Result<Vec<PostItem>> {
-    let repo = gix::open(POST_PATH).unwrap();
+    let repo = gix::open(POST_PATH.to_string()).unwrap();
 
     let head_id = repo.head_id().unwrap();
 
