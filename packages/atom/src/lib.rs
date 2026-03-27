@@ -134,7 +134,11 @@ fn parse_commit_message(message: &str) -> Option<(String, String)> {
     let subject = message.lines().next()?.trim();
 
     // Breaking change commits are ignored by requirement.
-    if subject.contains('!') {
+    if subject.contains('!') || subject.contains("breaking") {
+        return None;
+    }
+    // No structural posts.
+    if subject.contains("(now)") {
         return None;
     }
     if !subject.starts_with("feat(") {
