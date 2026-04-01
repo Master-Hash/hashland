@@ -4,6 +4,7 @@ import { Application, Assets } from "pixi.js";
 import { use, useEffect, useRef } from "react";
 import { useRouter } from "waku";
 
+import { ShanghaiNowDateTime } from "../../utils/functions.ts";
 import { isSafari } from "../../utils/functions.ts";
 import { NOTO_BUNDLE, FLUENT_BUNDLE, MISC_BUNDLE } from "./loadtexture.js";
 import { World } from "./rapier2d/pipeline/world.js";
@@ -29,10 +30,13 @@ export function Pixi() {
   const searchParams = new URLSearchParams(query);
 
   const isDark = useRef(false);
+  const s = ShanghaiNowDateTime();
   useEffect(() => {
     isDark.current =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
+      s.month === 4 && s.day === 9
+        ? false
+        : window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
   }, []);
 
   const isNoto = searchParams.get("noto") !== "0";

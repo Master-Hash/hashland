@@ -1,12 +1,13 @@
+import { ShanghaiNowDateTime } from "../../utils/functions.ts";
+
 export default function SlowComponent() {
-  // get today's date in MM-DD format
-  const today = new Date();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  const todayStr = `${month}-${day}`;
+  // get today's date (Asia/Shanghai)
+  const today = ShanghaiNowDateTime();
 
   // find tips that match today's date
-  const matchedTips = tips.filter((tip) => tip.date === todayStr);
+  const matchedTips = tips.filter(
+    (tip) => tip.date && today.toPlainDate().toPlainMonthDay().equals(tip.date),
+  );
 
   // if no matched tips, pick a random one but no matched date
   let tipToShow;
@@ -30,6 +31,9 @@ export const getConfig = () => {
   };
 };
 
+const createMonthDay = (month: number, day: number) =>
+  Temporal.PlainMonthDay.from({ month, day });
+
 // 抽取逻辑
 // 暂定：日期如果匹配，则只抽取当天的提示
 // 日期也许需要农历的吧？但先不管
@@ -41,7 +45,7 @@ export const getConfig = () => {
 const tips = [
   // 庆生
   {
-    date: "05-05",
+    date: createMonthDay(5, 5),
     data: (
       <p>
         5月5日是 <a href="/%E4%BA%BA/junyu33.md">Max</a> 的生日。生日快乐，Max！
@@ -49,14 +53,24 @@ const tips = [
     ),
   },
   {
-    date: "12-17",
+    date: createMonthDay(12, 17),
     data: <p>12月17日是我的生日。祝大家都能找到自己的快乐！</p>,
   },
   {
-    date: "12-22",
+    date: createMonthDay(12, 22),
     data: (
       <p>
         12月22日是 <a href="/%E4%BA%BA/tzy.md">tzy</a> 的生日。生日快乐！
+      </p>
+    ),
+  },
+  // 节日
+  {
+    date: createMonthDay(4, 9),
+    data: (
+      <p>
+        4月9日是 <a href="https://css-naked-day.org/">CSS 裸奔日</a>
+        ，旨在呼吁关注 HTML 语义结构，以便让任何人（包括盲人）顺利阅读。
       </p>
     ),
   },
