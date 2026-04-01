@@ -308,12 +308,12 @@ export function setup(ctx: Context) {
       // test if `c.alt` is full URL
       const outURL = URL.parse(c.alt!);
       if (outURL !== null) {
-        window.open(c.alt, "_blank", "noopener,noreferrer")?.focus();
+        window.open(c.alt, "_blank")?.focus();
       } else {
         const t = "alt" in c ? c.alt : `/事/${c.date}_${c.title}.md`;
         console.log("fuck", t);
         if (e.ctrlKey || e.metaKey || e.button === 1) {
-          window.open(t, "_blank", "noopener,noreferrer")?.focus();
+          window.open(t, "_blank")?.focus();
         } else {
           navigate(t!);
         }
@@ -378,9 +378,7 @@ export function setup(ctx: Context) {
     nameText.cursor = "pointer";
     nameText.on("pointerdown", (e) => {
       if (e.ctrlKey || e.metaKey || e.button === 1) {
-        window
-          .open(`/人/${b.name}.md`, "_blank", "noopener,noreferrer")
-          ?.focus();
+        window.open(`/人/${b.name}.md`, "_blank")?.focus();
       } else {
         navigate(`/人/${b.name}.md`);
       }
@@ -405,7 +403,7 @@ export function setup(ctx: Context) {
       siteText.eventMode = "static";
       siteText.cursor = "pointer";
       siteText.on("pointerdown", () => {
-        window.open(b.site, "_blank", "noopener,noreferrer")?.focus();
+        window.open(b.site, "_blank")?.focus();
       });
       bubbleContainer.addChild(siteText);
     }
