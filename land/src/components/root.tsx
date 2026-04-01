@@ -14,6 +14,7 @@ import noto from "../resources/NotoEmoji-VariableFont_wght-webring.woff2?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
 import font from "../resources/SourceSans3VF-Upright.ttf.woff2?url";
+import { ShanghaiNowDateTime } from "../utils/functions.ts";
 import { isSafari } from "../utils/functions.ts";
 
 import style from "../main.css?url";
@@ -27,7 +28,7 @@ export function HeaderComponent() {
     ["/kami", "故纸堆"],
   ] as const;
   return (
-    <header className="px-8 py-4 print:hidden">
+    <header className="px-8 py-4 contain-content print:hidden">
       <nav className="flex items-center">
         <Link to="/" className="mr-auto">
           <img
@@ -165,7 +166,7 @@ function Flower() {
       xmlns="http://www.w3.org/2000/svg"
       // viewBox="0 0 10 10.1"
       className={cx(
-        "absolute bottom-0 hidden h-27.5 w-27.5 stroke-cat-subtext1 stroke-[1.1] md:-right-20 md:inline dark:stroke-[.66]",
+        "absolute bottom-0 hidden h-27.5 w-27.5 stroke-cat-subtext1 stroke-[1.1] contain-strict md:-right-20 md:inline dark:stroke-[.66]",
         isInView ? "" : "md:invisible",
       )}
       strokeDasharray="1100"
@@ -392,6 +393,7 @@ export class HashError extends Component<
 export const Root: FC<{
   children: ReactElement;
 }> = ({ children }) => {
+  const s = ShanghaiNowDateTime();
   preload(font, {
     as: "font",
   });
@@ -416,7 +418,16 @@ export const Root: FC<{
         <meta property="og:site_name" content="故人故事故纸堆" />
         <meta property="og:locale" content="zh_CN" />
         <meta property="og:image" content="/favicon.png" />
-        <link rel="stylesheet" href={style} />
+        {/* April 9 is CSS Naked Day! */}
+        {s.month === 4 && s.day === 9 ? null : (
+          <link rel="stylesheet" href={style} />
+        )}
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          href="/atom.xml"
+          title="故人故事故纸堆（land.hash.moe）"
+        />
         <link
           rel="alternate"
           type="application/atom+xml"
@@ -435,13 +446,15 @@ export const Root: FC<{
       <body className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-cat-base text-cat-text print:block">
         <HeaderComponent />
         <HashError>{children}</HashError>
-        <footer className="relative mx-auto w-[calc(100%-3rem)] max-w-[38ic] p-3 pt-12 text-cat-subtext1 print:hidden">
-          <div>
-            <small>
-              <Slice id="tip" lazy fallback={"抽取提示中……"} />
-            </small>
+        <footer className="text-cat-subtext1 contain-content print:hidden">
+          <div className="relative mx-auto w-[calc(100%-3rem)] max-w-[38ic] p-3 pt-12">
+            <div>
+              <small>
+                <Slice id="tip" lazy fallback={"抽取提示中……"} />
+              </small>
+            </div>
+            <FooterComponent />
           </div>
-          <FooterComponent />
         </footer>
         {/* <!-- Cloudflare Web Analytics --> */}
         {/* <script

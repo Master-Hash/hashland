@@ -1,6 +1,6 @@
 export default function NotFound() {
   return (
-    <main className="relative mx-auto prose prose-a:whitespace-nowrap">
+    <main className="relative mx-auto prose">
       <title>404 « 故人故事故纸堆</title>
       <meta property="og:title" content="404 « 故人故事故纸堆" />
       <h1>404 - 页面未找到</h1>

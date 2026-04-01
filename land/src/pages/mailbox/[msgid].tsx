@@ -1,7 +1,6 @@
-import type { PageProps } from "waku/router";
-
 import { env } from "cloudflare:workers";
 import PostalMime from "postal-mime";
+import type { PageProps } from "waku/router";
 import { unstable_notFound } from "waku/router/server";
 import { unstable_getContext } from "waku/server";
 import xss from "xss";
@@ -44,7 +43,7 @@ export default async function DisplayMailbox({
     const humanDate = dateFormat.format(new Date(email.date!));
     const t = `${email.subject} « 故人故事故纸堆`;
     return (
-      <div className="mx-auto prose">
+      <div className="no-note mx-auto prose">
         <main key={msgid}>
           <title>{t}</title>
 

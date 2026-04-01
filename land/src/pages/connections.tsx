@@ -5,7 +5,7 @@ import { Pixi } from "../components/connections/p.tsx";
 
 export default function PixiServer() {
   return (
-    <main className="relative mx-auto prose select-none prose-a:whitespace-nowrap">
+    <main className="relative mx-auto prose select-none">
       <title>故人 « 故人故事故纸堆</title>
       <meta property="og:title" content="故人 « 故人故事故纸堆" />
       <Suspense

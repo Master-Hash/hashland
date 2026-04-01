@@ -29,7 +29,7 @@ body {
   /* @apply bg-contain; */
   /* @apply bg-auto; */
   /* @apply bg-cover; */
-  @apply bg-[50%_auto];
+  @apply bg-size-[50%_auto];
 }
 
 /* https://stackoverflow.com/questions/16348489/is-there-a-way-to-apply-styles-to-safari-only */
@@ -139,7 +139,13 @@ a[href*="?q=%23"] {
   pre {
     @apply bg-inherit;
     @apply max-w-dvw;
+    @apply contain-layout contain-paint;
     /* @apply overflow-x-hidden; */
+  }
+
+  & > *:nth-child(n + 21) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1px auto 100px;
   }
 
   --tw-prose-pre-code: unset;
@@ -156,6 +162,10 @@ hr {
   /* @apply invisible; */
   @apply contents;
   /* content: "* * *"; */
+}
+
+table {
+  @apply contain-content;
 }
 
 hr::after {
@@ -175,11 +185,6 @@ hr::after {
   hr::after {
     @apply font-[Playfair,serif];
   }
-}
-
-summary {
-  @apply font-semibold;
-  /* @apply text-center; */
 }
 
 /* 我认为更恰当的做法是，内容用 <blockquote>，来表达边界 */
