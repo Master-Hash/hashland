@@ -15,7 +15,7 @@ import {
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { generateRss } from "atom";
+import { generateRss, collectPosts } from "atom";
 import Color from "colorjs.io";
 import { toString } from "mdast-util-to-string";
 import rehypeKatex from "rehype-katex";
@@ -296,6 +296,7 @@ export default defineConfig({
         "virtual:partial-chars": partialChars,
         "virtual:dark": dark,
         "virtual:light": light,
+        "virtual:recent-posts": collectPosts(),
       }),
       hashShikiPlugin,
       hashAtomPlugin,

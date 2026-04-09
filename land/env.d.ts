@@ -36,3 +36,8 @@ declare module "virtual:dark" {
   const dark: Record<string, number>;
   export default dark;
 }
+
+declare module "virtual:recent-posts" {
+  const posts: import("atom").PostItem[];
+  export default posts;
+}
