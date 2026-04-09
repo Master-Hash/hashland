@@ -1,102 +1,104 @@
-:root {
-  --n-yellow: #ffe44d;
-  --n-yellow-text: rgba(55, 40, 0, 0.85);
-  --n-pink: #ff7eb3;
-  --n-pink-text: rgba(80, 0, 30, 0.85);
-  --n-mint: #6ee7b7;
-  --n-mint-text: rgba(0, 55, 35, 0.85);
-  --n-blue: #7ec8e3;
-  --n-blue-text: rgba(0, 40, 70, 0.85);
-  /* 亮色主题，阴影更暗 */
-  --n-shadow: 0.9;
-}
-
-@media (prefers-color-scheme: dark) {
+@media not print {
   :root {
-    --n-yellow: #a8841a;
-    --n-yellow-text: rgba(255, 235, 160, 0.9);
-    --n-pink: #9b3060;
-    --n-pink-text: rgba(255, 200, 220, 0.9);
-    --n-mint: #1a6b4a;
-    --n-mint-text: rgba(160, 245, 210, 0.9);
-    --n-blue: #1a5f7a;
-    --n-blue-text: rgba(170, 225, 245, 0.9);
-    /* 暗色主题，阴影更亮 */
-    --n-shadow: 1.2;
-  }
-}
-
-.prose:not(.no-note) {
-  details {
-    position: relative;
-    padding: 10px 12px 22px;
+    --n-yellow: #ffe44d;
+    --n-yellow-text: rgba(55, 40, 0, 0.85);
+    --n-pink: #ff7eb3;
+    --n-pink-text: rgba(80, 0, 30, 0.85);
+    --n-mint: #6ee7b7;
+    --n-mint-text: rgba(0, 55, 35, 0.85);
+    --n-blue: #7ec8e3;
+    --n-blue-text: rgba(0, 40, 70, 0.85);
+    /* 亮色主题，阴影更暗 */
+    --n-shadow: 0.9;
   }
 
-  details::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: inherit;
-    transform: rotate(-2.5deg) translate(4px, 5px);
-    transform: rotate(random(-3deg, 0deg)) translate(4px, 5px);
-    filter: brightness(var(--n-shadow));
-    @apply mix-blend-lighten dark:mix-blend-darken;
-    z-index: -1;
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --n-yellow: #a8841a;
+      --n-yellow-text: rgba(255, 235, 160, 0.9);
+      --n-pink: #9b3060;
+      --n-pink-text: rgba(255, 200, 220, 0.9);
+      --n-mint: #1a6b4a;
+      --n-mint-text: rgba(160, 245, 210, 0.9);
+      --n-blue: #1a5f7a;
+      --n-blue-text: rgba(170, 225, 245, 0.9);
+      /* 暗色主题，阴影更亮 */
+      --n-shadow: 1.2;
+    }
   }
 
-  details > summary {
-    @apply block;
-    list-style: none;
-    margin: 0 -12px 10px;
-    padding: 6px 12px;
-    font-size: 14px;
-    cursor: pointer;
-  }
+  .prose:not(.no-note) {
+    details {
+      position: relative;
+      padding: 10px 12px 22px;
+    }
 
-  details > summary::marker {
-    display: none;
-  }
-  details > summary::after {
-    content: "▸";
-    float: right;
-    transition: transform 0.18s;
-  }
-  details[open] > summary::after {
-    transform: rotate(90deg);
-  }
+    details::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: inherit;
+      transform: rotate(-2.5deg) translate(4px, 5px);
+      transform: rotate(random(-3deg, 0deg)) translate(4px, 5px);
+      filter: brightness(var(--n-shadow));
+      @apply mix-blend-lighten dark:mix-blend-darken;
+      z-index: -1;
+    }
 
-  details > summary ~ * {
-    @apply text-sm;
-    margin: 0 0 4px;
-    word-break: break-word;
-    color: inherit;
-  }
+    details > summary {
+      @apply block;
+      list-style: none;
+      margin: 0 -12px 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
 
-  details:nth-child(4n) {
-    background-color: var(--n-yellow);
-    color: var(--n-yellow-text);
-    transform: rotate(-1.5deg);
-    transform: rotate(random(-1.5deg, 1.5deg));
-  }
-  details:nth-child(4n + 1) {
-    background-color: var(--n-pink);
-    color: var(--n-pink-text);
-    transform: rotate(1deg);
-    transform: rotate(random(-1.5deg, 1.5deg));
-  }
-  details:nth-child(4n + 2) {
-    background-color: var(--n-mint);
-    color: var(--n-mint-text);
-    transform: rotate(-0.8deg);
-    transform: rotate(random(-1.5deg, 1.5deg));
-  }
-  details:nth-child(4n + 3) {
-    background-color: var(--n-blue);
-    color: var(--n-blue-text);
-    transform: rotate(1.5deg);
-    transform: rotate(random(-1.5deg, 1.5deg));
+    details > summary::marker {
+      display: none;
+    }
+    details > summary::after {
+      content: "▸";
+      float: right;
+      transition: transform 0.18s;
+    }
+    details[open] > summary::after {
+      transform: rotate(90deg);
+    }
+
+    details > summary ~ * {
+      @apply text-sm;
+      margin: 0 0 4px;
+      word-break: break-word;
+      color: inherit;
+    }
+
+    details:nth-child(4n) {
+      background-color: var(--n-yellow);
+      color: var(--n-yellow-text);
+      transform: rotate(-1.5deg);
+      transform: rotate(random(-1.5deg, 1.5deg));
+    }
+    details:nth-child(4n + 1) {
+      background-color: var(--n-pink);
+      color: var(--n-pink-text);
+      transform: rotate(1deg);
+      transform: rotate(random(-1.5deg, 1.5deg));
+    }
+    details:nth-child(4n + 2) {
+      background-color: var(--n-mint);
+      color: var(--n-mint-text);
+      transform: rotate(-0.8deg);
+      transform: rotate(random(-1.5deg, 1.5deg));
+    }
+    details:nth-child(4n + 3) {
+      background-color: var(--n-blue);
+      color: var(--n-blue-text);
+      transform: rotate(1.5deg);
+      transform: rotate(random(-1.5deg, 1.5deg));
+    }
   }
 }
