@@ -1,11 +1,10 @@
 import type { Sprite } from "pixi.js";
-
 import { Container, Graphics, Text } from "pixi.js";
 
 const mockData = {
   Ayu: "https://ayu.land/",
   Spheniscidae: "https://blog.sphenhe.me/",
-  哲涵: "https://note.adamanteye.cc/",
+  哲涵: "https://blog.adamanteye.cc/",
   续本达: "https://hep.tsinghua.edu.cn/~orv/index.html",
 } as Record<string, string>;
 
