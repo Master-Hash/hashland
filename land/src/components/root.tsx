@@ -33,11 +33,10 @@ export function HeaderComponent() {
         <Link to="/" className="mr-auto">
           <img
             alt="站点标识，为一立方体的三点透视图"
+            width="48"
+            height="48"
             src="/favicon.ico"
-            className={cx(
-              "size-12",
-              isRoot ? "" : "opacity-80 hover:opacity-100",
-            )}
+            className={cx(isRoot ? "" : "opacity-80 hover:opacity-100")}
           />
         </Link>
 
@@ -112,9 +111,13 @@ export function FooterComponent() {
             →
           </a>
           {"・"}
-          <a className="align-middle" href="/colophon">
-            <span className="icon-[ri--creative-commons-line]" />
-            <span className="icon-[ri--creative-commons-by-line]" />
+          <a className="align-middle" href="/colophon" title="封底内页">
+            <span className="icon-[ri--creative-commons-line] inline">
+              &emsp;
+            </span>
+            <span className="icon-[ri--creative-commons-by-line] inline">
+              &emsp;
+            </span>
           </a>
           {"・"}
           <button className="cursor-pointer" onClick={() => refetch("S/tip")}>
