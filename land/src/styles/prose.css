@@ -65,9 +65,18 @@ nav {
 }
 
 /* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/ */
+/* 正文就免了，不然太长 */
+/* 写作时就应该注意，如果外链内容很重要，我们应该直接引用正文，再加尾注 */
+/* 讲究一点的地方，用脚注加尾注，但到时候再说（？） */
 @media print {
-  a::after {
-    content: "(" attr(href) ")";
+  .footnotes {
+    & a[href^="https://"]::after,
+    & a[href^="tg://"]::after {
+      content: "(" attr(href) ")";
+    }
+    & a.data-footnote-backref {
+      display: none;
+    }
   }
 }
 
