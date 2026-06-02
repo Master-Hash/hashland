@@ -1,5 +1,5 @@
 diff --git a/dist/index.mjs b/dist/index.mjs
-index 73b2f5e0122430458b6d317d539fbdc9dbf15b68..027316cc2764b2f341eb35388b1f3a8a15c2236f 100644
+index 8f3fe7d619f247640705232ab9491c12f3e84979..a5b75f0fe574672f5714cfa866762106d044e9b0 100644
 --- a/dist/index.mjs
 +++ b/dist/index.mjs
 @@ -2,6 +2,7 @@ import { ShikiError as ShikiError$1 } from "@shikijs/types";
@@ -7,10 +7,10 @@ index 73b2f5e0122430458b6d317d539fbdc9dbf15b68..027316cc2764b2f341eb35388b1f3a8a
  import { FontStyle } from "@shikijs/vscode-textmate";
  import { toHtml } from "hast-util-to-html";
 +import { highlightTokens, fromAlias } from "@master-hash/tree-sitter-highlight";
- 
- export * from "@shikijs/types"
- 
-@@ -699,6 +700,9 @@ function dimColor(color) {
+ export * from "@shikijs/types";
+ //#region src/utils/hast.ts
+ const RE_WHITESPACE = /\s+/g;
+@@ -693,6 +694,9 @@ function dimColor(color) {
  * This wraps the tokenizer's implementation to add ANSI support.
  */
  function codeToTokensBase(primitive, code, options = {}) {
@@ -20,7 +20,7 @@ index 73b2f5e0122430458b6d317d539fbdc9dbf15b68..027316cc2764b2f341eb35388b1f3a8a
  	const lang = primitive.resolveLangAlias(options.lang || "text");
  	const { theme: themeName = primitive.getLoadedThemes()[0] } = options;
  	if (!isPlainLang(lang) && !isNoneTheme(themeName) && lang === "ansi") {
-@@ -722,7 +726,14 @@ function codeToTokens(primitive, code, options) {
+@@ -715,7 +719,14 @@ function codeToTokens(primitive, code, options) {
  	let themeName;
  	let rootStyle;
  	let grammarState;
@@ -36,15 +36,3 @@ index 73b2f5e0122430458b6d317d539fbdc9dbf15b68..027316cc2764b2f341eb35388b1f3a8a
  		const { defaultColor = "light", cssVariablePrefix = "--shiki-", colorsRendering = "css-vars" } = options;
  		const themes = Object.entries(options.themes).filter((i) => i[1]).map((i) => ({
  			color: i[0],
-diff --git a/package.json b/package.json
-index 3fb27a37ac2415c88dddb4e7b89188bdc09c6c6f..e8be7a89a63384d5f0cffce0b311cbab1f673477 100644
---- a/package.json
-+++ b/package.json
-@@ -46,6 +46,7 @@
-     "node": ">=20"
-   },
-   "dependencies": {
-+    "@master-hash/tree-sitter-highlight": "workspace:^",
-     "@shikijs/vscode-textmate": "^10.0.2",
-     "@types/hast": "^3.0.4",
-     "hast-util-to-html": "^9.0.5",

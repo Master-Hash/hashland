@@ -1,13 +1,21 @@
 {
   "name": "atom",
   "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
   "napi": {
     "binaryName": "atom"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^3.5.1"
+    "@napi-rs/cli": "^3.7.0"
   },
   "scripts": {
-    "build": "napi build --platform --release"
+    "build": "napi build --platform --release --esm"
   }
 }

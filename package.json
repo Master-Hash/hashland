@@ -10,27 +10,16 @@
     "start": "pnpm -F hashland start",
     "deploy": "pnpm -F hashland run deploy",
     "fmt": "oxfmt",
-    "lint": "oxlint --type-aware"
+    "lint": "oxlint"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@types/react": "^19.2.14",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
-    "oxlint-tsgolint": "^0.18.1",
-    "typescript": "^6.0.2"
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
+    "oxlint-tsgolint": "^0.23.0",
+    "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@10.28.2",
-  "pnpm": {
-    "overrides": {
-      "safe-buffer": "npm:@nolyfill/safe-buffer@^1",
-      "safer-buffer": "npm:@nolyfill/safer-buffer@^1",
-      "vite": "8.0.7",
-      "lightningcss": "1.32.0",
-      "@vitejs/plugin-react": "6.0.1",
-      "@rolldown/pluginutils": "1.0.0-rc.14",
-      "@cloudflare/workerd-windows-64": "1.20260329.1"
-    }
-  }
+  "packageManager": "pnpm@11.5.0"
 }

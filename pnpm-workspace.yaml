@@ -1,12 +1,29 @@
-patchedDependencies:
-  waku: patches/waku.patch
-  workerd: patches/workerd.patch
-  cytoscape: patches/cytoscape.patch
-  "@shikijs/core": patches/@shikijs__core.patch
 packages:
   - land
   - packages/tree-sitter-highlight
   - packages/atom
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
+autoInstallPeers: false
 
 dedupePeerDependents: true
-autoInstallPeers: false
+
+# minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - waku
+  - react
+  - react-dom
+  - react-server-dom-webpack
+patchedDependencies:
+  '@shikijs/core': patches/@shikijs__core.patch
+  cytoscape: patches/cytoscape.patch
+  # waku: patches/waku.patch
+  workerd: patches/workerd.patch
+
+overrides:
+  "safe-buffer": "npm:@nolyfill/safe-buffer@^1"
+  "safer-buffer": "npm:@nolyfill/safer-buffer@^1"
+  "js-tokens": "10.0.0"
+  "style-to-js": "2.0.0"

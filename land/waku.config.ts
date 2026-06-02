@@ -4,12 +4,13 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
+// import typst from "@myriaddreamin/vite-plugin-typst";
 import babel from "@rolldown/plugin-babel";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
 import {
-  transformerRenderWhitespace,
+  // transformerRenderWhitespace,
   transformerStyleToClass,
 } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
@@ -31,7 +32,9 @@ import { createOnigurumaEngine } from "shiki/engine/oniguruma";
 import getWasm from "shiki/wasm";
 import { SKIP, visit } from "unist-util-visit";
 import virtual from "vite-plugin-virtual";
-import { defineConfig, type VitePlugin } from "waku/config";
+import { defineConfig } from "waku/config";
+import type { VitePlugin } from "waku/config";
+// import inspect from "vite-plugin-inspect";
 
 import chronicles from "./src/components/connections/chronicles.json" with { type: "json" };
 import { EMOJI_REGEX } from "./src/utils/constant.ts";
@@ -91,11 +94,13 @@ const hashAtomPlugin = {
   name: "hash:atom",
   generateBundle() {
     const rss = generateRss();
-    this.emitFile({
-      type: "asset",
-      fileName: "atom.xml",
-      source: rss,
-    });
+    if (this.environment.name === "client") {
+      this.emitFile({
+        type: "asset",
+        fileName: "atom.xml",
+        source: rss,
+      });
+    }
   },
 } as VitePlugin;
 //#endregion
@@ -219,6 +224,9 @@ const hashMDXPlugin = {
 //#region waku
 export default defineConfig({
   vite: {
+    // devtools: {
+    //   enabled: true,
+    // },
     environments: {
       ssr: {
         optimizeDeps: {
@@ -274,7 +282,6 @@ export default defineConfig({
         "eventemitter3",
         "pixi.js",
         "parse-svg-path",
-        "@xmldom/xmldom",
         "react/jsx-runtime",
       ],
     },
@@ -282,10 +289,16 @@ export default defineConfig({
       // DevTools(),
       // isBuild && isoImport(),
       tailwindcss(),
+      // typst({
+      //   root: "post/",
+      //   documents: ["**/*.typ"],
+      // }),
       hashMDXPlugin,
-      react(),
+      react({
+        include: /\.(md|mdx|js|jsx|ts|tsx)$/,
+      }),
       babel({
-        // include: /\.(md|tsx?)$/,
+        include: /\.(md|mdx|js|jsx|ts|tsx)$/,
         presets: [reactCompilerPreset()],
       }),
       cloudflare({
@@ -300,6 +313,7 @@ export default defineConfig({
       }),
       hashShikiPlugin,
       hashAtomPlugin,
+      // inspect({ build: false }),
     ],
   },
 });
