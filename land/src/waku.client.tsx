@@ -5,9 +5,8 @@
 
 import { StrictMode } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
+import { unstable_defaultRootOptions as defaultRootOptions } from "waku/client";
 import { Router } from "waku/router/client";
-
-import { isSafari } from "./utils/functions.ts";
 
 const rootElement = (
   <StrictMode>
@@ -15,10 +14,8 @@ const rootElement = (
   </StrictMode>
 );
 
-if (!isSafari()) {
-  if (globalThis.__WAKU_HYDRATE__) {
-    hydrateRoot(document, rootElement);
-  } else {
-    createRoot(document).render(rootElement);
-  }
+if (globalThis.__WAKU_HYDRATE__) {
+  hydrateRoot(document, rootElement, defaultRootOptions);
+} else {
+  createRoot(document, defaultRootOptions).render(rootElement);
 }

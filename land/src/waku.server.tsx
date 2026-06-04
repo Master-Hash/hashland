@@ -4,7 +4,8 @@ import adapter from "waku/adapters/cloudflare";
 import { nonceMiddleware } from "./middleware/csp.ts";
 
 export default adapter(
-  fsRouter(import.meta.glob("./**/*.{tsx,ts}", { base: "./pages" })),
+  fsRouter(import.meta.glob("./pages/**/*.{tsx,ts}")),
+  // fsRouter(import.meta.glob("./**/*.{tsx,ts}", { base: "./pages" })),
   {
     handlers: {
       // Define additional Cloudflare Workers handlers here

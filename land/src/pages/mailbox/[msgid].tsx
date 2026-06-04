@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 import PostalMime from "postal-mime";
 import type { PageProps } from "waku/router";
 import { unstable_notFound } from "waku/router/server";
-import { unstable_getContext } from "waku/server";
+import { unstable_getRequest } from "waku/router/server";
 import xss from "xss";
 
 import { HAN_REGEX } from "../../utils/constant.ts";
@@ -13,7 +13,7 @@ export default async function DisplayMailbox({
 }: PageProps<"/mailbox/[msgid]">) {
   // console.log(m, entries);
   // console.log("Rendering post:", _t, _p);
-  const { req } = unstable_getContext();
+  const req = unstable_getRequest();
 
   console.log(req.url);
 

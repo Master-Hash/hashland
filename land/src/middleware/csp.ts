@@ -1,10 +1,10 @@
 import type { MiddlewareHandler } from "hono";
-
+import { contextStorage } from "hono/context-storage";
 import { createMiddleware } from "hono/factory";
 import { NONCE, secureHeaders } from "hono/secure-headers";
-import { unstable_getContext as getContext } from "waku/server";
 
 export const nonceMiddleware = (): MiddlewareHandler => {
+  const storage = contextStorage();
   const secure = secureHeaders({
     crossOriginResourcePolicy: "same-site",
     crossOriginEmbedderPolicy: "require-corp",
@@ -36,13 +36,8 @@ export const nonceMiddleware = (): MiddlewareHandler => {
       await next();
       return;
     }
-    await secure(c, async () => {
-      const nonce = c.get("secureHeadersNonce");
-      if (nonce) {
-        const context = getContext();
-        context.nonce = nonce;
-      }
-      await next();
+    await storage(c, async () => {
+      await secure(c, next);
     });
   });
 };
