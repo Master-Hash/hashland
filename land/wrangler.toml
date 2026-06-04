@@ -2,7 +2,7 @@
 
 name = "land"
 main = "./src/waku.server.tsx"
-compatibility_date = "2026-04-20"
+compatibility_date = "2026-06-01"
 compatibility_flags = ["nodejs_als"]
 workers_dev = false
 send_metrics = false
