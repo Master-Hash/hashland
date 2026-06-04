@@ -172,3 +172,6 @@ worker-configuration.d.ts
 sonda-report.html
 .vite-inspect/
 .sonda/*
+
+
+/target

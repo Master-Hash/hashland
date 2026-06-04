@@ -17,7 +17,3 @@ napi-derive = "3"
 
 [build-dependencies]
 napi-build = { version = "2" }
-
-[profile.release]
-opt-level = 3
-lto = true
