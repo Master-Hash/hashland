@@ -108,7 +108,7 @@
 }
 
 a[id^="user-content-fnref-"]::before {
-  content: "[";
+  content: "\2060[";
 }
 
 a[id^="user-content-fnref-"]::after {
