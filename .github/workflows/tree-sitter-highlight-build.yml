@@ -63,7 +63,7 @@ jobs:
     name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: |
           git submodule update --init --recursive packages/tree-sitter-highlight
       - name: setup pnpm
@@ -116,7 +116,7 @@ jobs:
   #   needs:
   #     - build
   #   steps:
-  #     - uses: actions/checkout@v6
+  #     - uses: actions/checkout@v7
   #     - name: setup pnpm
   #       uses: pnpm/action-setup@v5
   #     - name: Setup node
