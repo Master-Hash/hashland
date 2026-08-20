@@ -5,7 +5,6 @@ import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { t
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 // import typst from "@myriaddreamin/vite-plugin-typst";
-import babel from "@rolldown/plugin-babel";
 import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import type { RehypeShikiCoreOptions } from "@shikijs/rehype/core";
 import rehypeShikiFromHighlighter from "@shikijs/rehype/core";
@@ -15,7 +14,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerTwoslash } from "@shikijs/twoslash";
 import tailwindcss from "@tailwindcss/vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 import { generateRss, collectPosts } from "atom";
 import Color from "colorjs.io";
 import { toString } from "mdast-util-to-string";
@@ -253,6 +252,7 @@ export default defineConfig({
       // sourcemap: true,
       minify: "oxc",
       // minify: "esbuild",
+      // chunkImportMap: true,
       cssMinify: "lightningcss",
       target: "esnext",
       assetsInlineLimit: 0,
@@ -278,12 +278,7 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      include: [
-        "eventemitter3",
-        "pixi.js",
-        "parse-svg-path",
-        "react/jsx-runtime",
-      ],
+      include: ["pixi.js", "react/jsx-runtime"],
     },
     plugins: [
       // DevTools(),
@@ -296,10 +291,7 @@ export default defineConfig({
       hashMDXPlugin,
       react({
         include: /\.(md|mdx|js|jsx|ts|tsx)$/,
-      }),
-      babel({
-        include: /\.(md|mdx|js|jsx|ts|tsx)$/,
-        presets: [reactCompilerPreset()],
+        compiler: true,
       }),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },

@@ -1,9 +1,6 @@
 [workspace]
 resolver = "3"
-members = [
-  "packages/atom",
-  "packages/tree-sitter-highlight",
-]
+members = ["packages/atom", "packages/tree-sitter-highlight"]
 
 [workspace.package]
 edition = "2024"

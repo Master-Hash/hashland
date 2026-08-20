@@ -3,5 +3,9 @@
   "options": {
     "typeAware": true,
     "typeCheck": true
+  },
+  "plugins": ["react"],
+  "categories": {
+    "correctness": "error"
   }
 }

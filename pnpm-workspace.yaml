@@ -16,8 +16,10 @@ minimumReleaseAgeExclude:
   - react
   - react-dom
   - react-server-dom-webpack
+  - "@vitejs/plugin-react@6.1.0"
+  - magic-string@1.2.1
 patchedDependencies:
-  '@shikijs/core': patches/@shikijs__core.patch
+  "@shikijs/core": patches/@shikijs__core.patch
   cytoscape: patches/cytoscape.patch
   # waku: patches/waku.patch
   workerd: patches/workerd.patch
@@ -25,5 +27,9 @@ patchedDependencies:
 overrides:
   "safe-buffer": "npm:@nolyfill/safe-buffer@^1"
   "safer-buffer": "npm:@nolyfill/safer-buffer@^1"
+  "typescript": "^6.0.3"
   "js-tokens": "10.0.0"
-  "style-to-js": "2.0.0"
+  "style-to-js": "2.0.2"
+  "vite": "8.2.1"
+  "lightningcss": "1.33.0"
+  "magic-string": "1.2.1"

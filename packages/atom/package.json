@@ -9,13 +9,13 @@
       "default": "./index.js"
     }
   },
-  "napi": {
-    "binaryName": "atom"
-  },
-  "devDependencies": {
-    "@napi-rs/cli": "^3.7.0"
-  },
   "scripts": {
     "build": "napi build --platform --release --esm"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^3.8.6"
+  },
+  "napi": {
+    "binaryName": "atom"
   }
 }

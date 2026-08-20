@@ -2,12 +2,13 @@
 
 name = "land"
 main = "./src/waku.server.tsx"
-compatibility_date = "2026-06-01"
+compatibility_date = "2026-08-01"
 compatibility_flags = ["nodejs_als"]
 workers_dev = false
 send_metrics = false
 assets = { directory = "./dist/public", binding = "ASSETS" }
 routes = [{ pattern = "land.hash.moe", custom_domain = true }]
+cache = { enabled = true }
 
 [observability]
 enabled = true
