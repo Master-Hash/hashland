@@ -37,7 +37,7 @@ export function Pixi() {
         ? false
         : window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }, []);
+  }, [s.day, s.month]);
 
   const isNoto = searchParams.get("noto") !== "0";
   const isSingleThread =

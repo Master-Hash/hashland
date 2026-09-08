@@ -1,7 +1,4 @@
 import type { AssetsBundle } from "pixi.js";
-
-// import chars from "@iconify-json/fluent-emoji-high-contrast/chars.json" with { type: "json" };
-// import { Assets } from "pixi.js";
 import chars from "virtual:partial-chars";
 
 import { EMOJI_REGEX } from "../../utils/constant.ts";

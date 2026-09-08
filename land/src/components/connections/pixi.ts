@@ -1,6 +1,4 @@
 import type { Application, FederatedPointerEvent, Texture } from "pixi.js";
-import type { useNavigate } from "react-router";
-
 import { Container, Point, Sprite, Text } from "pixi.js";
 import DARK from "virtual:dark";
 import LIGHT from "virtual:light";
@@ -14,7 +12,7 @@ const PADDING = 15;
 export function pixiApp(
   app: Application,
   isDark: boolean,
-  navigate: ReturnType<typeof useNavigate>,
+  navigate: ReturnType<any>,
   texture: Record<string, Texture>,
 ): void {
   // const texture = await loadTexture();

@@ -1,7 +1,6 @@
 "use client";
 
 import type { SVGProps } from "react";
-
 import { renderToReadableStream } from "react-dom/server";
 
 // calendrier républicain

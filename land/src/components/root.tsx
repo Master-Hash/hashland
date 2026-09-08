@@ -4,18 +4,38 @@ import { cx } from "classix";
 import { motion, useInView } from "motion/react";
 import type { FC, ReactElement, ReactNode } from "react";
 import { Component, Fragment, useRef, useState } from "react";
-import { useEffect } from "react";
+import { useCallback } from "react";
 import { preload } from "react-dom";
 import { Link, useRouter } from "waku";
 import { Slice } from "waku";
-import { useRefetch } from "waku/minimal/client";
+import {
+  unstable_fetchRsc as fetchRsc,
+  unstable_registerRscReloadListener as registerRscReloadListener,
+  useMergeElements_UNSTABLE as useMergeElements,
+} from "waku/minimal/client";
+
+const useRefetch = () => {
+  const mergeElements = useMergeElements();
+  return useCallback(
+    (rscPath: string, rscParams?: unknown) => {
+      const refetch = () => mergeElements(fetchRsc(rscPath, rscParams));
+      registerRscReloadListener(
+        () => {
+          void refetch();
+        },
+        { replace: true },
+      );
+      return refetch();
+    },
+    [mergeElements],
+  );
+};
 
 import noto from "../resources/NotoEmoji-VariableFont_wght-webring.woff2?url";
 import shiwakeBr from "../resources/shiwake-br.html?url";
 import shiwake from "../resources/shiwake.html?url";
 import font from "../resources/SourceSans3VF-Upright.ttf.woff2?url";
 import { ShanghaiNowDateTime } from "../utils/functions.ts";
-import { isSafari } from "../utils/functions.ts";
 
 import style from "../main.css?url";
 
@@ -386,10 +406,14 @@ export class HashError extends Component<
     return this.props.children;
   }
   componentDidMount() {
-    window.navigation.addEventListener("navigate", this.reset);
+    if ("navigation" in window) {
+      window.navigation.addEventListener("navigate", this.reset);
+    }
   }
   componentWillUnmount() {
-    window.navigation.removeEventListener("navigate", this.reset);
+    if ("navigation" in window) {
+      window.navigation.removeEventListener("navigate", this.reset);
+    }
   }
 }
 
@@ -403,13 +427,13 @@ export const Root: FC<{
   preload(noto, {
     as: "font",
   });
-  useEffect(() => {
-    if (isSafari()) {
-      alert(
-        "本网站与 Safari 有已知的兼容性错误，现已禁用 JavaScript 以保证基本体验。我没有苹果设备，难以调试，在此提前道歉。",
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isSafari()) {
+  //     alert(
+  //       "本网站与 Safari 有已知的兼容性错误，现已禁用 JavaScript 以保证基本体验。我没有苹果设备，难以调试，在此提前道歉。",
+  //     );
+  //   }
+  // }, []);
   return (
     <html lang="zh-CN">
       <head>
@@ -443,6 +467,7 @@ export const Root: FC<{
           href="https://github.com/Master-Hash/hashland/commits/vite.atom"
           title="Recent Commits to hashland:vite"
         />
+        <script src="/analytics/script.js" data-site-id="35522e41c288" async />
         {/* <Links /> */}
         {/* <Resources /> */}
       </head>
@@ -467,12 +492,6 @@ export const Root: FC<{
           suppressHydrationWarning
         /> */}
         {/* <!-- End Cloudflare Web Analytics --> */}
-        <script
-          src="https://app.rybbit.io/api/script.js"
-          data-site-id="35522e41c288"
-          defer
-          crossOrigin="anonymous"
-        />
       </body>
     </html>
   );
