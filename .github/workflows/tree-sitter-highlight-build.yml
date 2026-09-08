@@ -24,7 +24,7 @@ on:
 env:
   DEBUG: napi:*
   APP_NAME: tree-sitter-highlight
-  CARGO_INCREMENTAL: '1'
+  CARGO_INCREMENTAL: "1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -63,11 +63,11 @@ jobs:
     name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: |
           git submodule update --init --recursive packages/tree-sitter-highlight
       - name: setup pnpm
-        uses: pnpm/action-setup@v5
+        uses: pnpm/action-setup@v6
       - name: Setup node
         uses: actions/setup-node@v6
         with:
@@ -80,7 +80,7 @@ jobs:
         with:
           add-to-path: false
       - name: Cache cargo
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/registry/index/
@@ -100,7 +100,7 @@ jobs:
         if: matrix.settings.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: 'packages/tree-sitter-highlight/*.node'
+          path: "packages/tree-sitter-highlight/*.node"
           if-no-files-found: error
 
       - name: Upload artifact
@@ -108,7 +108,7 @@ jobs:
         if: matrix.settings.target == 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: 'packages/tree-sitter-highlight/*.wasm'
+          path: "packages/tree-sitter-highlight/*.wasm"
           if-no-files-found: error
   # publish:
   #   name: Publish

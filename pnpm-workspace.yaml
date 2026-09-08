@@ -30,6 +30,6 @@ overrides:
   "typescript": "^6.0.3"
   "js-tokens": "10.0.0"
   "style-to-js": "2.0.2"
-  "vite": "8.2.1"
+  "vite": "8.2.2"
   "lightningcss": "1.33.0"
-  "magic-string": "1.2.1"
+  "magic-string": "1.2.3"

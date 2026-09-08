@@ -13,7 +13,7 @@
     "build": "napi build --platform --release --esm"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^3.8.6"
+    "@napi-rs/cli": "^3.9.0"
   },
   "napi": {
     "binaryName": "atom"
