@@ -33,8 +33,27 @@ let DOLPHIN_ENABLED = false;
 const COLLIDER_GROUP_1 = 0x00010002;
 const COLLIDER_GROUP_2 = 0x00020003;
 
+const GAMEPAD_STICK_AXIS_X = 2; // 大多数手柄 axes[2]/[3] 是右摇杆，具体需按实际设备核对
+const GAMEPAD_STICK_AXIS_Y = 3;
+const GAMEPAD_STICK_EDGE_THRESHOLD = 0.9; // 视为"推到最边缘"的阈值
+
+const GAMEPAD_BUTTON_A = 0;
+const GAMEPAD_BUTTON_Y = 3;
+const GAMEPAD_BUTTON_DPAD_UP = 12;
+const AYU_SEQUENCE = [
+  GAMEPAD_BUTTON_A,
+  GAMEPAD_BUTTON_Y,
+  GAMEPAD_BUTTON_DPAD_UP,
+] as const;
+let prevButtonsPressed = new Set<number>();
+let ayuStep = 0; // 已经正确按到序列的第几步了
+
 function navigate(to: string) {
-  window.navigation.navigate(to);
+  if ("navigation" in window) {
+    window.navigation.navigate(to);
+  } else {
+    location.href = to;
+  }
 }
 
 /**
@@ -55,6 +74,7 @@ export function setup(ctx: Context) {
   // 我先试一试不转换坐标系行不行
   // 反正负负得正
   let currentPointerDown = null as DragTag | null;
+  let gamepadDragging = false;
   const wallLeftColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
@@ -510,6 +530,119 @@ export function setup(ctx: Context) {
   // zodiacRigidBody.setAdditionalMass(0.1, true);
   console.log(zodiacRigidBody.mass());
 
+  // #region GamePads
+  app.ticker.add(
+    () => {
+      const gamepads = navigator.getGamepads();
+      const gamepad = gamepads[0];
+      if (!gamepad) {
+        prevButtonsPressed.clear();
+        ayuStep = 0;
+        return;
+      }
+
+      // 不考虑多手柄
+      let gX = 0;
+      let gY = 0;
+      let magnitude = 0;
+
+      gX = gamepad.axes[GAMEPAD_STICK_AXIS_X] ?? 0;
+      gY = gamepad.axes[GAMEPAD_STICK_AXIS_Y] ?? 0;
+      magnitude = Math.hypot(gX, gY);
+
+      if (magnitude >= GAMEPAD_STICK_EDGE_THRESHOLD) {
+        // 摇杆方向即为拖拽方向
+        const theta = Math.atan2(gY, gX);
+
+        if (!gamepadDragging) {
+          // 和 pointerdown 类似：只有没人在拖别的东西时才接管
+          if (currentPointerDown === null) {
+            gamepadDragging = true;
+            currentPointerDown = zodiac;
+            zodiac.dragTag = true;
+            const r = 722; // 与 hitArea 里用的半径一致
+            zodiac.r = r;
+            const global = {
+              x: zodiacContainer.x + r * Math.cos(theta),
+              y: zodiacContainer.y + r * Math.sin(theta),
+            };
+            const local = zodiacContainer.toLocal(global);
+            const params = JointData.spring(
+              REST_LENGTH,
+              STIFFNESS,
+              SPRING_DAMPING,
+              local,
+              { x: 0, y: 0 },
+            );
+            pointerRigidBody.setTranslation(global, true);
+            const joint = world.createImpulseJoint(
+              params,
+              zodiacRigidBody,
+              pointerRigidBody,
+              true,
+            );
+            currentPointerDown.joint = joint;
+          }
+        } else if (currentPointerDown === zodiac) {
+          // 和 pointermove 一致：沿固定半径更新目标位置
+          pointerRigidBody.setTranslation(
+            {
+              x: zodiacContainer.x + zodiac.r * Math.cos(theta),
+              y: zodiacContainer.y + zodiac.r * Math.sin(theta),
+            },
+            true,
+          );
+        }
+      } else if (gamepadDragging) {
+        // 摇杆回到边缘以内，相当于松手
+        if (currentPointerDown !== null) {
+          world.removeImpulseJoint(currentPointerDown.joint!, true);
+          currentPointerDown.dragTag = false;
+          currentPointerDown.joint = null;
+          // if (currentPointerDown instanceof BubbleGroup) {
+          //   currentPointerDown.rigid.setLinearDamping(BUBBLE_FREE_DAMPING);
+          // }
+          currentPointerDown = null;
+        }
+        gamepadDragging = false;
+      }
+
+      // 手柄秘籍
+      const currentButtonsPressed = new Set<number>();
+      gamepad.buttons.forEach((b, i) => {
+        if (b.pressed) currentButtonsPressed.add(i);
+      });
+      // console.log(currentButtonsPressed, ayuStep);
+
+      // 找出这一帧“刚按下”的所有键
+      for (let i = 0; i < gamepad.buttons.length; i++) {
+        const justPressed =
+          currentButtonsPressed.has(i) && !prevButtonsPressed.has(i);
+        if (!justPressed) continue;
+
+        const expected = AYU_SEQUENCE[ayuStep];
+        if (i === expected) {
+          // 按对了，进入下一步
+          ayuStep++;
+          if (ayuStep === AYU_SEQUENCE.length) {
+            app.stage.emit("dolphin");
+            ayuStep = 0;
+          }
+        } else if (i === AYU_SEQUENCE[0]) {
+          // 按错了，但这个键恰好是序列的第一个键（A），可以重新开始计
+          ayuStep = 1;
+        } else {
+          // 按了不相干的键，序列作废
+          ayuStep = 0;
+        }
+      }
+
+      prevButtonsPressed = currentButtonsPressed;
+    },
+    undefined,
+    20,
+  );
+  // #endregion
   // #region Eventloop
   app.ticker.add(
     () => {
@@ -584,4 +717,10 @@ export function setup(ctx: Context) {
     4,
   );
   // #endregion
+}
+
+if ("window" in globalThis) {
+  window.addEventListener("gamepadconnected", (e) => {
+    console.log(e);
+  });
 }
