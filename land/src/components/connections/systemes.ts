@@ -36,10 +36,18 @@ const COLLIDER_GROUP_2 = 0x00020003;
 const GAMEPAD_STICK_AXIS_X = 2; // 大多数手柄 axes[2]/[3] 是右摇杆，具体需按实际设备核对
 const GAMEPAD_STICK_AXIS_Y = 3;
 const GAMEPAD_STICK_EDGE_THRESHOLD = 0.9; // 视为"推到最边缘"的阈值
+// 左摇杆用于焦点导航，标准映射下是 axes[0]/[1]
+const GAMEPAD_NAVIGATION_STICK_AXIS_X = 0;
+const GAMEPAD_NAVIGATION_STICK_AXIS_Y = 1;
+// 焦点导航允许的最大偏角
+const GAMEPAD_NAVIGATION_MAX_ANGLE = Math.PI / 3;
 
 const GAMEPAD_BUTTON_A = 0;
 const GAMEPAD_BUTTON_Y = 3;
 const GAMEPAD_BUTTON_DPAD_UP = 12;
+const GAMEPAD_BUTTON_DPAD_DOWN = 13;
+const GAMEPAD_BUTTON_DPAD_LEFT = 14;
+const GAMEPAD_BUTTON_DPAD_RIGHT = 15;
 const AYU_SEQUENCE = [
   GAMEPAD_BUTTON_A,
   GAMEPAD_BUTTON_Y,
@@ -561,6 +569,64 @@ export function setup(ctx: Context) {
   console.log(zodiacRigidBody.mass());
 
   // #region GamePads
+  // 手柄方向键/左摇杆切换焦点
+  // 方向键支持八方向，但一次按住只触发一次，全部松开前不再移动
+  let dpadLatched = false;
+  let stickEngaged = false;
+
+  const focusTargets: FocusTag[] = [...events, ...floatBubbles];
+
+  function normalizeAngle(angle: number) {
+    return Math.atan2(Math.sin(angle), Math.cos(angle));
+  }
+
+  // 从 from 出发，沿 (dirX, dirY) 方向寻找最合适的焦点
+  // 综合考虑偏角与距离；当前无焦点时以屏幕中心为起点
+  function findNextFocus(from: FocusTag | null, dirX: number, dirY: number) {
+    const dirAngle = Math.atan2(dirY, dirX);
+    const origin = from
+      ? from.conteneur.getGlobalPosition()
+      : { x: app.screen.width / 2, y: app.screen.height / 2 };
+    let best: FocusTag | null = null;
+    let bestScore = Infinity;
+
+    for (const target of focusTargets) {
+      if (target === from) continue;
+      const position = target.conteneur.getGlobalPosition();
+      // 忽略已经离开屏幕的目标
+      if (
+        position.x < 0 ||
+        position.x > app.screen.width ||
+        position.y < 0 ||
+        position.y > app.screen.height
+      ) {
+        continue;
+      }
+      const dx = position.x - origin.x;
+      const dy = position.y - origin.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 1e-3) continue;
+      const diff = normalizeAngle(Math.atan2(dy, dx) - dirAngle);
+      if (Math.abs(diff) > GAMEPAD_NAVIGATION_MAX_ANGLE) continue;
+      // 偏角越大、距离越远，代价越高
+      const score = distance / Math.cos(diff);
+      if (score < bestScore) {
+        bestScore = score;
+        best = target;
+      }
+    }
+
+    return best;
+  }
+
+  function navigateFocus(dirX: number, dirY: number) {
+    const next = findNextFocus(focusedTag, dirX, dirY);
+    // 目标方向没有物体时保持当前焦点
+    if (next !== null) {
+      setFocus(next);
+    }
+  }
+
   app.ticker.add(
     () => {
       const gamepads = navigator.getGamepads();
@@ -568,6 +634,8 @@ export function setup(ctx: Context) {
       if (!gamepad) {
         prevButtonsPressed.clear();
         ayuStep = 0;
+        dpadLatched = false;
+        stickEngaged = false;
         return;
       }
 
@@ -635,6 +703,39 @@ export function setup(ctx: Context) {
           currentPointerDown = null;
         }
         gamepadDragging = false;
+      }
+
+      // 方向键：八方向，本帧按下的组合即方向；
+      // 一旦触发就闩锁，必须全部松开才能再移动，方向中途变化不再触发
+      const dpadX =
+        (gamepad.buttons[GAMEPAD_BUTTON_DPAD_RIGHT]?.pressed ? 1 : 0) -
+        (gamepad.buttons[GAMEPAD_BUTTON_DPAD_LEFT]?.pressed ? 1 : 0);
+      const dpadY =
+        (gamepad.buttons[GAMEPAD_BUTTON_DPAD_DOWN]?.pressed ? 1 : 0) -
+        (gamepad.buttons[GAMEPAD_BUTTON_DPAD_UP]?.pressed ? 1 : 0);
+      let navigated = false;
+      if (dpadX === 0 && dpadY === 0) {
+        // 全部松开，解除闩锁
+        dpadLatched = false;
+      } else if (!dpadLatched) {
+        navigateFocus(dpadX, dpadY);
+        navigated = true;
+        dpadLatched = true;
+      }
+
+      // 左摇杆：任意方向，越过阈值时只触发一次
+      const navX = gamepad.axes[GAMEPAD_NAVIGATION_STICK_AXIS_X] ?? 0;
+      const navY = gamepad.axes[GAMEPAD_NAVIGATION_STICK_AXIS_Y] ?? 0;
+      const navMagnitude = Math.hypot(navX, navY);
+      if (navMagnitude >= GAMEPAD_STICK_EDGE_THRESHOLD) {
+        if (!stickEngaged) {
+          stickEngaged = true;
+          if (!navigated) {
+            navigateFocus(navX / navMagnitude, navY / navMagnitude);
+          }
+        }
+      } else {
+        stickEngaged = false;
       }
 
       // 手柄秘籍
