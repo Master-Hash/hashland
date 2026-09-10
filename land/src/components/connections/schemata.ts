@@ -38,6 +38,10 @@ export interface DragTag extends RapierRigid {
   joint: ImpulseJoint | null;
 }
 
+export interface FocusTag extends PixiConteneur {
+  focusTag: boolean;
+}
+
 // Chronicle 的碰撞体附加在 Zodiac 上
 export interface RapierCollider extends PixiConteneur {
   collider: Collider;
@@ -64,7 +68,7 @@ export interface Attracted extends RapierRigid {
 /**
  * @param {number} theta 右手系坐标，逆时针为正
  */
-export class ChronicleGroup implements PixiConteneur, RapierCollider {
+export class ChronicleGroup implements PixiConteneur, RapierCollider, FocusTag {
   constructor(
     public readonly conteneur: Container,
     public readonly collider: Collider,
@@ -72,6 +76,7 @@ export class ChronicleGroup implements PixiConteneur, RapierCollider {
     public readonly people: Array<string>,
     public readonly r: number,
     public readonly theta: number,
+    public focusTag: boolean = false,
   ) {}
 }
 
@@ -86,6 +91,7 @@ export class BubbleGroup
     public attractedBy: Array<ChronicleGroup> = [],
     public joint: ImpulseJoint | null = null,
     public dragTag: boolean = false,
+    public focusTag: boolean = false,
   ) {}
 }
 

@@ -1,5 +1,5 @@
 import type { FederatedPointerEvent } from "pixi.js";
-import { Container, Graphics, Sprite, Text } from "pixi.js";
+import { Container, Graphics, Rectangle, Sprite, Text } from "pixi.js";
 import DARK from "virtual:dark";
 import LIGHT from "virtual:light";
 
@@ -9,7 +9,7 @@ import { colors } from "./colors.ts";
 import { JointData } from "./rapier2d/dynamics/impulse_joint.js";
 import { RigidBodyDesc } from "./rapier2d/dynamics/rigid_body.js";
 import { ColliderDesc } from "./rapier2d/geometry/collider.js";
-import type { Context, DragTag } from "./schemata.ts";
+import type { Context, DragTag, FocusTag } from "./schemata.ts";
 import { BubbleGroup, ChronicleGroup, Zodiac } from "./schemata.ts";
 
 const ZODIAC_SCALE = 0.54;
@@ -75,6 +75,39 @@ export function setup(ctx: Context) {
   // 反正负负得正
   let currentPointerDown = null as DragTag | null;
   let gamepadDragging = false;
+  // #region Focus
+  // 同一时间只允许一个对象处于 focus 状态
+  let focusedTag: FocusTag | null = null;
+  const focusCallbacks = new Map<FocusTag, (focused: boolean) => void>();
+
+  function applyFocus(target: FocusTag, focused: boolean) {
+    target.focusTag = focused;
+    focusCallbacks.get(target)?.(focused);
+  }
+
+  function setFocus(target: FocusTag | null) {
+    if (focusedTag === target) return;
+    if (focusedTag) {
+      applyFocus(focusedTag, false);
+    }
+    focusedTag = target;
+    if (focusedTag) {
+      applyFocus(focusedTag, true);
+    }
+  }
+
+  function toggleFocus(target: FocusTag) {
+    setFocus(focusedTag === target ? null : target);
+  }
+
+  // 点击空白处取消 focus
+  app.stage.eventMode = "static";
+  app.stage.hitArea = new Rectangle(0, 0, app.screen.width, app.screen.height);
+  app.stage.on("pointerdown", (e) => {
+    if (e.button !== 0) return;
+    setFocus(null);
+  });
+  // #endregion
   const wallLeftColliderDesc = ColliderDesc.cuboid(
     PADDING / 2,
     (app.screen.height - PADDING) / 2,
@@ -306,20 +339,18 @@ export function setup(ctx: Context) {
     });
     lable.visible = false;
     lable.anchor.set(0.5);
-    lable.y = 18;
+    lable.y = 25;
 
-    eventContainer.on("mouseenter", (e) => {
-      lable.visible = true;
+    const focusRing = new Graphics().circle(0, 0, 17).stroke({
+      color: isDark ? 0xa5adce : 0x6c6f85, // Subtext 0
+      width: 2,
     });
-    eventContainer.on("mouseleave", (e) => {
-      lable.visible = false;
-    });
+    focusRing.visible = false;
 
-    eventContainer.on("tap", (e) => {
-      lable.visible = true;
-      setTimeout(() => {
-        lable.visible = false;
-      }, 800);
+    eventContainer.on("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      toggleFocus(eventDataObj);
+      e.stopPropagation();
     });
 
     lable.eventMode = "static";
@@ -340,8 +371,13 @@ export function setup(ctx: Context) {
       }
     });
 
+    eventContainer.addChild(focusRing);
     eventContainer.addChild(emojiSprite);
     eventContainer.addChild(lable);
+    focusCallbacks.set(eventDataObj, (focused) => {
+      lable.visible = focused;
+      focusRing.visible = focused;
+    });
     zodiacContainer.addChild(eventContainer);
 
     return eventDataObj;
@@ -379,6 +415,12 @@ export function setup(ctx: Context) {
       : colors.latte[i % colors.latte.length];
 
     bubbleContainer.addChild(bubbleGraphics);
+    const focusRing = new Graphics().circle(0, 0, 11).stroke({
+      color: isDark ? 0xa5adce : 0x6c6f85, // Subtext 0
+      width: 2,
+    });
+    focusRing.visible = false;
+    bubbleContainer.addChild(focusRing);
     const nameText = new Text({
       text: b.name,
       style: {
@@ -392,7 +434,7 @@ export function setup(ctx: Context) {
       },
     });
     nameText.anchor.set(0.5, 0);
-    nameText.y = 8;
+    nameText.y = 10;
     nameText.visible = false;
     nameText.eventMode = "static";
     nameText.cursor = "pointer";
@@ -406,8 +448,9 @@ export function setup(ctx: Context) {
 
     bubbleContainer.addChild(nameText);
 
+    let siteText: Text | null = null;
     if (b.site !== null) {
-      const siteText = new Text({
+      siteText = new Text({
         text: "✨友链✨",
         style: {
           fill: isDark ? 0xbabbf1 : 0x7287fd, // Lavender
@@ -418,7 +461,7 @@ export function setup(ctx: Context) {
         },
       });
       siteText.anchor.set(0.5, 0);
-      siteText.y = 21;
+      siteText.y = 23;
       siteText.visible = false;
       siteText.eventMode = "static";
       siteText.cursor = "pointer";
@@ -431,31 +474,6 @@ export function setup(ctx: Context) {
     console.log(bubbleCollider.mass());
 
     bubbleContainer.eventMode = "static";
-    bubbleContainer.on("mouseenter", () => {
-      nameText.visible = true;
-      // console.log(container);
-      if (b.site !== null) {
-        bubbleContainer.children.at(-1)!.visible = true;
-      }
-    });
-    bubbleContainer.on("mouseleave", () => {
-      nameText.visible = false;
-      if (b.site !== null) {
-        bubbleContainer.children.at(-1)!.visible = false;
-      }
-    });
-    bubbleContainer.on("tap", () => {
-      nameText.visible = true;
-      if (b.site !== null) {
-        bubbleContainer.children.at(-1)!.visible = true;
-      }
-      setTimeout(() => {
-        nameText.visible = false;
-        if (b.site !== null) {
-          bubbleContainer.children.at(-1)!.visible = false;
-        }
-      }, 800);
-    });
 
     const floating = new BubbleGroup(
       bubbleContainer,
@@ -463,6 +481,18 @@ export function setup(ctx: Context) {
       b.name,
       [],
     );
+
+    bubbleContainer.on("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      toggleFocus(floating);
+      e.stopPropagation();
+    });
+
+    focusCallbacks.set(floating, (focused) => {
+      nameText.visible = focused;
+      if (siteText) siteText.visible = focused;
+      focusRing.visible = focused;
+    });
 
     bubbleGraphics.hitArea = {
       contains: (x, y) => {
