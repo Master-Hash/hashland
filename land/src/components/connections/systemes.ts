@@ -627,6 +627,11 @@ export function setup(ctx: Context) {
     }
   }
 
+  // 键盘方向键：由 p.tsx 的 keydown 触发，按下即移动，长按不重复
+  app.stage.on("navigate", (direction: { x: number; y: number }) => {
+    navigateFocus(direction.x, direction.y);
+  });
+
   app.ticker.add(
     () => {
       const gamepads = navigator.getGamepads();

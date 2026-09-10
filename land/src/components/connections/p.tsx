@@ -77,6 +77,13 @@ export function Pixi() {
 
       // 彩蛋：按键宏
       const DOLPHIN_CODE = ["d", "o", "l", "p", "h", "i", "n"];
+      // 方向键：四向切换焦点
+      const ARROW_KEYS: Record<string, { x: number; y: number }> = {
+        ArrowLeft: { x: -1, y: 0 },
+        ArrowRight: { x: 1, y: 0 },
+        ArrowUp: { x: 0, y: -1 },
+        ArrowDown: { x: 0, y: 1 },
+      };
       let userInput = [] as string[];
       const callback = (e: KeyboardEvent) => {
         userInput.push(e.key);
@@ -88,6 +95,21 @@ export function Pixi() {
           DOLPHIN_CODE.join(",").toLowerCase()
         ) {
           app.stage.emit("dolphin");
+        }
+
+        // 方向键：按下时触发（不是抬起），并忽略长按产生的重复事件
+        const direction = ARROW_KEYS[e.key];
+        const target = e.target as HTMLElement | null;
+        if (
+          direction &&
+          !e.repeat &&
+          !target?.isContentEditable &&
+          target?.tagName !== "INPUT" &&
+          target?.tagName !== "TEXTAREA" &&
+          target?.tagName !== "SELECT"
+        ) {
+          e.preventDefault();
+          app.stage.emit("navigate", direction);
         }
       };
       window.addEventListener("keydown", callback);
