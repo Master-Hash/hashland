@@ -43,6 +43,8 @@ const GAMEPAD_NAVIGATION_STICK_AXIS_Y = 1;
 const GAMEPAD_NAVIGATION_MAX_ANGLE = Math.PI / 3;
 
 const GAMEPAD_BUTTON_A = 0;
+const GAMEPAD_BUTTON_B = 1;
+const GAMEPAD_BUTTON_X = 2;
 const GAMEPAD_BUTTON_Y = 3;
 const GAMEPAD_BUTTON_DPAD_UP = 12;
 const GAMEPAD_BUTTON_DPAD_DOWN = 13;
@@ -87,6 +89,8 @@ export function setup(ctx: Context) {
   // 同一时间只允许一个对象处于 focus 状态
   let focusedTag: FocusTag | null = null;
   const focusCallbacks = new Map<FocusTag, (focused: boolean) => void>();
+  // 每个焦点对象可打开的链接（第一个、第二个……）
+  const focusLinks = new Map<FocusTag, Array<() => void>>();
 
   function applyFocus(target: FocusTag, focused: boolean) {
     target.focusTag = focused;
@@ -106,6 +110,11 @@ export function setup(ctx: Context) {
 
   function toggleFocus(target: FocusTag) {
     setFocus(focusedTag === target ? null : target);
+  }
+
+  function openFocusLink(index: number) {
+    if (focusedTag === null) return;
+    focusLinks.get(focusedTag)?.[index]?.();
   }
 
   // 点击空白处取消 focus
@@ -361,9 +370,7 @@ export function setup(ctx: Context) {
       e.stopPropagation();
     });
 
-    lable.eventMode = "static";
-    lable.cursor = "pointer";
-    lable.on("pointerdown", (e) => {
+    function openChronicle(newTab: boolean) {
       // test if `c.alt` is full URL
       const outURL = URL.parse(c.alt!);
       if (outURL !== null) {
@@ -371,12 +378,18 @@ export function setup(ctx: Context) {
       } else {
         const t = "alt" in c ? c.alt : `/事/${c.date}_${c.title}.md`;
         console.log("fuck", t);
-        if (e.ctrlKey || e.metaKey || e.button === 1) {
+        if (newTab) {
           window.open(t, "_blank")?.focus();
         } else {
           navigate(t!);
         }
       }
+    }
+
+    lable.eventMode = "static";
+    lable.cursor = "pointer";
+    lable.on("pointerdown", (e) => {
+      openChronicle(e.ctrlKey || e.metaKey || e.button === 1);
     });
 
     eventContainer.addChild(focusRing);
@@ -386,6 +399,7 @@ export function setup(ctx: Context) {
       lable.visible = focused;
       focusRing.visible = focused;
     });
+    focusLinks.set(eventDataObj, [() => openChronicle(false)]);
     zodiacContainer.addChild(eventContainer);
 
     return eventDataObj;
@@ -446,12 +460,17 @@ export function setup(ctx: Context) {
     nameText.visible = false;
     nameText.eventMode = "static";
     nameText.cursor = "pointer";
-    nameText.on("pointerdown", (e) => {
-      if (e.ctrlKey || e.metaKey || e.button === 1) {
-        window.open(`/人/${b.name}.md`, "_blank")?.focus();
+    function openPerson(newTab: boolean) {
+      const url = `/人/${b.name}.md`;
+      if (newTab) {
+        window.open(url, "_blank")?.focus();
       } else {
-        navigate(`/人/${b.name}.md`);
+        navigate(url);
       }
+    }
+
+    nameText.on("pointerdown", (e) => {
+      openPerson(e.ctrlKey || e.metaKey || e.button === 1);
     });
 
     bubbleContainer.addChild(nameText);
@@ -501,6 +520,13 @@ export function setup(ctx: Context) {
       if (siteText) siteText.visible = focused;
       focusRing.visible = focused;
     });
+
+    const links: Array<() => void> = [() => openPerson(false)];
+    if (b.site !== null) {
+      const site = b.site;
+      links.push(() => window.open(site, "_blank")?.focus());
+    }
+    focusLinks.set(floating, links);
 
     bubbleGraphics.hitArea = {
       contains: (x, y) => {
@@ -755,6 +781,15 @@ export function setup(ctx: Context) {
         const justPressed =
           currentButtonsPressed.has(i) && !prevButtonsPressed.has(i);
         if (!justPressed) continue;
+
+        // B 取消选中；X 打开第一个链接，Y 打开第二个链接（与彩蛋冲突是有意为之）
+        if (i === GAMEPAD_BUTTON_B) {
+          setFocus(null);
+        } else if (i === GAMEPAD_BUTTON_X) {
+          openFocusLink(0);
+        } else if (i === GAMEPAD_BUTTON_Y) {
+          openFocusLink(1);
+        }
 
         const expected = AYU_SEQUENCE[ayuStep];
         if (i === expected) {
