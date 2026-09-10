@@ -16,8 +16,8 @@ minimumReleaseAgeExclude:
   - react
   - react-dom
   - react-server-dom-webpack
-  - "@vitejs/plugin-react@6.1.0"
   - magic-string@1.2.1
+  - scheduler@0.28.0
 patchedDependencies:
   "@shikijs/core": patches/@shikijs__core.patch
   cytoscape: patches/cytoscape.patch
