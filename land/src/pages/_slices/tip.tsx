@@ -75,9 +75,9 @@ const tips = [
     ),
   },
   // 隐私
-  {
-    data: <p>我喜欢翻看网站后台，能认出这里的常客哟。</p>,
-  },
+  // {
+  //   data: <p>我喜欢翻看网站后台，能认出这里的常客哟。</p>,
+  // },
   {
     data: (
       <p>
@@ -89,7 +89,7 @@ const tips = [
     data: (
       <p>
         我不喜欢陌生的机器人阅读我的文章。
-        <a href="https://utcc.utoronto.ca/~cks/cspace-old-browser.html">
+        <a href="https://web.archive.org/web/20260315204643/https://utcc.utoronto.ca/~cks/cspace-old-browser.html">
           机器人常伪装成旧款浏览器
         </a>
         ，我一律拦截。
@@ -107,7 +107,7 @@ const tips = [
   {
     data: (
       <p>
-        写程序的朋友之中，我和
+        朋友之中，我和
         <a href="/%E4%BA%8B/2025-10-16_%E5%A4%A9%E7%A9%BA%E5%B7%A5%E5%9C%BA%E7%BA%AA%E4%BA%8B.md#%E5%8F%B6%E8%80%81%E6%9D%BF">
           海豚
         </a>
@@ -185,6 +185,14 @@ const tips = [
       <p>
         在小游戏页输入 <code>dolphin</code>
         ，会有意想不到的效果！（再次输入可以重置）
+      </p>
+    ),
+  },
+  {
+    data: (
+      <p>
+        如果希望和其他读者交流，可以向<a href="/email#公开信箱">公开信箱</a>
+        写信！
       </p>
     ),
   },
